@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tech Intelligence Hub - Real Breakthroughs Only</title>
+<title>Global Tech Intelligence Hub - Deep Analysis System</title>
 <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Widgets/widgets.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -15,8 +15,8 @@ body{font-family:'SF Mono','Monaco','Courier New',monospace;background:#000;colo
 .main{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:15px;height:100%;overflow:hidden}
 .panel{background:rgba(0,26,0,0.95);border:2px solid #0f0;padding:20px;overflow-y:auto;box-shadow:0 0 20px rgba(0,255,0,0.3)}
 .panel h2{color:#0f0;font-size:1.3em;margin-bottom:15px;border-bottom:2px solid #0f0;padding-bottom:10px}
-.breakthrough{background:rgba(0,51,0,0.7);padding:15px;margin:15px 0;border-left:4px solid #0ff;transition:all 0.3s}
-.breakthrough:hover{background:rgba(0,51,0,1);transform:translateX(5px)}
+.breakthrough{background:rgba(0,51,0,0.7);padding:15px;margin:15px 0;border-left:4px solid #0ff;transition:all 0.3s;cursor:pointer}
+.breakthrough:hover{background:rgba(0,51,0,1);transform:translateX(5px);border-left-width:6px}
 .breakthrough h3{color:#0ff;font-size:1.1em;margin-bottom:8px}
 .breakthrough .meta{color:#0a0;font-size:0.85em;margin:8px 0}
 .breakthrough .impact{color:#ff0;font-weight:bold;margin-top:10px}
@@ -24,25 +24,46 @@ body{font-family:'SF Mono','Monaco','Courier New',monospace;background:#000;colo
 .critical{border-left-color:#f00!important}
 .high{border-left-color:#ff0!important}
 #globe{width:100%;height:100%;background:#000}
-.loading{text-align:center;padding:30px;color:#0f0;font-size:1.2em}
-.timestamp{color:#0a0;font-size:0.8em;margin-top:10px}
 .status{display:inline-block;width:10px;height:10px;background:#0f0;border-radius:50%;margin-right:8px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* DEEP DIVE MODAL */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:1000;overflow-y:auto}
+.modal.active{display:block}
+.modal-content{max-width:1200px;margin:50px auto;background:#001a00;border:3px solid #0f0;padding:30px;box-shadow:0 0 50px rgba(0,255,0,0.5)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #0f0;padding-bottom:15px}
+.modal-header h2{color:#0ff;font-size:1.8em}
+.close-btn{background:#f00;color:#fff;border:none;padding:10px 20px;cursor:pointer;font-size:1.2em;font-weight:bold}
+.close-btn:hover{background:#ff0;color:#000}
+.section{margin:20px 0;padding:20px;background:rgba(0,51,0,0.5);border-left:3px solid #0f0}
+.section h3{color:#0f0;font-size:1.3em;margin-bottom:15px}
+.section p{color:#0f0;line-height:1.8;margin:10px 0}
+.section ul{margin-left:20px;color:#0f0}
+.section li{margin:8px 0;line-height:1.6}
+.proof{background:rgba(255,255,0,0.1);border:1px solid #ff0;padding:15px;margin:10px 0}
+.proof h4{color:#ff0;margin-bottom:10px}
+.urgent{background:rgba(255,0,0,0.2);border:2px solid #f00;padding:15px;margin:15px 0}
+.urgent h4{color:#f00;font-size:1.2em;margin-bottom:10px}
+.secret{background:rgba(255,0,255,0.1);border:2px solid #f0f;padding:15px;margin:15px 0}
+.secret h4{color:#f0f;font-size:1.2em;margin-bottom:10px}
+.timeline{border-left:3px solid #0ff;padding-left:20px;margin:20px 0}
+.timeline-item{margin:15px 0;padding:10px;background:rgba(0,255,255,0.1)}
+.timeline-item .date{color:#0ff;font-weight:bold}
+a{color:#0ff;text-decoration:none}
+a:hover{color:#ff0;text-decoration:underline}
 </style>
 </head>
 <body>
 <div class="container">
 <div class="header">
-<h1><span class="status"></span>TECH INTELLIGENCE HUB</h1>
-<p>Real-time breakthrough detection • AI-powered analysis • Auto-updating every 60 seconds</p>
+<h1><span class="status"></span>GLOBAL TECH INTELLIGENCE HUB</h1>
+<p>Deep Analysis System • Click any breakthrough for full intelligence report • Auto-updating every 60s</p>
 <p id="last-update" style="margin-top:10px;color:#0ff">Initializing...</p>
 </div>
 <div class="main">
 <div class="panel">
-<h2>🚨 LATEST BREAKTHROUGHS (TODAY)</h2>
-<div id="breakthroughs">
-<div class="loading">Scanning for breakthroughs...</div>
-</div>
+<h2>🚨 LATEST BREAKTHROUGHS (CLICK FOR DEEP DIVE)</h2>
+<div id="breakthroughs"></div>
 </div>
 <div class="panel">
 <h2>🛰️ LIVE EARTH - 3D SATELLITE VIEW</h2>
@@ -50,84 +71,123 @@ body{font-family:'SF Mono','Monaco','Courier New',monospace;background:#000;colo
 </div>
 </div>
 </div>
+
+<!-- DEEP DIVE MODAL -->
+<div id="modal" class="modal">
+<div class="modal-content">
+<div class="modal-header">
+<h2 id="modal-title">Loading...</h2>
+<button class="close-btn" onclick="closeModal()">✕ CLOSE</button>
+</div>
+<div id="modal-body"></div>
+</div>
+</div>
+
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js"></script>
+<script src="intelligence-data.js"></script>
 <script>
-// REAL BREAKTHROUGH DETECTION
-const BREAKTHROUGHS_TODAY = [
-  {
-    title: "XPENG VLA 2.0 - First Physical-AI for L4 Autonomous Driving",
-    description: "Industry's first Visual-Language-Action model that directly generates driving commands from visual inputs. Enables L4 autonomous driving without traditional rule-based systems.",
-    impact: "CRITICAL - Revolutionizes autonomous driving. Deployment to customer vehicles March 2026.",
-    source: "XPENG Official",
-    date: "2026-01-12",
-    category: "AI/Autonomous",
-    url: "https://www.prnewswire.com/news-releases/xpeng-charts-new-course-in-2026-flagship-launch-sales-momentum-and-ai-breakthrough-propel-global-technology-ambitions-302658303.html"
-  },
-  {
-    title: "NVIDIA Vera Rubin AI Platform - H300 GPUs for Trillion-Parameter Models",
-    description: "New AI foundry platform with H300 GPUs designed for trillion-parameter models. Full production later in 2026.",
-    impact: "HIGH - Enables next-gen AI models at unprecedented scale.",
-    source: "NVIDIA CES 2026",
-    date: "2026-01-12",
-    category: "AI Hardware",
-    url: "https://www.crescendo.ai/news/latest-ai-news-and-updates"
-  },
-  {
-    title: "Boston Dynamics Atlas Production - 30,000 Humanoid Robots/Year",
-    description: "Atlas humanoid robot enters mass production. Deployments at Hyundai and Google DeepMind with Gemini Robotics AI integration.",
-    impact: "HIGH - First mass-produced humanoid robot with advanced AI.",
-    source: "Boston Dynamics",
-    date: "2026-01-04",
-    category: "Robotics",
-    url: "https://amiko.consulting/en/the-january-2026-ai-revolution-7-key-trends-changing-the-future-of-manufacturing/"
-  },
-  {
-    title: "Microsoft Copilot GPT-5.2 Upgrade",
-    description: "Major upgrade to Copilot with GPT-5.2 capabilities. Enhanced multimodal AI performance.",
-    impact: "MEDIUM - Improves AI assistant capabilities across Microsoft ecosystem.",
-    source: "Microsoft",
-    date: "2026-01-12",
-    category: "AI Software",
-    url: "https://news.aibase.com/news/24506"
-  },
-  {
-    title: "Falcon-H1R 7B - Compact AI Matching Larger Models",
-    description: "7-billion-parameter model matching performance of much larger systems via DeepConf. Suitable for edge AI in manufacturing and robotics.",
-    impact: "MEDIUM - Enables powerful AI on resource-constrained devices.",
-    source: "Technology Innovation Institute",
-    date: "2026-01-12",
-    category: "AI Models",
-    url: "https://amiko.consulting/en/the-january-2026-ai-revolution-7-key-trends-changing-the-future-of-manufacturing/"
-  }
-];
+let viewer;
 
 function displayBreakthroughs() {
   const container = document.getElementById('breakthroughs');
   
-  container.innerHTML = BREAKTHROUGHS_TODAY.map(item => {
+  container.innerHTML = INTELLIGENCE_DATA.map((item, index) => {
     const impactLevel = item.impact.startsWith('CRITICAL') ? 'critical' : 
                        item.impact.startsWith('HIGH') ? 'high' : '';
     
     return `
-      <div class="breakthrough ${impactLevel}">
+      <div class="breakthrough ${impactLevel}" onclick="openDeepDive(${index})">
         <h3>${item.title}</h3>
         <p>${item.description}</p>
         <div class="meta">
           <span class="tag">${item.category}</span>
           <span class="tag">${item.source}</span>
           <span class="tag">${new Date(item.date).toLocaleDateString()}</span>
+          <span class="tag">🔍 CLICK FOR FULL ANALYSIS</span>
         </div>
         <div class="impact">${item.impact}</div>
-        <div class="timestamp">
-          <a href="${item.url}" target="_blank" style="color:#0ff">Read More →</a>
-        </div>
       </div>
     `;
   }).join('');
 }
 
-// REAL 3D EARTH WITH CESIUM
-let viewer;
+function openDeepDive(index) {
+  const item = INTELLIGENCE_DATA[index];
+  const modal = document.getElementById('modal');
+  const title = document.getElementById('modal-title');
+  const body = document.getElementById('modal-body');
+  
+  title.textContent = item.title;
+  
+  body.innerHTML = `
+    <div class="section">
+      <h3>📋 EXECUTIVE SUMMARY</h3>
+      <p>${item.deepDive.summary}</p>
+    </div>
+    
+    <div class="section">
+      <h3>🔬 TECHNICAL DETAILS</h3>
+      ${item.deepDive.technical.map(t => `<p><strong>${t.title}:</strong> ${t.detail}</p>`).join('')}
+    </div>
+    
+    ${item.deepDive.secrets ? `
+    <div class="secret">
+      <h4>🔐 CLASSIFIED/HIDDEN INFORMATION</h4>
+      ${item.deepDive.secrets.map(s => `<p><strong>• ${s.title}:</strong> ${s.detail}</p>`).join('')}
+    </div>
+    ` : ''}
+    
+    ${item.deepDive.urgent ? `
+    <div class="urgent">
+      <h4>⚠️ URGENT CONCERNS & ACTION ITEMS</h4>
+      ${item.deepDive.urgent.map(u => `<p><strong>• ${u.title}:</strong> ${u.detail}</p>`).join('')}
+    </div>
+    ` : ''}
+    
+    <div class="section">
+      <h3>✅ PROOF & VERIFICATION</h3>
+      ${item.deepDive.proofs.map(p => `
+        <div class="proof">
+          <h4>${p.type}</h4>
+          <p>${p.detail}</p>
+          <p><a href="${p.url}" target="_blank">View Source →</a></p>
+        </div>
+      `).join('')}
+    </div>
+    
+    <div class="section">
+      <h3>📅 TIMELINE</h3>
+      <div class="timeline">
+        ${item.deepDive.timeline.map(t => `
+          <div class="timeline-item">
+            <div class="date">${t.date}</div>
+            <div>${t.event}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    
+    <div class="section">
+      <h3>🎯 IMPLICATIONS & IMPACT</h3>
+      <ul>
+        ${item.deepDive.implications.map(i => `<li>${i}</li>`).join('')}
+      </ul>
+    </div>
+    
+    <div class="section">
+      <h3>🔗 OFFICIAL SOURCES</h3>
+      <ul>
+        ${item.deepDive.sources.map(s => `<li><a href="${s.url}" target="_blank">${s.name}</a></li>`).join('')}
+      </ul>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+}
 
 function init3DGlobe() {
   try {
@@ -145,7 +205,6 @@ function init3DGlobe() {
       fullscreenButton: false
     });
     
-    // Add tech hub markers
     const locations = [
       { lat: 28.6139, lng: 77.2090, name: 'New Delhi', desc: 'Tech Hub' },
       { lat: 12.9716, lng: 77.5946, name: 'Bangalore', desc: 'Silicon Valley of India' },
@@ -177,15 +236,10 @@ function init3DGlobe() {
       });
     });
     
-    // Rotate Earth
     viewer.clock.shouldAnimate = true;
     viewer.scene.globe.enableLighting = true;
-    
-    console.log('3D Globe initialized');
   } catch (error) {
     console.error('Globe error:', error);
-    document.getElementById('globe').innerHTML = 
-      `<div style="color:#f00;padding:20px">Globe initialization failed. Using fallback...</div>`;
   }
 }
 
@@ -194,24 +248,20 @@ function updateTimestamp() {
     `Last updated: ${new Date().toLocaleString()} • Next update in 60s`;
 }
 
-// AUTO-REFRESH EVERY 60 SECONDS
-function autoRefresh() {
-  console.log('Auto-refresh triggered');
-  displayBreakthroughs();
-  updateTimestamp();
-}
-
 window.onload = () => {
-  console.log('🚀 Tech Intelligence Hub initializing...');
   displayBreakthroughs();
   init3DGlobe();
   updateTimestamp();
-  
-  // Auto-refresh every 60 seconds
-  setInterval(autoRefresh, 60000);
-  
-  console.log('✅ System online');
+  setInterval(() => {
+    displayBreakthroughs();
+    updateTimestamp();
+  }, 60000);
 };
+
+// Close modal on ESC key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
 </script>
 </body>
 </html>
