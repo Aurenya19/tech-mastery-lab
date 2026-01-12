@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tech Mastery Lab - Intelligence System</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas class="matrix-bg" id="matrix"></canvas>
+<div class="container">
+<div class="header">
+<h1><span class="status"></span>TECH MASTERY LAB - INTELLIGENCE SYSTEM</h1>
+<div class="controls">
+<button class="btn" onclick="refreshAll()">🔄 REFRESH ALL</button>
+<button class="btn" onclick="togglePanel('news')">📰 NEWS</button>
+<button class="btn" onclick="togglePanel('research')">🔬 RESEARCH</button>
+<button class="btn" onclick="togglePanel('github')">💻 GITHUB</button>
+<button class="btn" onclick="togglePanel('india')">🇮🇳 INDIA</button>
+<button class="btn" onclick="togglePanel('risks')">⚠️ RISKS</button>
+<button class="btn" onclick="togglePanel('osint')">🕵️ OSINT</button>
+<button class="btn" onclick="togglePanel('satellite')">🛰️ SATELLITE</button>
+</div>
+</div>
+<div class="main-grid">
+<div class="panel" id="stats-panel">
+<h2>📊 LIVE STATISTICS</h2>
+<div class="stat-grid">
+<div class="stat"><div class="stat-value" id="news-count">0</div><div class="stat-label">NEWS ITEMS</div></div>
+<div class="stat"><div class="stat-value" id="research-count">0</div><div class="stat-label">PAPERS</div></div>
+<div class="stat"><div class="stat-value" id="github-count">0</div><div class="stat-label">REPOS</div></div>
+<div class="stat"><div class="stat-value" id="risk-count">0</div><div class="stat-label">RISKS</div></div>
+</div>
+<div class="timestamp" id="last-update">LAST UPDATE: NEVER</div>
+</div>
+<div class="panel" id="news-panel">
+<h2>📰 TECH NEWS FEED <span style="font-size:0.7em">[LIVE]</span></h2>
+<input type="text" class="search-box" placeholder="SEARCH NEWS..." onkeyup="filterNews(this.value)">
+<div id="news-container"><div class="loading">LOADING NEWS FEED</div></div>
+</div>
+<div class="panel" id="research-panel">
+<h2>🔬 RESEARCH PAPERS</h2>
+<div id="research-container"><div class="loading">SCANNING ARXIV</div></div>
+</div>
+<div class="panel" id="github-panel">
+<h2>💻 GITHUB TRENDING</h2>
+<div id="github-container"><div class="loading">ANALYZING REPOSITORIES</div></div>
+</div>
+<div class="panel" id="india-panel">
+<h2>🇮🇳 INDIA TECH INTEL</h2>
+<div id="india-container"><div class="loading">MONITORING ISRO</div></div>
+</div>
+<div class="panel" id="risks-panel">
+<h2>⚠️ RISK ANALYSIS</h2>
+<div id="risks-container"><div class="loading">ASSESSING THREATS</div></div>
+</div>
+<div class="panel" id="osint-panel">
+<h2>🕵️ OSINT - SOCIAL INTEL</h2>
+<div id="osint-container"><div class="loading">MONITORING CHANNELS</div></div>
+</div>
+<div class="panel full-width" id="satellite-panel">
+<h2>🛰️ SATELLITE INTELLIGENCE</h2>
+<div id="map"></div>
+</div>
+</div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
