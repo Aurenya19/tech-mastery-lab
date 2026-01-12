@@ -1,0 +1,23 @@
+{
+  "name": "tech-mastery-lab",
+  "version": "2.0.0",
+  "description": "Complete Tech Intelligence System with real-time monitoring",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^3.3.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "socket.io": "^4.6.1",
+    "rss-parser": "^3.13.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
