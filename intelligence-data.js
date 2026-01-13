@@ -1,6 +1,276 @@
-// COMPLETE INTELLIGENCE DATABASE WITH DEEP DIVE DATA
+// COMPLETE INTELLIGENCE DATABASE WITH REAL WORLD SECRETS
 
 const INTELLIGENCE_DATA = [
+  {
+    title: "🔐 CHINA KNOWNSEC LEAK - State Cyber Espionage Tools Exposed",
+    description: "12,000+ internal documents leaked from Chinese cybersecurity firm Knownsec, revealing offensive cyber tools for PLA, MSS, and public security. Includes RATs, exploitation tools, and global reconnaissance platforms targeting 20+ countries.",
+    impact: "CRITICAL - Exposes China's state-sponsored cyber espionage infrastructure",
+    source: "DomainTools Intelligence",
+    date: "2025-11-07",
+    category: "Cyber Espionage/Classified",
+    url: "https://dti.domaintools.com/the-knownsec-leak-yet-another-leak-of-chinas-contractor-driven-cyber-espionage-ecosystem/",
+    
+    deepDive: {
+      summary: "In November 2025, over 12,000 internal documents from Chinese cybersecurity firm Knownsec were leaked on the Dark Web, exposing its role as a state-aligned contractor providing offensive cyber espionage tools to China's PLA (People's Liberation Army), MSS (Ministry of State Security), and public security organs. The leak revealed reconnaissance platforms, exploitation tools, remote access trojans (RATs), and massive datasets from global surveillance operations targeting critical infrastructure in 20+ countries including India, Japan, Vietnam, South Korea, and Taiwan.",
+      
+      technical: [
+        {
+          title: "Offensive Tools Exposed",
+          detail: "RATs (Remote Access Trojans) for persistent access across Windows, Linux, macOS, Android. Specialized Android data extraction tools. Vulnerability research and exploits for PSB, national CERT, and military clients."
+        },
+        {
+          title: "Reconnaissance Platforms",
+          detail: "TargetDB and ZoomEye - cyberspace mapping platforms for telecom regulators. Entity-fusion systems for police intelligence. Long-term PCAP sourcing from civilian data lakes and foreign hosting."
+        },
+        {
+          title: "Stolen Data Revealed",
+          detail: "95 GB Indian immigration data, 3 TB South Korean call logs, 459 GB Taiwanese transport data. Global breach datasets for deanonymization, spearphishing, and espionage."
+        },
+        {
+          title: "Customer List",
+          detail: "Ministry of Public Security, Beijing Municipal PSB, defense institutes, military production lines. Project sheets showing military and intelligence tasking."
+        }
+      ],
+      
+      secrets: [
+        {
+          title: "Shadow Organization Structure",
+          detail: "Knownsec publicly presents as cybersecurity vendor but operates shadow organization (404 Lab) supporting China's cyber-espionage ecosystem. Organizational charts and internal structure fully exposed."
+        },
+        {
+          title: "Targeting Lists for 20+ Countries",
+          detail: "Specific targeting lists revealed for Japan, Vietnam, India critical infrastructure, telecoms, governments, and private sectors. Systematic global surveillance operation."
+        },
+        {
+          title: "Insider Leak Source",
+          detail: "Breach likely from insider activity. Data surfaced on Dark Web November 7, 2025 by user 't1g3r'. Files briefly posted on GitHub before removal."
+        },
+        {
+          title: "China's Official Denial",
+          detail: "China denied knowledge, claiming opposition to cyberattacks. However, leaked documents prove direct state involvement through contractor model."
+        }
+      ],
+      
+      urgent: [
+        {
+          title: "Active Espionage Operations",
+          detail: "CRITICAL: Tools and infrastructure still operational. 20+ countries' critical infrastructure actively targeted. Immediate defensive measures required."
+        },
+        {
+          title: "India Specifically Targeted",
+          detail: "WARNING: 95 GB of Indian immigration data stolen. India on specific targeting list. Government and critical infrastructure at risk."
+        },
+        {
+          title: "Contractor-Driven Model",
+          detail: "SYSTEMIC ISSUE: Mirrors i-Soon leak. China uses contractor model for plausible deniability. More contractors likely operating with similar capabilities."
+        }
+      ],
+      
+      proofs: [
+        {
+          type: "DomainTools Intelligence Report",
+          detail: "Comprehensive analysis of 12,000+ leaked documents including organizational charts, customer lists, project sheets, and tool documentation.",
+          url: "https://dti.domaintools.com/the-knownsec-leak-yet-another-leak-of-chinas-contractor-driven-cyber-espionage-ecosystem/"
+        },
+        {
+          type: "SC World Coverage",
+          detail: "Cybersecurity breach exposing Knownsec's government-backed hacking tools and capabilities.",
+          url: "https://www.scworld.com/brief/cybersecurity-breach-exposes-chinese-firm-knownsecs-government-backed-hacking-tools"
+        },
+        {
+          type: "Resecurity Analysis",
+          detail: "Detailed breakdown of espionage tradecraft with insider narrative and tool specifications.",
+          url: "https://www.resecurity.com/blog/article/knownsec-data-breach-a-trove-of-espionage-tradecraft-with-an-insider-narrative"
+        }
+      ],
+      
+      timeline: [
+        {
+          date: "November 7, 2025",
+          event: "12,000+ Knownsec documents leaked on Dark Web by 't1g3r'"
+        },
+        {
+          date: "November 2025",
+          event: "Files briefly posted on GitHub before removal"
+        },
+        {
+          date: "Late 2025",
+          event: "China issues official denial, claims opposition to cyberattacks"
+        },
+        {
+          date: "January 2026",
+          event: "Security researchers publish detailed analysis of leaked tools and operations"
+        }
+      ],
+      
+      implications: [
+        "Exposes China's state-sponsored cyber espionage infrastructure using contractor model",
+        "Proves systematic targeting of 20+ countries' critical infrastructure",
+        "India, Japan, Vietnam, South Korea, Taiwan specifically targeted with massive data theft",
+        "95 GB Indian immigration data, 3 TB Korean call logs, 459 GB Taiwan transport data stolen",
+        "RATs and exploitation tools still operational - active threat to global infrastructure",
+        "Contractor model provides plausible deniability - more firms likely operating similarly",
+        "Mirrors i-Soon leak pattern - systemic issue in China's cyber operations",
+        "Global defensive measures urgently needed against exposed tools and techniques"
+      ],
+      
+      sources: [
+        {
+          name: "DomainTools Intelligence - Knownsec Leak Analysis",
+          url: "https://dti.domaintools.com/the-knownsec-leak-yet-another-leak-of-chinas-contractor-driven-cyber-espionage-ecosystem/"
+        },
+        {
+          name: "SC World - Government-Backed Hacking Tools Exposed",
+          url: "https://www.scworld.com/brief/cybersecurity-breach-exposes-chinese-firm-knownsecs-government-backed-hacking-tools"
+        },
+        {
+          name: "Resecurity - Espionage Tradecraft Analysis",
+          url: "https://www.resecurity.com/blog/article/knownsec-data-breach-a-trove-of-espionage-tradecraft-with-an-insider-narrative"
+        },
+        {
+          name: "BrinzTech Alert - Geopolitical Target Lists",
+          url: "https://www.brinztech.com/breach-alerts/brinztech-alert-chinese-state-affiliated-infosec-firm-knownsec-hacked-military-tools-geopolitical-target-lists-japan-vietnam-india-for-sale/"
+        }
+      ]
+    }
+  },
+  
+  {
+    title: "🔐 FORBES AI 50 COMPANIES - $400B+ Worth of Secrets Leaked on GitHub",
+    description: "65% of top AI companies (Forbes AI 50) exposed sensitive API keys, credentials, and access tokens on GitHub. Leaked data includes private models, training data, and organizational secrets from Hugging Face, Weights & Biases, ElevenLabs, Perplexity, Groq, NVIDIA.",
+    impact: "CRITICAL - $400B+ AI industry secrets exposed, private models compromised",
+    source: "Wiz Security Research",
+    date: "2025-12-01",
+    category: "AI Security/Data Breach",
+    url: "https://www.wiz.io/blog/forbes-ai-50-leaking-secrets",
+    
+    deepDive: {
+      summary: "Security researchers discovered that 65% of Forbes AI 50 companies (collectively valued over $400 billion) have exposed sensitive information on GitHub, including API keys, tokens, and credentials. These leaks compromise private AI models, training data, organizational structures, and internal systems. Exposed platforms include Hugging Face, Weights & Biases, LangChain, ElevenLabs, Perplexity, Groq, and NVIDIA. Leaked information was found in deleted forks, gists, commit histories, and employee repositories, often evading standard security scanners.",
+      
+      technical: [
+        {
+          title: "Exposed Credentials",
+          detail: "API keys, access tokens, authentication credentials for major AI platforms. LangChain enterprise keys granting full organizational access. Hugging Face tokens providing access to ~1,000 private models."
+        },
+        {
+          title: "Leak Locations",
+          detail: "Deleted forks, gists, commit histories, employee personal repositories. Often evade standard security scanners. Require deep scanning of git history and associated accounts."
+        },
+        {
+          title: "Affected Platforms",
+          detail: "Hugging Face (private model access), Weights & Biases (training data), LangChain (enterprise systems), ElevenLabs (voice AI), Perplexity (search AI), Groq (inference), NVIDIA (proprietary tools)."
+        },
+        {
+          title: "Scale of Exposure",
+          detail: "65% of Forbes AI 50 companies affected. Total value exceeds $400 billion. Thousands of credentials exposed across multiple platforms."
+        }
+      ],
+      
+      secrets: [
+        {
+          title: "Hidden AI Frontier - Internal Models More Advanced",
+          detail: "Major companies maintain unreported AI capabilities in private labs. OpenAI withholding advanced math models after GPT-5. Google uses 'Gemini for Google' internally for 25% of new code based on proprietary data. Internal systems significantly more advanced than public releases."
+        },
+        {
+          title: "Poor Disclosure Response",
+          detail: "Nearly 50% of affected companies ignored security notifications. No public disclosure of breaches. Companies prioritizing secrecy over security."
+        },
+        {
+          title: "Hugging Face Token - 1,000 Private Models",
+          detail: "Single leaked Hugging Face token from unnamed AI50 company provided access to approximately 1,000 private AI models. Full model weights and training data exposed."
+        },
+        {
+          title: "LangChain Enterprise Access",
+          detail: "Leaked LangChain enterprise keys grant full organizational access to internal AI systems, workflows, and proprietary implementations."
+        }
+      ],
+      
+      urgent: [
+        {
+          title: "Active Credential Exposure",
+          detail: "CRITICAL: Credentials still active on GitHub. Unauthorized access to private AI endpoints possible. Immediate credential rotation required."
+        },
+        {
+          title: "IP Theft Risk",
+          detail: "WARNING: Private models, training data, and proprietary techniques exposed. Competitors and adversaries can steal billions in AI R&D."
+        },
+        {
+          title: "Model Poisoning Threat",
+          detail: "SEVERE: Compromised systems could enable 'sleeper agent' models or poisoned training data. AI safety implications critical."
+        }
+      ],
+      
+      proofs: [
+        {
+          type: "Wiz Security Research Report",
+          detail: "Comprehensive analysis of Forbes AI 50 companies' GitHub exposure, including specific platforms, credential types, and access levels.",
+          url: "https://www.wiz.io/blog/forbes-ai-50-leaking-secrets"
+        },
+        {
+          type: "CSO Online Coverage",
+          detail: "AI startups leak sensitive credentials on GitHub exposing models and training data.",
+          url: "https://www.csoonline.com/article/4087983/ai-startups-leak-sensitive-credentials-on-github-exposing-models-and-training-data.html"
+        },
+        {
+          type: "eSecurity Planet Analysis",
+          detail: "AI companies leak secrets - security gaps in rapid development cycle.",
+          url: "https://www.esecurityplanet.com/news/ai-companies-leak-secrets/"
+        }
+      ],
+      
+      timeline: [
+        {
+          date: "2023-2025",
+          event: "Credentials gradually leaked across GitHub repositories, forks, and gists"
+        },
+        {
+          date: "December 2025",
+          event: "Wiz Security researchers discover widespread exposure across Forbes AI 50"
+        },
+        {
+          date: "Late 2025",
+          event: "Security notifications sent to affected companies - 50% ignored"
+        },
+        {
+          date: "January 2026",
+          event: "Public disclosure of $400B+ AI industry security crisis"
+        }
+      ],
+      
+      implications: [
+        "65% of top AI companies ($400B+ value) have exposed critical secrets on GitHub",
+        "Private AI models, training data, and proprietary systems compromised",
+        "Hugging Face token exposed ~1,000 private models from single AI50 company",
+        "LangChain enterprise keys grant full organizational access to internal systems",
+        "Hidden AI frontier: Internal models significantly more advanced than public releases",
+        "OpenAI withholding advanced models, Google using proprietary Gemini internally",
+        "50% of companies ignored security notifications - prioritizing secrecy over security",
+        "Active credentials enable IP theft, model poisoning, and unauthorized access",
+        "Rapid AI development outpacing security practices - systemic industry problem",
+        "Potential for 'sleeper agent' models or poisoned training data if systems compromised"
+      ],
+      
+      sources: [
+        {
+          name: "Wiz Security - Forbes AI 50 Leaking Secrets",
+          url: "https://www.wiz.io/blog/forbes-ai-50-leaking-secrets"
+        },
+        {
+          name: "CSO Online - AI Startups Leak Credentials",
+          url: "https://www.csoonline.com/article/4087983/ai-startups-leak-sensitive-credentials-on-github-exposing-models-and-training-data.html"
+        },
+        {
+          name: "AI Frontiers - The Hidden AI Frontier",
+          url: "https://ai-frontiers.org/articles/the-hidden-ai-frontier"
+        },
+        {
+          name: "eSecurity Planet - AI Companies Leak Secrets",
+          url: "https://www.esecurityplanet.com/news/ai-companies-leak-secrets/"
+        }
+      ]
+    }
+  },
+  
   {
     title: "XPENG VLA 2.0 - First Physical-AI for L4 Autonomous Driving",
     description: "Industry's first Visual-Language-Action model that directly generates driving commands from visual inputs. Enables L4 autonomous driving without traditional rule-based systems.",
@@ -81,11 +351,6 @@ const INTELLIGENCE_DATA = [
           type: "Industry Coverage",
           detail: "ArenaEV comprehensive analysis confirming VW as first launch customer and Q1 2026 deployment to Ultra vehicles.",
           url: "https://www.arenaev.com/xpeng_launches_paradigmshift_vla_20_selfdriving_vw_to_adopt_it_first-news-5289.php"
-        },
-        {
-          type: "Video Demonstration",
-          detail: "Official demo showcasing narrow road performance and nighttime driving capabilities.",
-          url: "https://www.youtube.com/watch?v=19xe90ut3lc"
         }
       ],
       
@@ -105,10 +370,6 @@ const INTELLIGENCE_DATA = [
         {
           date: "March 2026",
           event: "PLANNED: Over-the-air deployment to customer vehicles"
-        },
-        {
-          date: "2026",
-          event: "Robotaxi deployment and Land Aircraft Carrier (eVTOL) mass production"
         }
       ],
       
@@ -119,8 +380,7 @@ const INTELLIGENCE_DATA = [
         "Raises critical safety questions: unverified claims, no regulatory approval, rapid deployment timeline",
         "Chinese AI leadership in autonomous driving - geopolitical implications for US/EU tech dominance",
         "On-device processing (no cloud) solves latency and privacy concerns but raises update/monitoring questions",
-        "100M video training dataset sets new standard - competitors must match or exceed data scale",
-        "VW partnership validates technology but also spreads unproven system to Western markets"
+        "100M video training dataset sets new standard - competitors must match or exceed data scale"
       ],
       
       sources: [
@@ -131,190 +391,6 @@ const INTELLIGENCE_DATA = [
         {
           name: "CleanTechnica Technical Analysis",
           url: "https://cleantechnica.com/2025/12/29/breakdown-of-the-fastdrivevla-ai-led-l4-autonomous-driving-from-xpeng-peking-university/"
-        },
-        {
-          name: "ArenaEV Industry Report",
-          url: "https://www.arenaev.com/xpeng_launches_paradigmshift_vla_20_selfdriving_vw_to_adopt_it_first-news-5289.php"
-        },
-        {
-          name: "Electrek Coverage",
-          url: "https://electrek.co/2025/11/05/xpeng-ai-day-new-ai-model-powering-robots-robotaxis-and-flying-cars/"
-        },
-        {
-          name: "Motor Trend Analysis",
-          url: "https://www.motortrend.com/news/xpeng-ai-day-new-technology-robots-flying-cars"
-        }
-      ]
-    }
-  },
-  
-  {
-    title: "NVIDIA Vera Rubin - H300 GPUs for Trillion-Parameter AI Models",
-    description: "New AI foundry platform with H300 GPUs designed for trillion-parameter models. Announced at CES 2026. Full production later in 2026.",
-    impact: "HIGH - Enables next-generation AI at unprecedented scale",
-    source: "NVIDIA CES 2026",
-    date: "2026-01-12",
-    category: "AI Hardware",
-    url: "https://www.crescendo.ai/news/latest-ai-news-and-updates",
-    
-    deepDive: {
-      summary: "NVIDIA's Vera Rubin platform represents the next evolution in AI infrastructure, featuring H300 GPUs specifically designed to train and run trillion-parameter AI models. Named after astronomer Vera Rubin, this AI foundry platform was unveiled at CES 2026 and targets enterprises building next-generation AI systems. Full production is scheduled for later in 2026.",
-      
-      technical: [
-        {
-          title: "H300 GPU Architecture",
-          detail: "Next-generation GPU designed for trillion-parameter model training and inference. Significant improvements over H100 in memory bandwidth, compute density, and power efficiency."
-        },
-        {
-          title: "AI Foundry Platform",
-          detail: "Complete infrastructure solution including hardware, software stack, and development tools for building custom AI models at unprecedented scale."
-        },
-        {
-          title: "Target Applications",
-          detail: "Designed for frontier AI models, multimodal systems, and enterprise-scale AI deployments requiring massive compute resources."
-        }
-      ],
-      
-      secrets: [
-        {
-          title: "Exact Specifications Undisclosed",
-          detail: "NVIDIA has not released detailed technical specifications including TFLOPS, memory capacity, bandwidth, or power consumption figures."
-        },
-        {
-          title: "Pricing Strategy Unknown",
-          detail: "No pricing information available. Given H100 costs ($25,000-40,000), H300 likely significantly more expensive. Enterprise foundry platform costs could reach millions."
-        }
-      ],
-      
-      urgent: [
-        {
-          title: "AI Arms Race Acceleration",
-          detail: "CRITICAL: Trillion-parameter models will widen gap between tech giants and smaller players. Concentration of AI power in few hands."
-        },
-        {
-          title: "Energy Consumption Concerns",
-          detail: "WARNING: Training trillion-parameter models requires massive energy. Environmental impact and sustainability questions unanswered."
-        }
-      ],
-      
-      proofs: [
-        {
-          type: "CES 2026 Announcement",
-          detail: "Official NVIDIA announcement at Consumer Electronics Show 2026.",
-          url: "https://www.crescendo.ai/news/latest-ai-news-and-updates"
-        }
-      ],
-      
-      timeline: [
-        {
-          date: "January 2026",
-          event: "Vera Rubin platform unveiled at CES 2026"
-        },
-        {
-          date: "Late 2026",
-          event: "PLANNED: Full production and enterprise availability"
-        }
-      ],
-      
-      implications: [
-        "Enables trillion-parameter models - 10x larger than current GPT-4 scale systems",
-        "Widens AI capability gap between tech giants and smaller companies/researchers",
-        "Accelerates AI development timeline - more powerful models arriving faster",
-        "Raises concerns about AI safety, alignment, and control at unprecedented scale",
-        "Energy consumption and environmental impact of training massive models",
-        "Geopolitical implications - US maintaining AI hardware leadership over China"
-      ],
-      
-      sources: [
-        {
-          name: "Crescendo AI News Coverage",
-          url: "https://www.crescendo.ai/news/latest-ai-news-and-updates"
-        }
-      ]
-    }
-  },
-  
-  {
-    title: "Boston Dynamics Atlas - Mass Production of Humanoid Robots",
-    description: "Atlas humanoid robot enters mass production with capacity of 30,000 units/year. Deployments at Hyundai and Google DeepMind with Gemini Robotics AI integration.",
-    impact: "HIGH - First mass-produced advanced humanoid robot",
-    source: "Boston Dynamics",
-    date: "2026-01-04",
-    category: "Robotics",
-    url: "https://amiko.consulting/en/the-january-2026-ai-revolution-7-key-trends-changing-the-future-of-manufacturing/",
-    
-    deepDive: {
-      summary: "Boston Dynamics' Atlas humanoid robot has transitioned from research prototype to mass production, with manufacturing capacity of 30,000 units per year. The robot is being deployed at Hyundai manufacturing facilities and Google DeepMind for AI research, with Gemini Robotics AI integration enabling advanced autonomous capabilities. This marks the first time an advanced humanoid robot has reached commercial-scale production.",
-      
-      technical: [
-        {
-          title: "Production Capacity",
-          detail: "30,000 units per year manufacturing capacity. Represents massive scale-up from prototype production."
-        },
-        {
-          title: "AI Integration",
-          detail: "Gemini Robotics AI from Google DeepMind provides advanced perception, planning, and manipulation capabilities. Enables autonomous operation in complex environments."
-        },
-        {
-          title: "Deployment Sites",
-          detail: "Hyundai manufacturing facilities for industrial applications. Google DeepMind for AI research and development."
-        }
-      ],
-      
-      secrets: [
-        {
-          title: "Pricing Not Disclosed",
-          detail: "Per-unit cost unknown. Industrial robots typically $50,000-500,000. Atlas likely at premium end given advanced capabilities."
-        },
-        {
-          title: "Full Capability Set Unknown",
-          detail: "Specific tasks, payload capacity, battery life, and operational limitations not publicly detailed."
-        }
-      ],
-      
-      urgent: [
-        {
-          title: "Labor Displacement Concerns",
-          detail: "CRITICAL: 30,000 humanoid robots/year could displace significant manufacturing workforce. Social and economic implications require policy response."
-        },
-        {
-          title: "Safety Standards Needed",
-          detail: "WARNING: No established safety standards for humanoid robots in industrial settings. Regulatory framework urgently needed."
-        }
-      ],
-      
-      proofs: [
-        {
-          type: "Industry Analysis",
-          detail: "Comprehensive report on January 2026 AI revolution including Atlas production details.",
-          url: "https://amiko.consulting/en/the-january-2026-ai-revolution-7-key-trends-changing-the-future-of-manufacturing/"
-        }
-      ],
-      
-      timeline: [
-        {
-          date: "January 4, 2026",
-          event: "Mass production announcement and field test reports"
-        },
-        {
-          date: "2026",
-          event: "Ongoing deployments at Hyundai and Google DeepMind"
-        }
-      ],
-      
-      implications: [
-        "First commercially viable humanoid robot at scale - industry milestone",
-        "Manufacturing automation reaches new level - human-like dexterity and mobility",
-        "Labor market disruption - potential displacement of manufacturing workers",
-        "Safety and regulatory challenges - humanoid robots working alongside humans",
-        "AI advancement - Gemini integration demonstrates practical robotics AI",
-        "Competitive pressure - other robotics companies must accelerate development"
-      ],
-      
-      sources: [
-        {
-          name: "Amiko Consulting Industry Report",
-          url: "https://amiko.consulting/en/the-january-2026-ai-revolution-7-key-trends-changing-the-future-of-manufacturing/"
         }
       ]
     }
