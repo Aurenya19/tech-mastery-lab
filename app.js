@@ -634,37 +634,67 @@ async function loadResearch() {
   }
 }
 
-// SATELLITE MAP
+// ULTRA HD SATELLITE MAP - ZOOM 22 MAX
 function initMap() {
   try {
     map = L.map('map', {
       center: [20, 0],
       zoom: 2,
-      maxZoom: 20,
+      maxZoom: 22,
       minZoom: 2,
-      zoomControl: true
+      zoomControl: true,
+      preferCanvas: true
     });
     
-    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles © Esri',
-      maxZoom: 20,
-      maxNativeZoom: 19
+    // GOOGLE HYBRID - ULTRA HD (Best quality)
+    const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+      attribution: 'Map data ©2024 Google',
+      maxZoom: 22,
+      maxNativeZoom: 21,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
     }).addTo(map);
     
-    const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 20,
+    // GOOGLE SATELLITE - PURE IMAGERY
+    const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+      attribution: 'Imagery ©2024 Google',
+      maxZoom: 22,
+      maxNativeZoom: 21,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+    
+    // ESRI WORLD IMAGERY - HIGH RES
+    const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles © Esri',
+      maxZoom: 22,
       maxNativeZoom: 19
     });
     
-    const labels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Labels © Esri',
-      maxZoom: 20,
+    // MAPBOX SATELLITE - CRYSTAL CLEAR
+    const mapboxSatellite = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      attribution: 'Imagery © Mapbox',
+      maxZoom: 22,
+      maxNativeZoom: 20
+    });
+    
+    // STREET MAP
+    const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 22,
       maxNativeZoom: 19
+    });
+    
+    // LABELS OVERLAY
+    const labels = L.tileLayer('https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}', {
+      attribution: 'Labels © Google',
+      maxZoom: 22,
+      maxNativeZoom: 21
     });
     
     const baseMaps = {
-      "🛰️ Satellite (High-Res)": satellite,
+      "🛰️ Google Hybrid (ULTRA HD)": googleHybrid,
+      "🌍 Google Satellite (Pure)": googleSatellite,
+      "🗺️ ESRI Satellite": esriSatellite,
+      "📡 Mapbox Satellite": mapboxSatellite,
       "🗺️ Street Map": streetMap
     };
     
@@ -676,8 +706,8 @@ function initMap() {
     
     map.on('zoomend', function() {
       const zoom = map.getZoom();
-      document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | Max: 20`;
-      if (zoom >= 15) console.log('🔍 Street-level view active');
+      document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | Max: 22 (ULTRA HD)`;
+      if (zoom >= 18) console.log('🔍 ULTRA HD street-level view active');
     });
     
     markerCluster = L.markerClusterGroup({
@@ -738,7 +768,7 @@ function initMap() {
           <span style="color:#0f0;line-height:1.6">${loc.desc}</span><br><br>
           <span style="color:#0a0;font-size:0.85em">📍 ${loc.lat.toFixed(4)}°N, ${Math.abs(loc.lng).toFixed(4)}°${loc.lng >= 0 ? 'E' : 'W'}</span><br>
           <button onclick="zoomToLocation(${loc.lat}, ${loc.lng})" style="margin-top:10px;background:#0f0;color:#000;border:none;padding:8px 15px;cursor:pointer;font-weight:bold">
-            🔍 ZOOM TO STREET LEVEL
+            🔍 ZOOM TO ULTRA HD
           </button>
         </div>
       `);
@@ -781,7 +811,7 @@ function initMap() {
       
       if (matches.length > 0) {
         const firstMatch = matches[0];
-        map.setView([firstMatch.lat, firstMatch.lng], 15);
+        map.setView([firstMatch.lat, firstMatch.lng], 18);
         
         markers.forEach(m => {
           if (m.location.name === firstMatch.name) {
@@ -792,15 +822,16 @@ function initMap() {
     });
     
     console.log('✅ Map initialized with', allLocations.length, 'secret locations');
+    console.log('🛰️ ULTRA HD satellite imagery - Zoom up to level 22!');
   } catch (error) {
     console.error('Map error:', error);
   }
 }
 
 function zoomToLocation(lat, lng) {
-  map.setView([lat, lng], 18, {
+  map.setView([lat, lng], 20, {
     animate: true,
-    duration: 1
+    duration: 1.5
   });
 }
 
@@ -841,6 +872,7 @@ async function refreshAll() {
 window.onload = () => {
   console.log('🚀 Tech Intelligence Hub initializing...');
   console.log('📊 Loading 100+ news, 50+ Reddit posts, 50+ GitHub repos, 30+ papers');
+  console.log('🛰️ ULTRA HD satellite maps - Zoom level 22 max!');
   
   initMatrix();
   initMap();
