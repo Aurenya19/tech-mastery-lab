@@ -57,6 +57,17 @@
       to { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff; }
     }
     
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
     .subtitle {
       color: #0f0;
       font-size: 1.2em;
@@ -86,6 +97,7 @@
       background: #0f0;
       color: #000;
       box-shadow: 0 0 15px #0f0;
+      transform: scale(1.05);
     }
     
     .stats {
@@ -100,12 +112,25 @@
       border: 2px solid #0f0;
       padding: 20px;
       text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .stat-card:hover {
+      border-color: #0ff;
+      box-shadow: 0 0 20px rgba(0,255,255,0.5);
+      transform: translateY(-5px);
     }
     
     .stat-number {
       font-size: 2.5em;
       color: #0ff;
       font-weight: bold;
+      animation: countUp 1s ease-out;
+    }
+    
+    @keyframes countUp {
+      from { opacity: 0; transform: scale(0.5); }
+      to { opacity: 1; transform: scale(1); }
     }
     
     .stat-label {
@@ -168,6 +193,7 @@
     .item a {
       color: #0ff;
       text-decoration: none;
+      transition: all 0.3s;
     }
     
     .item a:hover {
@@ -181,8 +207,15 @@
       color: #000;
       padding: 3px 8px;
       margin-right: 5px;
+      margin-top: 5px;
       font-size: 0.8em;
       font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .tag:hover {
+      background: #0ff;
+      transform: scale(1.1);
     }
     
     .meta {
@@ -209,6 +242,11 @@
       padding: 8px;
       background: rgba(0,255,255,0.1);
       border: 1px solid #0ff;
+      transition: all 0.3s;
+    }
+    
+    .expand-btn:hover {
+      background: rgba(0,255,255,0.3);
     }
     
     .details {
@@ -217,6 +255,7 @@
       padding: 15px;
       background: rgba(0,0,0,0.9);
       border: 2px solid #0ff;
+      animation: slideIn 0.3s ease;
     }
     
     .item.expanded .details {
@@ -256,6 +295,14 @@
       margin: 10px 0;
     }
     
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #0ff;
+      font-size: 1.2em;
+      animation: pulse 1.5s infinite;
+    }
+    
     #map {
       height: 700px;
       width: 100%;
@@ -273,6 +320,7 @@
       font-family: 'Courier New', monospace;
       font-size: 1em;
       margin-bottom: 15px;
+      transition: all 0.3s;
     }
     
     .search-box:focus {
@@ -321,6 +369,16 @@
       width: 300px;
     }
     
+    .content-badge {
+      display: inline-block;
+      background: #ff0;
+      color: #000;
+      padding: 5px 10px;
+      font-weight: bold;
+      margin-left: 10px;
+      animation: pulse 2s infinite;
+    }
+    
     @media (max-width: 768px) {
       h1 { font-size: 1.8em; }
       .stats { grid-template-columns: 1fr; }
@@ -336,17 +394,22 @@
   <div class="container">
     <header>
       <h1>🔐 TECH MASTERY LAB</h1>
-      <div class="subtitle">Global Intelligence Hub - Real-Time Monitoring</div>
+      <div class="subtitle">
+        Global Intelligence Hub - Real-Time Monitoring
+        <span class="content-badge">100+ NEWS</span>
+        <span class="content-badge">50+ REDDIT</span>
+        <span class="content-badge">50+ GITHUB</span>
+      </div>
       <div class="subtitle" id="last-update">Initializing systems...</div>
       
       <div class="controls">
         <button onclick="refreshAll()">🔄 REFRESH ALL</button>
         <button onclick="togglePanel('stats')">📊 STATS</button>
         <button onclick="togglePanel('breakthroughs')">🚨 BREAKTHROUGHS</button>
-        <button onclick="togglePanel('news')">📰 NEWS</button>
-        <button onclick="togglePanel('research')">🔬 RESEARCH</button>
-        <button onclick="togglePanel('github')">💻 GITHUB</button>
-        <button onclick="togglePanel('reddit')">🕵️ REDDIT</button>
+        <button onclick="togglePanel('news')">📰 NEWS (100+)</button>
+        <button onclick="togglePanel('research')">🔬 RESEARCH (30+)</button>
+        <button onclick="togglePanel('github')">💻 GITHUB (50+)</button>
+        <button onclick="togglePanel('reddit')">🕵️ REDDIT (50+)</button>
         <button onclick="togglePanel('satellite')">🛰️ SATELLITE</button>
       </div>
     </header>
@@ -374,6 +437,10 @@
           <div class="stat-number">27</div>
           <div class="stat-label">Secret Labs Tracked</div>
         </div>
+        <div class="stat-card">
+          <div class="stat-number">60s</div>
+          <div class="stat-label">Auto-Refresh Rate</div>
+        </div>
       </div>
     </div>
     
@@ -383,28 +450,33 @@
     </div>
     
     <div id="news-panel" class="panel">
-      <h2>📰 HACKER NEWS - TOP STORIES</h2>
+      <h2>📰 HACKER NEWS - TOP 100+ STORIES</h2>
       <input type="text" class="search-box" placeholder="🔍 Search news..." onkeyup="filterNews(this.value)">
       <div id="news-container"></div>
     </div>
     
     <div id="research-panel" class="panel">
-      <h2>🔬 ARXIV RESEARCH - LATEST PAPERS</h2>
+      <h2>🔬 ARXIV RESEARCH - 30+ LATEST PAPERS (6 CATEGORIES)</h2>
+      <p style="color:#0ff;margin-bottom:15px">AI • Machine Learning • Computer Vision • NLP • Robotics • Quantum Physics</p>
       <div id="research-container"></div>
     </div>
     
     <div id="github-panel" class="panel">
-      <h2>💻 GITHUB TRENDING - TOP REPOSITORIES</h2>
+      <h2>💻 GITHUB TRENDING - 50+ TOP REPOSITORIES</h2>
       <div id="github-container"></div>
     </div>
     
     <div id="reddit-panel" class="panel">
-      <h2>🕵️ REDDIT - TECH COMMUNITIES</h2>
+      <h2>🕵️ REDDIT - 50+ POSTS FROM 10 TECH COMMUNITIES</h2>
+      <p style="color:#0ff;margin-bottom:15px">
+        r/technology • r/Futurology • r/artificial • r/spacex • r/programming • 
+        r/MachineLearning • r/datascience • r/cybersecurity • r/startups • r/gadgets
+      </p>
       <div id="reddit-container"></div>
     </div>
     
     <div id="satellite-panel" class="panel">
-      <h2>🛰️ GLOBAL SATELLITE VIEW - SECRET LABS & RESEARCH CENTERS</h2>
+      <h2>🛰️ GLOBAL SATELLITE VIEW - 27 SECRET LABS & RESEARCH CENTERS</h2>
       <p style="color:#0ff;margin-bottom:15px">
         🔴 Classified Sites | 🔵 Tech Giants | 🟣 Space/Research | 🟠 India | 🟡 China | 🟢 Others
       </p>
