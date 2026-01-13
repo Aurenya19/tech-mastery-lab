@@ -3,265 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Global Tech Intelligence Hub - Deep Analysis System</title>
-<link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Widgets/widgets.css">
+<title>Tech Intelligence Hub - Complete Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'SF Mono','Monaco','Courier New',monospace;background:#000;color:#0f0;overflow:hidden}
-.container{height:100vh;display:grid;grid-template-rows:auto 1fr}
-.header{background:#001a00;padding:20px;border-bottom:2px solid #0f0}
-.header h1{font-size:2em;color:#0f0;text-shadow:0 0 10px #0f0}
-.header p{color:#0a0;margin-top:5px;font-size:0.9em}
-.main{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:15px;height:100%;overflow:hidden}
-.panel{background:rgba(0,26,0,0.95);border:2px solid #0f0;padding:20px;overflow-y:auto;box-shadow:0 0 20px rgba(0,255,0,0.3)}
-.panel h2{color:#0f0;font-size:1.3em;margin-bottom:15px;border-bottom:2px solid #0f0;padding-bottom:10px}
-.breakthrough{background:rgba(0,51,0,0.7);padding:15px;margin:15px 0;border-left:4px solid #0ff;transition:all 0.3s;cursor:pointer}
-.breakthrough:hover{background:rgba(0,51,0,1);transform:translateX(5px);border-left-width:6px}
-.breakthrough h3{color:#0ff;font-size:1.1em;margin-bottom:8px}
-.breakthrough .meta{color:#0a0;font-size:0.85em;margin:8px 0}
-.breakthrough .impact{color:#ff0;font-weight:bold;margin-top:10px}
-.tag{display:inline-block;padding:4px 10px;background:rgba(0,255,0,0.2);border:1px solid #0f0;margin:5px 5px 0 0;font-size:0.8em}
+body{font-family:'Courier New',monospace;background:#000;color:#0f0;overflow-x:hidden}
+.matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.1}
+.container{position:relative;z-index:1;min-height:100vh}
+.header{background:linear-gradient(135deg,#001a00 0%,#003300 100%);padding:20px;border-bottom:2px solid #0f0;box-shadow:0 0 20px #0f0;position:sticky;top:0;z-index:100}
+.header h1{font-size:2em;color:#0f0;text-shadow:0 0 10px #0f0;display:flex;align-items:center;gap:10px}
+.status{display:inline-block;width:12px;height:12px;background:#0f0;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 10px #0f0}50%{opacity:0.3}}
+.controls{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.btn{padding:8px 15px;background:#001a00;border:1px solid #0f0;color:#0f0;cursor:pointer;font-family:inherit;transition:all 0.3s;font-size:0.9em}
+.btn:hover{background:#0f0;color:#000;box-shadow:0 0 15px #0f0}
+.main-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:15px}
+.panel{background:rgba(0,26,0,0.95);border:2px solid #0f0;padding:20px;box-shadow:0 0 10px rgba(0,255,0,0.3);max-height:600px;overflow-y:auto}
+.panel::-webkit-scrollbar{width:8px}
+.panel::-webkit-scrollbar-track{background:#001a00}
+.panel::-webkit-scrollbar-thumb{background:#0f0;border-radius:4px}
+.panel h2{color:#0f0;font-size:1.2em;margin-bottom:15px;border-bottom:2px solid #0f0;padding-bottom:10px;position:sticky;top:0;background:rgba(0,26,0,0.95);z-index:10}
+.item{background:rgba(0,51,0,0.5);padding:12px;margin:10px 0;border-left:3px solid #0f0;transition:all 0.3s;cursor:pointer}
+.item:hover{background:rgba(0,51,0,0.9);border-left-color:#0ff;transform:translateX(5px)}
+.item h3{color:#0ff;font-size:1em;margin-bottom:8px;line-height:1.4}
+.item h3 a{color:#0ff;text-decoration:none}
+.item h3 a:hover{color:#0f0;text-decoration:underline}
+.item p{color:#0f0;font-size:0.85em;line-height:1.5;margin:5px 0}
+.item .details{display:none;margin-top:10px;padding:10px;background:rgba(0,77,0,0.3);border-left:2px solid #ff0}
+.item.expanded .details{display:block}
+.tag{display:inline-block;padding:3px 8px;background:rgba(0,255,0,0.2);border:1px solid #0f0;font-size:0.75em;margin:3px 3px 0 0;color:#0f0}
 .critical{border-left-color:#f00!important}
 .high{border-left-color:#ff0!important}
-#globe{width:100%;height:100%;background:#000}
-.status{display:inline-block;width:10px;height:10px;background:#0f0;border-radius:50%;margin-right:8px;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-
-/* DEEP DIVE MODAL */
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:1000;overflow-y:auto}
-.modal.active{display:block}
-.modal-content{max-width:1200px;margin:50px auto;background:#001a00;border:3px solid #0f0;padding:30px;box-shadow:0 0 50px rgba(0,255,0,0.5)}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:2px solid #0f0;padding-bottom:15px}
-.modal-header h2{color:#0ff;font-size:1.8em}
-.close-btn{background:#f00;color:#fff;border:none;padding:10px 20px;cursor:pointer;font-size:1.2em;font-weight:bold}
-.close-btn:hover{background:#ff0;color:#000}
-.section{margin:20px 0;padding:20px;background:rgba(0,51,0,0.5);border-left:3px solid #0f0}
-.section h3{color:#0f0;font-size:1.3em;margin-bottom:15px}
-.section p{color:#0f0;line-height:1.8;margin:10px 0}
-.section ul{margin-left:20px;color:#0f0}
-.section li{margin:8px 0;line-height:1.6}
-.proof{background:rgba(255,255,0,0.1);border:1px solid #ff0;padding:15px;margin:10px 0}
-.proof h4{color:#ff0;margin-bottom:10px}
-.urgent{background:rgba(255,0,0,0.2);border:2px solid #f00;padding:15px;margin:15px 0}
-.urgent h4{color:#f00;font-size:1.2em;margin-bottom:10px}
-.secret{background:rgba(255,0,255,0.1);border:2px solid #f0f;padding:15px;margin:15px 0}
-.secret h4{color:#f0f;font-size:1.2em;margin-bottom:10px}
-.timeline{border-left:3px solid #0ff;padding-left:20px;margin:20px 0}
-.timeline-item{margin:15px 0;padding:10px;background:rgba(0,255,255,0.1)}
-.timeline-item .date{color:#0ff;font-weight:bold}
-a{color:#0ff;text-decoration:none}
-a:hover{color:#ff0;text-decoration:underline}
+.timestamp{font-size:0.75em;color:#0a0;margin-top:5px}
+.search-box{width:100%;padding:8px;background:#001a00;border:1px solid #0f0;color:#0f0;font-family:inherit;margin-bottom:10px}
+.search-box:focus{outline:none;box-shadow:0 0 10px #0f0}
+.full-width{grid-column:span 3}
+#map{height:500px;width:100%;border:2px solid #0f0;background:#000}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}
+.stat{background:rgba(0,255,0,0.1);padding:15px;border:2px solid #0f0;text-align:center}
+.stat-value{font-size:2em;color:#0f0;font-weight:bold}
+.stat-label{font-size:0.8em;color:#0f0;margin-top:5px}
+.loading{text-align:center;padding:20px;color:#0f0}
+.secret{background:rgba(255,0,255,0.1);border-left-color:#f0f!important;padding:10px;margin:5px 0}
+.secret h4{color:#f0f;font-size:0.9em;margin-bottom:5px}
+.urgent{background:rgba(255,0,0,0.1);border-left-color:#f00!important;padding:10px;margin:5px 0}
+.urgent h4{color:#f00;font-size:0.9em;margin-bottom:5px}
+.proof{background:rgba(255,255,0,0.1);border-left-color:#ff0!important;padding:8px;margin:5px 0}
+.expand-btn{color:#0ff;font-size:0.85em;margin-top:5px;cursor:pointer}
+.expand-btn:hover{color:#ff0}
 </style>
 </head>
 <body>
+<canvas class="matrix-bg" id="matrix"></canvas>
 <div class="container">
 <div class="header">
-<h1><span class="status"></span>GLOBAL TECH INTELLIGENCE HUB</h1>
-<p>Deep Analysis System • Click any breakthrough for full intelligence report • Auto-updating every 60s</p>
-<p id="last-update" style="margin-top:10px;color:#0ff">Initializing...</p>
+<h1><span class="status"></span>TECH INTELLIGENCE HUB - COMPLETE DASHBOARD</h1>
+<p style="font-size:0.9em;margin-top:5px;color:#0a0">Real-time: News • Research • GitHub • Reddit • Breakthroughs • Satellite • Auto-refresh every 2 min</p>
+<div class="controls">
+<button class="btn" onclick="refreshAll()">🔄 REFRESH ALL</button>
+<button class="btn" onclick="togglePanel('stats')">📊 STATS</button>
+<button class="btn" onclick="togglePanel('breakthroughs')">🚨 BREAKTHROUGHS</button>
+<button class="btn" onclick="togglePanel('news')">📰 NEWS</button>
+<button class="btn" onclick="togglePanel('research')">🔬 RESEARCH</button>
+<button class="btn" onclick="togglePanel('github')">💻 GITHUB</button>
+<button class="btn" onclick="togglePanel('reddit')">🕵️ REDDIT</button>
+<button class="btn" onclick="togglePanel('satellite')">🛰️ SATELLITE</button>
 </div>
-<div class="main">
-<div class="panel">
-<h2>🚨 LATEST BREAKTHROUGHS (CLICK FOR DEEP DIVE)</h2>
-<div id="breakthroughs"></div>
+<p id="last-update" style="margin-top:10px;color:#0ff;font-size:0.85em">Initializing...</p>
 </div>
-<div class="panel">
-<h2>🛰️ LIVE EARTH - 3D SATELLITE VIEW</h2>
-<div id="globe"></div>
+
+<div class="main-grid">
+<!-- STATS PANEL -->
+<div class="panel full-width" id="stats-panel">
+<h2>📊 LIVE STATISTICS</h2>
+<div class="stat-grid">
+<div class="stat">
+<div class="stat-value" id="news-count">0</div>
+<div class="stat-label">NEWS ITEMS</div>
+</div>
+<div class="stat">
+<div class="stat-value" id="research-count">0</div>
+<div class="stat-label">RESEARCH PAPERS</div>
+</div>
+<div class="stat">
+<div class="stat-value" id="github-count">0</div>
+<div class="stat-label">GITHUB REPOS</div>
+</div>
+<div class="stat">
+<div class="stat-value" id="reddit-count">0</div>
+<div class="stat-label">REDDIT POSTS</div>
 </div>
 </div>
 </div>
 
-<!-- DEEP DIVE MODAL -->
-<div id="modal" class="modal">
-<div class="modal-content">
-<div class="modal-header">
-<h2 id="modal-title">Loading...</h2>
-<button class="close-btn" onclick="closeModal()">✕ CLOSE</button>
+<!-- BREAKTHROUGHS PANEL -->
+<div class="panel full-width" id="breakthroughs-panel">
+<h2>🚨 MAJOR BREAKTHROUGHS (CLICK TO EXPAND FULL DETAILS)</h2>
+<div id="breakthroughs-container"></div>
 </div>
-<div id="modal-body"></div>
+
+<!-- NEWS PANEL -->
+<div class="panel" id="news-panel">
+<h2>📰 HACKER NEWS - TOP STORIES</h2>
+<input type="text" class="search-box" placeholder="SEARCH NEWS..." onkeyup="filterNews(this.value)">
+<div id="news-container"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- RESEARCH PANEL -->
+<div class="panel" id="research-panel">
+<h2>🔬 ARXIV RESEARCH PAPERS</h2>
+<div id="research-container"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- GITHUB PANEL -->
+<div class="panel" id="github-panel">
+<h2>💻 GITHUB TRENDING REPOS</h2>
+<div id="github-container"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- REDDIT PANEL -->
+<div class="panel full-width" id="reddit-panel">
+<h2>🕵️ REDDIT TECH COMMUNITIES</h2>
+<div id="reddit-container"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- SATELLITE PANEL -->
+<div class="panel full-width" id="satellite-panel">
+<h2>🛰️ LIVE SATELLITE VIEW - ZOOM & EXPLORE</h2>
+<div id="map"></div>
+</div>
 </div>
 </div>
 
-<script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="intelligence-data.js"></script>
-<script>
-let viewer;
-
-function displayBreakthroughs() {
-  const container = document.getElementById('breakthroughs');
-  
-  container.innerHTML = INTELLIGENCE_DATA.map((item, index) => {
-    const impactLevel = item.impact.startsWith('CRITICAL') ? 'critical' : 
-                       item.impact.startsWith('HIGH') ? 'high' : '';
-    
-    return `
-      <div class="breakthrough ${impactLevel}" onclick="openDeepDive(${index})">
-        <h3>${item.title}</h3>
-        <p>${item.description}</p>
-        <div class="meta">
-          <span class="tag">${item.category}</span>
-          <span class="tag">${item.source}</span>
-          <span class="tag">${new Date(item.date).toLocaleDateString()}</span>
-          <span class="tag">🔍 CLICK FOR FULL ANALYSIS</span>
-        </div>
-        <div class="impact">${item.impact}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-function openDeepDive(index) {
-  const item = INTELLIGENCE_DATA[index];
-  const modal = document.getElementById('modal');
-  const title = document.getElementById('modal-title');
-  const body = document.getElementById('modal-body');
-  
-  title.textContent = item.title;
-  
-  body.innerHTML = `
-    <div class="section">
-      <h3>📋 EXECUTIVE SUMMARY</h3>
-      <p>${item.deepDive.summary}</p>
-    </div>
-    
-    <div class="section">
-      <h3>🔬 TECHNICAL DETAILS</h3>
-      ${item.deepDive.technical.map(t => `<p><strong>${t.title}:</strong> ${t.detail}</p>`).join('')}
-    </div>
-    
-    ${item.deepDive.secrets ? `
-    <div class="secret">
-      <h4>🔐 CLASSIFIED/HIDDEN INFORMATION</h4>
-      ${item.deepDive.secrets.map(s => `<p><strong>• ${s.title}:</strong> ${s.detail}</p>`).join('')}
-    </div>
-    ` : ''}
-    
-    ${item.deepDive.urgent ? `
-    <div class="urgent">
-      <h4>⚠️ URGENT CONCERNS & ACTION ITEMS</h4>
-      ${item.deepDive.urgent.map(u => `<p><strong>• ${u.title}:</strong> ${u.detail}</p>`).join('')}
-    </div>
-    ` : ''}
-    
-    <div class="section">
-      <h3>✅ PROOF & VERIFICATION</h3>
-      ${item.deepDive.proofs.map(p => `
-        <div class="proof">
-          <h4>${p.type}</h4>
-          <p>${p.detail}</p>
-          <p><a href="${p.url}" target="_blank">View Source →</a></p>
-        </div>
-      `).join('')}
-    </div>
-    
-    <div class="section">
-      <h3>📅 TIMELINE</h3>
-      <div class="timeline">
-        ${item.deepDive.timeline.map(t => `
-          <div class="timeline-item">
-            <div class="date">${t.date}</div>
-            <div>${t.event}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-    
-    <div class="section">
-      <h3>🎯 IMPLICATIONS & IMPACT</h3>
-      <ul>
-        ${item.deepDive.implications.map(i => `<li>${i}</li>`).join('')}
-      </ul>
-    </div>
-    
-    <div class="section">
-      <h3>🔗 OFFICIAL SOURCES</h3>
-      <ul>
-        ${item.deepDive.sources.map(s => `<li><a href="${s.url}" target="_blank">${s.name}</a></li>`).join('')}
-      </ul>
-    </div>
-  `;
-  
-  modal.classList.add('active');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('active');
-}
-
-function init3DGlobe() {
-  try {
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI5N2UyMjcwOS00MDY1LTQxYjEtYjZjMy00YTU0ZTg1YmJhMTUiLCJpZCI6ODAzMDYsImlhdCI6MTY0Mjc0ODI2MX0.dkwAL1CcljUV7NA7fDbhXXnmyZQU_c-G4zsiaxEkfw0';
-    
-    viewer = new Cesium.Viewer('globe', {
-      imageryProvider: new Cesium.IonImageryProvider({ assetId: 3845 }),
-      baseLayerPicker: false,
-      geocoder: false,
-      homeButton: false,
-      sceneModePicker: false,
-      navigationHelpButton: false,
-      animation: false,
-      timeline: false,
-      fullscreenButton: false
-    });
-    
-    const locations = [
-      { lat: 28.6139, lng: 77.2090, name: 'New Delhi', desc: 'Tech Hub' },
-      { lat: 12.9716, lng: 77.5946, name: 'Bangalore', desc: 'Silicon Valley of India' },
-      { lat: 37.7749, lng: -122.4194, name: 'San Francisco', desc: 'AI Capital' },
-      { lat: 51.5074, lng: -0.1278, name: 'London', desc: 'Tech Hub' },
-      { lat: 35.6762, lng: 139.6503, name: 'Tokyo', desc: 'Robotics Center' },
-      { lat: 31.2304, lng: 121.4737, name: 'Shanghai', desc: 'Manufacturing AI' }
-    ];
-    
-    locations.forEach(loc => {
-      viewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(loc.lng, loc.lat),
-        point: {
-          pixelSize: 10,
-          color: Cesium.Color.LIME,
-          outlineColor: Cesium.Color.BLACK,
-          outlineWidth: 2
-        },
-        label: {
-          text: loc.name,
-          font: '14px monospace',
-          fillColor: Cesium.Color.LIME,
-          outlineColor: Cesium.Color.BLACK,
-          outlineWidth: 2,
-          style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-          pixelOffset: new Cesium.Cartesian2(0, -10)
-        }
-      });
-    });
-    
-    viewer.clock.shouldAnimate = true;
-    viewer.scene.globe.enableLighting = true;
-  } catch (error) {
-    console.error('Globe error:', error);
-  }
-}
-
-function updateTimestamp() {
-  document.getElementById('last-update').textContent = 
-    `Last updated: ${new Date().toLocaleString()} • Next update in 60s`;
-}
-
-window.onload = () => {
-  displayBreakthroughs();
-  init3DGlobe();
-  updateTimestamp();
-  setInterval(() => {
-    displayBreakthroughs();
-    updateTimestamp();
-  }, 60000);
-};
-
-// Close modal on ESC key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
-});
-</script>
+<script src="app.js"></script>
 </body>
 </html>
