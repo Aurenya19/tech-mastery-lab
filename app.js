@@ -1,4 +1,4 @@
-// ENHANCED TECH INTELLIGENCE SYSTEM - MAXIMUM CONTENT
+// ENHANCED TECH INTELLIGENCE SYSTEM - WITH DEEP PAGES
 let allNews = [];
 let allReddit = [];
 let allGitHub = [];
@@ -36,6 +36,249 @@ function initMatrix() {
     }
   }
   setInterval(draw, 33);
+}
+
+// MODAL SYSTEM
+function openModal(content) {
+  const modal = document.getElementById('detail-modal');
+  const modalContent = document.getElementById('modal-content');
+  modalContent.innerHTML = content;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('detail-modal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
+
+// HACKER NEWS DETAIL PAGE
+async function showNewsDetail(storyId, title, url, score, comments, by, time) {
+  const content = `
+    <div class="detail-header">
+      <h2>${title}</h2>
+      <div class="detail-meta">
+        <span class="tag">⬆ ${score} points</span>
+        <span class="tag">💬 ${comments} comments</span>
+        <span class="tag">by ${by}</span>
+        <span class="tag">${new Date(time * 1000).toLocaleString()}</span>
+      </div>
+      ${url ? `<a href="${url}" target="_blank" class="external-link">🔗 Read Original Article →</a>` : ''}
+    </div>
+    
+    <div class="detail-body">
+      <h3 style="color:#0ff;margin:20px 0 10px">💬 COMMENTS (Loading...)</h3>
+      <div id="comments-container">
+        <div class="loading">⏳ Loading comments...</div>
+      </div>
+    </div>
+  `;
+  
+  openModal(content);
+  
+  // Load comments
+  try {
+    const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`);
+    const story = await response.json();
+    
+    if (story.kids && story.kids.length > 0) {
+      const commentPromises = story.kids.slice(0, 20).map(async id => {
+        try {
+          const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+          return res.json();
+        } catch (e) {
+          return null;
+        }
+      });
+      
+      const comments = await Promise.all(commentPromises);
+      const validComments = comments.filter(c => c && c.text);
+      
+      const commentsHtml = validComments.map(comment => `
+        <div class="comment">
+          <div class="comment-meta">
+            <strong style="color:#0ff">${comment.by}</strong>
+            <span style="color:#0a0;margin-left:10px">${new Date(comment.time * 1000).toLocaleString()}</span>
+          </div>
+          <div class="comment-text">${comment.text}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('comments-container').innerHTML = 
+        commentsHtml || '<p style="color:#0a0">No comments yet</p>';
+    } else {
+      document.getElementById('comments-container').innerHTML = 
+        '<p style="color:#0a0">No comments yet</p>';
+    }
+  } catch (error) {
+    console.error('Comments error:', error);
+    document.getElementById('comments-container').innerHTML = 
+      '<p style="color:#f00">Error loading comments</p>';
+  }
+}
+
+// GITHUB DETAIL PAGE
+async function showGitHubDetail(repo) {
+  const content = `
+    <div class="detail-header">
+      <h2>${repo.full_name}</h2>
+      <div class="detail-meta">
+        <span class="tag">${repo.language || 'Unknown'}</span>
+        <span class="tag">⭐ ${repo.stargazers_count.toLocaleString()}</span>
+        <span class="tag">🍴 ${repo.forks_count.toLocaleString()}</span>
+        <span class="tag">👁️ ${repo.watchers_count.toLocaleString()}</span>
+      </div>
+      <p style="color:#0f0;margin:15px 0">${repo.description || 'No description'}</p>
+      <a href="${repo.html_url}" target="_blank" class="external-link">🔗 View on GitHub →</a>
+    </div>
+    
+    <div class="detail-body">
+      <h3 style="color:#0ff;margin:20px 0 10px">📁 REPOSITORY FILES (Loading...)</h3>
+      <div id="files-container">
+        <div class="loading">⏳ Loading files...</div>
+      </div>
+      
+      <h3 style="color:#0ff;margin:30px 0 10px">📊 RECENT COMMITS (Loading...)</h3>
+      <div id="commits-container">
+        <div class="loading">⏳ Loading commits...</div>
+      </div>
+    </div>
+  `;
+  
+  openModal(content);
+  
+  // Load files
+  try {
+    const filesRes = await fetch(`https://api.github.com/repos/${repo.full_name}/contents`);
+    const files = await filesRes.json();
+    
+    const filesHtml = files.slice(0, 20).map(file => `
+      <div class="file-item">
+        <span style="color:#0ff">${file.type === 'dir' ? '📁' : '📄'}</span>
+        <span style="color:#0f0;margin-left:10px">${file.name}</span>
+        <span style="color:#0a0;margin-left:10px;font-size:0.85em">${(file.size / 1024).toFixed(1)} KB</span>
+      </div>
+    `).join('');
+    
+    document.getElementById('files-container').innerHTML = filesHtml;
+  } catch (error) {
+    console.error('Files error:', error);
+    document.getElementById('files-container').innerHTML = 
+      '<p style="color:#f00">Error loading files</p>';
+  }
+  
+  // Load commits
+  try {
+    const commitsRes = await fetch(`https://api.github.com/repos/${repo.full_name}/commits?per_page=10`);
+    const commits = await commitsRes.json();
+    
+    const commitsHtml = commits.map(commit => `
+      <div class="commit-item">
+        <div class="commit-message">${commit.commit.message.split('\n')[0]}</div>
+        <div class="commit-meta">
+          <strong style="color:#0ff">${commit.commit.author.name}</strong>
+          <span style="color:#0a0;margin-left:10px">${new Date(commit.commit.author.date).toLocaleString()}</span>
+          <span style="color:#ff0;margin-left:10px">${commit.sha.substring(0, 7)}</span>
+        </div>
+      </div>
+    `).join('');
+    
+    document.getElementById('commits-container').innerHTML = commitsHtml;
+  } catch (error) {
+    console.error('Commits error:', error);
+    document.getElementById('commits-container').innerHTML = 
+      '<p style="color:#f00">Error loading commits</p>';
+  }
+}
+
+// ARXIV DETAIL PAGE
+function showResearchDetail(paper) {
+  const content = `
+    <div class="detail-header">
+      <h2>${paper.title}</h2>
+      <div class="detail-meta">
+        <span class="tag">${paper.category}</span>
+        <span class="tag">👥 ${paper.authors.split(',').length} authors</span>
+        <span class="tag">${new Date(paper.published).toLocaleDateString()}</span>
+      </div>
+      <a href="${paper.link}" target="_blank" class="external-link">🔗 View on ArXiv →</a>
+      <a href="${paper.link.replace('abs', 'pdf')}" target="_blank" class="external-link">📄 Download PDF →</a>
+    </div>
+    
+    <div class="detail-body">
+      <h3 style="color:#0ff;margin:20px 0 10px">👥 AUTHORS</h3>
+      <p style="color:#0f0">${paper.authors}</p>
+      
+      <h3 style="color:#0ff;margin:20px 0 10px">📋 ABSTRACT</h3>
+      <p style="color:#0f0;line-height:1.8">${paper.summary}...</p>
+      
+      <h3 style="color:#0ff;margin:20px 0 10px">📄 PDF VIEWER</h3>
+      <iframe src="${paper.link.replace('abs', 'pdf')}" 
+              style="width:100%;height:600px;border:2px solid #0f0;background:#000"
+              title="PDF Viewer"></iframe>
+    </div>
+  `;
+  
+  openModal(content);
+}
+
+// REDDIT DETAIL PAGE
+async function showRedditDetail(post) {
+  const content = `
+    <div class="detail-header">
+      <h2>${post.title}</h2>
+      <div class="detail-meta">
+        <span class="tag">r/${post.subreddit}</span>
+        <span class="tag">⬆ ${post.score}</span>
+        <span class="tag">💬 ${post.comments}</span>
+        <span class="tag">u/${post.author}</span>
+      </div>
+      <a href="${post.url}" target="_blank" class="external-link">🔗 View on Reddit →</a>
+    </div>
+    
+    <div class="detail-body">
+      <h3 style="color:#0ff;margin:20px 0 10px">💬 TOP COMMENTS (Loading...)</h3>
+      <div id="reddit-comments-container">
+        <div class="loading">⏳ Loading comments...</div>
+      </div>
+    </div>
+  `;
+  
+  openModal(content);
+  
+  // Load comments
+  try {
+    const commentsRes = await fetch(`${post.url}.json`);
+    const data = await commentsRes.json();
+    
+    if (data[1] && data[1].data && data[1].data.children) {
+      const comments = data[1].data.children
+        .filter(c => c.data.body)
+        .slice(0, 15);
+      
+      const commentsHtml = comments.map(comment => `
+        <div class="comment">
+          <div class="comment-meta">
+            <strong style="color:#0ff">u/${comment.data.author}</strong>
+            <span style="color:#0a0;margin-left:10px">⬆ ${comment.data.score}</span>
+            <span style="color:#0a0;margin-left:10px">${new Date(comment.data.created_utc * 1000).toLocaleString()}</span>
+          </div>
+          <div class="comment-text">${comment.data.body}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('reddit-comments-container').innerHTML = 
+        commentsHtml || '<p style="color:#0a0">No comments yet</p>';
+    } else {
+      document.getElementById('reddit-comments-container').innerHTML = 
+        '<p style="color:#0a0">No comments yet</p>';
+    }
+  } catch (error) {
+    console.error('Reddit comments error:', error);
+    document.getElementById('reddit-comments-container').innerHTML = 
+      '<p style="color:#f00">Error loading comments</p>';
+  }
 }
 
 // LOADING INDICATOR
@@ -144,7 +387,6 @@ async function loadNews() {
     const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
     const storyIds = await response.json();
     
-    // Load 100 stories instead of 30
     const stories = await Promise.all(
       storyIds.slice(0, 100).map(async id => {
         try {
@@ -158,6 +400,7 @@ async function loadNews() {
     );
     
     allNews = stories.filter(s => s && s.title).map(story => ({
+      id: story.id,
       title: story.title,
       url: story.url || `https://news.ycombinator.com/item?id=${story.id}`,
       source: 'Hacker News',
@@ -190,8 +433,9 @@ function displayNews(news) {
   }
   
   container.innerHTML = news.map((item, index) => `
-    <div class="item" style="animation: slideIn 0.3s ease ${index * 0.02}s both">
-      <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
+    <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both" 
+         onclick='showNewsDetail(${item.id}, ${JSON.stringify(item.title)}, ${JSON.stringify(item.url)}, ${item.score}, ${item.comments}, ${JSON.stringify(item.by)}, ${item.time})'>
+      <h3>${item.title}</h3>
       <div>
         <span class="tag">${item.source}</span>
         <span class="tag">⬆ ${item.score}</span>
@@ -199,6 +443,7 @@ function displayNews(news) {
         <span class="tag">by ${item.by}</span>
       </div>
       <div class="timestamp">${new Date(item.time * 1000).toLocaleString()}</div>
+      <div class="click-hint">👆 Click to view comments & details</div>
     </div>
   `).join('');
 }
@@ -253,8 +498,9 @@ async function loadReddit() {
     
     hideLoading('reddit-container');
     document.getElementById('reddit-container').innerHTML = allReddit.map((post, index) => `
-      <div class="item" style="animation: slideIn 0.3s ease ${index * 0.02}s both">
-        <h3><a href="${post.url}" target="_blank">${post.title}</a></h3>
+      <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both"
+           onclick='showRedditDetail(${JSON.stringify(post)})'>
+        <h3>${post.title}</h3>
         <div>
           <span class="tag">r/${post.subreddit}</span>
           <span class="tag">⬆ ${post.score}</span>
@@ -262,6 +508,7 @@ async function loadReddit() {
           <span class="tag">u/${post.author}</span>
         </div>
         <div class="timestamp">${new Date(post.created * 1000).toLocaleString()}</div>
+        <div class="click-hint">👆 Click to view thread & comments</div>
       </div>
     `).join('');
     
@@ -279,7 +526,6 @@ async function loadGitHub() {
     showLoading('github-container');
     console.log('💻 Loading GitHub (50+ trending repos)...');
     
-    // Multiple queries to get more repos
     const queries = [
       'stars:>1000 created:>2024-01-01',
       'stars:>5000 pushed:>2024-01-01',
@@ -295,7 +541,6 @@ async function loadGitHub() {
         
         if (data.items) {
           data.items.forEach(repo => {
-            // Avoid duplicates
             if (!allGitHub.find(r => r.id === repo.id)) {
               allGitHub.push(repo);
             }
@@ -308,8 +553,9 @@ async function loadGitHub() {
     
     hideLoading('github-container');
     document.getElementById('github-container').innerHTML = allGitHub.slice(0, 50).map((repo, index) => `
-      <div class="item" style="animation: slideIn 0.3s ease ${index * 0.02}s both">
-        <h3><a href="${repo.html_url}" target="_blank">${repo.full_name}</a></h3>
+      <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both"
+           onclick='showGitHubDetail(${JSON.stringify(repo)})'>
+        <h3>${repo.full_name}</h3>
         <p>${repo.description || 'No description'}</p>
         <div>
           <span class="tag">${repo.language || 'Unknown'}</span>
@@ -318,6 +564,7 @@ async function loadGitHub() {
           <span class="tag">👁️ ${repo.watchers_count.toLocaleString()}</span>
         </div>
         <div class="timestamp">Updated: ${new Date(repo.updated_at).toLocaleString()}</div>
+        <div class="click-hint">👆 Click to browse files & commits</div>
       </div>
     `).join('');
     
@@ -350,7 +597,7 @@ async function loadResearch() {
         
         entries.forEach(entry => {
           const title = entry.querySelector('title')?.textContent.trim();
-          const summary = entry.querySelector('summary')?.textContent.trim().substring(0, 200);
+          const summary = entry.querySelector('summary')?.textContent.trim().substring(0, 300);
           const published = entry.querySelector('published')?.textContent;
           const link = entry.querySelector('id')?.textContent;
           const authors = Array.from(entry.querySelectorAll('author name')).map(a => a.textContent).join(', ');
@@ -366,14 +613,16 @@ async function loadResearch() {
     
     hideLoading('research-container');
     document.getElementById('research-container').innerHTML = allResearch.map((paper, index) => `
-      <div class="item" style="animation: slideIn 0.3s ease ${index * 0.02}s both">
-        <h3><a href="${paper.link}" target="_blank">${paper.title}</a></h3>
+      <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both"
+           onclick='showResearchDetail(${JSON.stringify(paper)})'>
+        <h3>${paper.title}</h3>
         <p>${paper.summary}...</p>
         <div>
           <span class="tag">${paper.category}</span>
           <span class="tag">👥 ${paper.authors.split(',').length} authors</span>
         </div>
         <div class="timestamp">${new Date(paper.published).toLocaleString()}</div>
+        <div class="click-hint">👆 Click to read abstract & view PDF</div>
       </div>
     `).join('');
     
@@ -385,7 +634,7 @@ async function loadResearch() {
   }
 }
 
-// ENHANCED SATELLITE MAP
+// SATELLITE MAP (keeping existing code)
 function initMap() {
   try {
     map = L.map('map', {
@@ -588,8 +837,13 @@ window.onload = () => {
   displayBreakthroughs();
   refreshAll();
   
-  // Auto-refresh every 1 minute (60 seconds)
   setInterval(refreshAll, 60000);
   
   console.log('✅ System online - Auto-refresh every 60 seconds');
+  console.log('👆 Click any item to view detailed information!');
 };
+
+// Close modal on ESC key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
