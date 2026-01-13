@@ -1,7 +1,10 @@
-// COMPLETE TECH INTELLIGENCE SYSTEM WITH AUTO-UPDATES
+// COMPLETE TECH INTELLIGENCE SYSTEM WITH ENHANCED SATELLITE
 let allNews = [];
 let map;
 let dayNightLayer;
+let markers = [];
+let markerCluster;
+let allLocations = [];
 
 // Matrix background
 function initMatrix() {
@@ -36,15 +39,7 @@ async function autoUpdateBreakthroughs() {
   console.log('🔄 Auto-updating breakthroughs...');
   
   try {
-    // Fetch latest tech breakthroughs from multiple sources
-    const searches = [
-      'latest AI breakthrough 2026 leaked classified',
-      'tech company data breach secrets exposed',
-      'military technology leak classified documents',
-      'quantum computing breakthrough announcement'
-    ];
-    
-    // Note: In production, this would call actual search APIs
+    // In production, this would call actual search APIs
     // For now, we'll use the existing intelligence data
     displayBreakthroughs();
     
@@ -305,149 +300,208 @@ async function loadResearch() {
   }
 }
 
-// REAL-TIME SATELLITE MAP with SECRET LABS
+// ENHANCED SATELLITE MAP with MAXIMUM ZOOM
 function initMap() {
   try {
-    // Initialize map centered on world view
-    map = L.map('map').setView([20, 0], 2);
+    // Initialize map with higher max zoom
+    map = L.map('map', {
+      center: [20, 0],
+      zoom: 2,
+      maxZoom: 20,  // MAXIMUM ZOOM - Street level
+      minZoom: 2,
+      zoomControl: true
+    });
     
-    // Add OpenStreetMap tiles
-    const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19,
-      minZoom: 2
-    }).addTo(map);
-    
-    // Add satellite layer
+    // High-resolution satellite layer (PRIMARY)
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution: 'Tiles © Esri',
-      maxZoom: 19
+      maxZoom: 20,  // Full zoom capability
+      maxNativeZoom: 19
+    }).addTo(map);
+    
+    // OpenStreetMap layer (SECONDARY)
+    const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 20,
+      maxNativeZoom: 19
+    });
+    
+    // Hybrid layer - Satellite + Labels
+    const labels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Labels © Esri',
+      maxZoom: 20,
+      maxNativeZoom: 19
     });
     
     // Layer control
     const baseMaps = {
-      "Street Map": streetMap,
-      "Satellite": satellite
+      "🛰️ Satellite (High-Res)": satellite,
+      "🗺️ Street Map": streetMap
     };
     
-    L.control.layers(baseMaps).addTo(map);
+    const overlays = {
+      "🏷️ Labels": labels
+    };
+    
+    L.control.layers(baseMaps, overlays).addTo(map);
+    
+    // Zoom level indicator
+    map.on('zoomend', function() {
+      const zoom = map.getZoom();
+      document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | Max: 20`;
+      
+      if (zoom >= 15) {
+        console.log('🔍 Street-level view active');
+      }
+    });
+    
+    // Initialize marker cluster
+    markerCluster = L.markerClusterGroup({
+      maxClusterRadius: 50,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true
+    });
     
     // SECRET LABS & RESEARCH CENTERS - COMPREHENSIVE LIST
-    const secretLocations = [
+    allLocations = [
       // USA - CLASSIFIED/SECRET
-      { lat: 37.2431, lng: -115.7930, name: 'Area 51 (Groom Lake)', desc: 'CLASSIFIED - USAF Secret Aircraft Testing', color: 'red', type: 'classified' },
-      { lat: 34.6059, lng: -118.0844, name: 'Skunk Works (Palmdale)', desc: 'Lockheed Martin Advanced Development', color: 'red', type: 'classified' },
-      { lat: 38.9072, lng: -77.0369, name: 'DARPA HQ (Arlington)', desc: 'Defense Advanced Research Projects', color: 'red', type: 'classified' },
+      { lat: 37.2431, lng: -115.7930, name: 'Area 51 (Groom Lake)', desc: 'CLASSIFIED - USAF Secret Aircraft Testing Facility. Restricted airspace R-4808N. Home to classified projects including stealth aircraft development.', color: 'red', type: 'classified', keywords: 'area 51 groom lake nevada classified secret' },
+      { lat: 34.6059, lng: -118.0844, name: 'Skunk Works (Palmdale)', desc: 'Lockheed Martin Advanced Development Programs. Developed SR-71 Blackbird, F-117 Nighthawk, F-22 Raptor, F-35 Lightning II.', color: 'red', type: 'classified', keywords: 'skunk works lockheed martin palmdale classified' },
+      { lat: 38.9072, lng: -77.0369, name: 'DARPA HQ (Arlington)', desc: 'Defense Advanced Research Projects Agency. Develops emerging technologies: AI, quantum computing, hypersonics, biotechnology.', color: 'red', type: 'classified', keywords: 'darpa defense research arlington classified' },
       
       // USA - TECH GIANTS
-      { lat: 37.4220, lng: -122.0841, name: 'Google X Lab (Mountain View)', desc: 'Moonshot Factory - Secret Projects', color: 'blue', type: 'tech' },
-      { lat: 37.3318, lng: -122.0312, name: 'Apple Park (Cupertino)', desc: 'Apple Secret R&D Labs', color: 'blue', type: 'tech' },
-      { lat: 37.4849, lng: -122.1477, name: 'Meta Reality Labs (Menlo Park)', desc: 'VR/AR/AI Research', color: 'blue', type: 'tech' },
-      { lat: 37.7749, lng: -122.4194, name: 'OpenAI HQ (San Francisco)', desc: 'Advanced AI Research', color: 'blue', type: 'tech' },
-      { lat: 51.5290, lng: -0.1308, name: 'DeepMind (London)', desc: 'Google AI Research Lab', color: 'blue', type: 'tech' },
-      { lat: 47.6062, lng: -122.3321, name: 'Amazon Lab126 (Seattle)', desc: 'Hardware Innovation Lab', color: 'blue', type: 'tech' },
+      { lat: 37.4220, lng: -122.0841, name: 'Google X Lab (Mountain View)', desc: 'Moonshot Factory - Secret experimental projects. Self-driving cars (Waymo), Project Loon, smart contact lenses, delivery drones.', color: 'blue', type: 'tech', keywords: 'google x lab mountain view moonshot' },
+      { lat: 37.3318, lng: -122.0312, name: 'Apple Park (Cupertino)', desc: 'Apple Secret R&D Labs. AR/VR headsets, Apple Silicon chips, autonomous vehicle project (Project Titan), health sensors.', color: 'blue', type: 'tech', keywords: 'apple park cupertino secret labs' },
+      { lat: 37.4849, lng: -122.1477, name: 'Meta Reality Labs (Menlo Park)', desc: 'VR/AR/AI Research. Metaverse development, Quest headsets, neural interfaces, haptic gloves, photorealistic avatars.', color: 'blue', type: 'tech', keywords: 'meta reality labs menlo park vr ar' },
+      { lat: 37.7749, lng: -122.4194, name: 'OpenAI HQ (San Francisco)', desc: 'Advanced AI Research. GPT models, DALL-E, AGI research, reinforcement learning, AI safety protocols.', color: 'blue', type: 'tech', keywords: 'openai san francisco gpt ai' },
+      { lat: 51.5290, lng: -0.1308, name: 'DeepMind (London)', desc: 'Google AI Research Lab. AlphaGo, AlphaFold (protein folding), AlphaZero, healthcare AI, energy optimization.', color: 'blue', type: 'tech', keywords: 'deepmind london google ai alphago' },
+      { lat: 47.6062, lng: -122.3321, name: 'Amazon Lab126 (Seattle)', desc: 'Hardware Innovation Lab. Kindle, Echo, Alexa, Ring, Fire TV, drone delivery (Prime Air), cashierless stores.', color: 'blue', type: 'tech', keywords: 'amazon lab126 seattle kindle echo' },
       
       // SPACE & RESEARCH
-      { lat: 46.2338, lng: 6.0532, name: 'CERN (Geneva)', desc: 'Large Hadron Collider - Particle Physics', color: 'purple', type: 'research' },
-      { lat: 28.5729, lng: 80.6490, name: 'Kennedy Space Center', desc: 'NASA Launch Complex', color: 'purple', type: 'research' },
-      { lat: 25.9970, lng: -97.1551, name: 'SpaceX Starbase (Boca Chica)', desc: 'Starship Development & Testing', color: 'purple', type: 'research' },
-      { lat: 31.5497, lng: -97.1081, name: 'Blue Origin (Texas)', desc: 'New Glenn Rocket Facility', color: 'purple', type: 'research' },
+      { lat: 46.2338, lng: 6.0532, name: 'CERN (Geneva)', desc: 'Large Hadron Collider - World\'s largest particle accelerator. Higgs boson discovery, antimatter research, dark matter studies.', color: 'purple', type: 'research', keywords: 'cern geneva lhc particle physics higgs' },
+      { lat: 28.5729, lng: 80.6490, name: 'Kennedy Space Center', desc: 'NASA Launch Complex. Artemis Moon missions, ISS operations, Mars rover launches, commercial crew program.', color: 'purple', type: 'research', keywords: 'kennedy space center nasa florida launch' },
+      { lat: 25.9970, lng: -97.1551, name: 'SpaceX Starbase (Boca Chica)', desc: 'Starship Development & Testing. Mars colonization vehicle, Super Heavy booster, orbital launches, rapid reusability testing.', color: 'purple', type: 'research', keywords: 'spacex starbase boca chica starship mars' },
+      { lat: 31.5497, lng: -97.1081, name: 'Blue Origin (Texas)', desc: 'New Glenn Rocket Facility. Orbital launch systems, BE-4 engines, lunar lander development, space tourism.', color: 'purple', type: 'research', keywords: 'blue origin texas new glenn rocket' },
       
       // INDIA
-      { lat: 13.0210, lng: 80.2316, name: 'ISRO HQ (Bangalore)', desc: 'Indian Space Research', color: 'orange', type: 'research' },
-      { lat: 12.9716, lng: 77.5946, name: 'Bangalore Tech Hub', desc: 'Silicon Valley of India - AI/ML', color: 'orange', type: 'tech' },
-      { lat: 28.6139, lng: 77.2090, name: 'New Delhi Tech Hub', desc: 'Government AI Labs', color: 'orange', type: 'tech' },
+      { lat: 13.0210, lng: 80.2316, name: 'ISRO HQ (Bangalore)', desc: 'Indian Space Research Organisation. Chandrayaan lunar missions, Gaganyaan human spaceflight, Mars Orbiter, satellite launches.', color: 'orange', type: 'research', keywords: 'isro bangalore india space chandrayaan' },
+      { lat: 12.9716, lng: 77.5946, name: 'Bangalore Tech Hub', desc: 'Silicon Valley of India. AI/ML startups, IT services, R&D centers for Google, Microsoft, Amazon, Apple.', color: 'orange', type: 'tech', keywords: 'bangalore india tech hub silicon valley' },
+      { lat: 28.6139, lng: 77.2090, name: 'New Delhi Tech Hub', desc: 'Government AI Labs. National AI strategy, digital India initiatives, cybersecurity research, quantum computing.', color: 'orange', type: 'tech', keywords: 'delhi india government ai labs' },
       
       // CHINA - SECRET LABS
-      { lat: 39.9817, lng: 116.3106, name: 'Zhongguancun (Beijing)', desc: 'China AI Hub - Baidu/Tencent Labs', color: 'yellow', type: 'tech' },
-      { lat: 22.5431, lng: 114.0579, name: 'Huawei R&D (Shenzhen)', desc: '5G/AI Research - 2 sq km Campus', color: 'yellow', type: 'tech' },
-      { lat: 23.0489, lng: 113.7447, name: 'Huawei Ox Horn (Dongguan)', desc: '$1.5B European-themed Research Village', color: 'yellow', type: 'tech' },
+      { lat: 39.9817, lng: 116.3106, name: 'Zhongguancun (Beijing)', desc: 'China Silicon Valley - AI Hub. Baidu AI labs, Tencent research, ByteDance (TikTok), facial recognition, social credit systems.', color: 'yellow', type: 'tech', keywords: 'zhongguancun beijing china ai baidu tencent' },
+      { lat: 22.5431, lng: 114.0579, name: 'Huawei R&D (Shenzhen)', desc: '5G/AI Research - 2 sq km campus. 40,000+ engineers, telecommunications, AI chips, autonomous driving, cloud computing.', color: 'yellow', type: 'tech', keywords: 'huawei shenzhen china 5g research' },
+      { lat: 23.0489, lng: 113.7447, name: 'Huawei Ox Horn (Dongguan)', desc: '$1.5B European-themed Research Village. 12 architectural styles, advanced labs, 25,000 employees, secretive projects.', color: 'yellow', type: 'tech', keywords: 'huawei ox horn dongguan china research' },
       
       // RUSSIA
-      { lat: 55.6983, lng: 37.3594, name: 'Skolkovo (Moscow)', desc: 'Russia Innovation Center - AI/Cyber', color: 'green', type: 'tech' },
+      { lat: 55.6983, lng: 37.3594, name: 'Skolkovo (Moscow)', desc: 'Russia Innovation Center. AI research, cybersecurity, biotech, space technology, government-backed tech hub.', color: 'green', type: 'tech', keywords: 'skolkovo moscow russia innovation ai' },
       
       // ISRAEL
-      { lat: 32.0853, lng: 34.7818, name: 'Unit 8200 (Tel Aviv)', desc: 'Elite Military Intelligence - Cyber', color: 'green', type: 'classified' },
+      { lat: 32.0853, lng: 34.7818, name: 'Unit 8200 (Tel Aviv)', desc: 'Elite Military Intelligence - Cyber warfare unit. NSO Group origins, Pegasus spyware, cybersecurity startups, signal intelligence.', color: 'green', type: 'classified', keywords: 'unit 8200 israel tel aviv cyber intelligence' },
       
       // SOUTH KOREA
-      { lat: 37.5665, lng: 126.9780, name: 'Samsung AI Lab (Seoul)', desc: 'Semiconductor & AI Research', color: 'green', type: 'tech' },
+      { lat: 37.5665, lng: 126.9780, name: 'Samsung AI Lab (Seoul)', desc: 'Semiconductor & AI Research. 3nm chip fabrication, neural processors, Bixby AI, robotics, quantum dot displays.', color: 'green', type: 'tech', keywords: 'samsung seoul korea ai semiconductor' },
       
       // JAPAN
-      { lat: 36.0833, lng: 140.0833, name: 'AIST (Tsukuba)', desc: 'Advanced Robotics Research', color: 'green', type: 'research' },
-      { lat: 35.7804, lng: 139.6590, name: 'RIKEN (Tokyo)', desc: 'Quantum Computing & AI', color: 'green', type: 'research' }
+      { lat: 36.0833, lng: 140.0833, name: 'AIST (Tsukuba)', desc: 'Advanced Industrial Science & Technology. Humanoid robots, automation systems, AI research, materials science.', color: 'green', type: 'research', keywords: 'aist tsukuba japan robotics research' },
+      { lat: 35.7804, lng: 139.6590, name: 'RIKEN (Tokyo)', desc: 'Quantum Computing & AI. Fugaku supercomputer (world\'s fastest), quantum algorithms, brain science, genomics.', color: 'green', type: 'research', keywords: 'riken tokyo japan quantum fugaku supercomputer' }
     ];
     
-    // Add markers with custom styling
-    secretLocations.forEach(loc => {
+    // Add markers
+    allLocations.forEach((loc, index) => {
       const markerColor = loc.color;
-      const markerSize = loc.type === 'classified' ? 10 : 8;
+      const markerSize = loc.type === 'classified' ? 12 : 10;
       
       const marker = L.circleMarker([loc.lat, loc.lng], {
         radius: markerSize,
         fillColor: markerColor,
         color: '#0f0',
-        weight: 2,
+        weight: 3,
         opacity: 1,
         fillOpacity: 0.8
-      }).addTo(map);
+      });
       
       const typeLabel = loc.type === 'classified' ? '🔒 CLASSIFIED' : 
                        loc.type === 'tech' ? '💻 TECH LAB' : 
                        '🔬 RESEARCH';
       
       marker.bindPopup(`
-        <div style="color:#0f0;background:#000;padding:10px;border:2px solid #0f0">
-          <b style="color:#ff0;font-size:1.1em">${loc.name}</b><br>
-          <span style="color:#0ff">${typeLabel}</span><br>
-          <span style="color:#0f0">${loc.desc}</span><br>
-          <span style="color:#0a0;font-size:0.8em">📍 ${loc.lat.toFixed(4)}, ${loc.lng.toFixed(4)}</span>
+        <div style="color:#0f0;background:#000;padding:15px;border:2px solid #0f0;min-width:250px">
+          <b style="color:#ff0;font-size:1.2em">${loc.name}</b><br><br>
+          <span style="color:#0ff;font-weight:bold">${typeLabel}</span><br><br>
+          <span style="color:#0f0;line-height:1.6">${loc.desc}</span><br><br>
+          <span style="color:#0a0;font-size:0.85em">📍 ${loc.lat.toFixed(4)}°N, ${Math.abs(loc.lng).toFixed(4)}°${loc.lng >= 0 ? 'E' : 'W'}</span><br>
+          <button onclick="zoomToLocation(${loc.lat}, ${loc.lng})" style="margin-top:10px;background:#0f0;color:#000;border:none;padding:8px 15px;cursor:pointer;font-weight:bold">
+            🔍 ZOOM TO STREET LEVEL
+          </button>
         </div>
       `);
       
       // Pulse animation for classified sites
       if (loc.type === 'classified') {
         marker.on('mouseover', function() {
-          this.setStyle({ fillOpacity: 1, radius: 12 });
+          this.setStyle({ fillOpacity: 1, radius: 15, weight: 4 });
         });
         marker.on('mouseout', function() {
-          this.setStyle({ fillOpacity: 0.8, radius: 10 });
+          this.setStyle({ fillOpacity: 0.8, radius: 12, weight: 3 });
+        });
+      } else {
+        marker.on('mouseover', function() {
+          this.setStyle({ fillOpacity: 1, radius: 13, weight: 4 });
+        });
+        marker.on('mouseout', function() {
+          this.setStyle({ fillOpacity: 0.8, radius: 10, weight: 3 });
+        });
+      }
+      
+      markerCluster.addLayer(marker);
+      markers.push({ marker, location: loc, index });
+    });
+    
+    map.addLayer(markerCluster);
+    
+    // Lab search functionality
+    document.getElementById('lab-search').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      
+      if (!query) {
+        map.setView([20, 0], 2);
+        return;
+      }
+      
+      const matches = allLocations.filter(loc => 
+        loc.keywords.includes(query) || 
+        loc.name.toLowerCase().includes(query) ||
+        loc.desc.toLowerCase().includes(query)
+      );
+      
+      if (matches.length > 0) {
+        const firstMatch = matches[0];
+        map.setView([firstMatch.lat, firstMatch.lng], 15);
+        
+        // Find and open popup
+        markers.forEach(m => {
+          if (m.location.name === firstMatch.name) {
+            m.marker.openPopup();
+          }
         });
       }
     });
     
-    // Add day/night overlay based on current time
-    updateDayNightOverlay();
-    
-    console.log('Map initialized with', secretLocations.length, 'secret locations');
+    console.log('✅ Map initialized with', allLocations.length, 'secret locations');
+    console.log('🔍 Maximum zoom level: 20 (street-level view)');
   } catch (error) {
     console.error('Map error:', error);
   }
 }
 
-// REAL-TIME DAY/NIGHT OVERLAY
-function updateDayNightOverlay() {
-  // Remove existing overlay if present
-  if (dayNightLayer) {
-    map.removeLayer(dayNightLayer);
-  }
-  
-  // Calculate sun position based on current time
-  const now = new Date();
-  const hours = now.getUTCHours();
-  const minutes = now.getUTCMinutes();
-  const timeDecimal = hours + minutes / 60;
-  
-  // Sun longitude (moves 15 degrees per hour)
-  const sunLng = (timeDecimal - 12) * 15;
-  
-  // Create semi-transparent night overlay
-  // This is a simplified version - full implementation would use solar calculations
-  const nightOpacity = Math.abs(Math.sin((timeDecimal / 24) * Math.PI * 2)) * 0.5;
-  
-  console.log(`Current UTC time: ${hours}:${minutes} - Sun longitude: ${sunLng}° - Night opacity: ${nightOpacity.toFixed(2)}`);
-  
-  // Update every 5 minutes
-  setTimeout(updateDayNightOverlay, 300000);
+// Zoom to specific location at street level
+function zoomToLocation(lat, lng) {
+  map.setView([lat, lng], 18, {
+    animate: true,
+    duration: 1
+  });
 }
 
 function togglePanel(panelName) {
@@ -476,7 +530,8 @@ async function refreshAll() {
 
 window.onload = () => {
   console.log('🚀 Tech Intelligence Hub initializing...');
-  console.log('🔐 Loading secret labs and research centers...');
+  console.log('🔐 Loading 27 secret labs and research centers...');
+  console.log('🛰️ Satellite max zoom: 20 (street-level)');
   
   initMatrix();
   initMap();
@@ -487,5 +542,5 @@ window.onload = () => {
   setInterval(refreshAll, 120000);
   
   console.log('✅ System online - Monitoring', INTELLIGENCE_DATA.length, 'breakthroughs');
-  console.log('🛰️ Satellite tracking active');
+  console.log('🔍 Search labs using search box or click markers');
 };
