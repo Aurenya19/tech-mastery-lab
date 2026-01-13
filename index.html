@@ -1,142 +1,424 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tech Intelligence Hub - Complete Dashboard</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Courier New',monospace;background:#000;color:#0f0;overflow-x:hidden}
-.matrix-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.1}
-.container{position:relative;z-index:1;min-height:100vh}
-.header{background:linear-gradient(135deg,#001a00 0%,#003300 100%);padding:20px;border-bottom:2px solid #0f0;box-shadow:0 0 20px #0f0;position:sticky;top:0;z-index:100}
-.header h1{font-size:2em;color:#0f0;text-shadow:0 0 10px #0f0;display:flex;align-items:center;gap:10px}
-.status{display:inline-block;width:12px;height:12px;background:#0f0;border-radius:50%;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 10px #0f0}50%{opacity:0.3}}
-.controls{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
-.btn{padding:8px 15px;background:#001a00;border:1px solid #0f0;color:#0f0;cursor:pointer;font-family:inherit;transition:all 0.3s;font-size:0.9em}
-.btn:hover{background:#0f0;color:#000;box-shadow:0 0 15px #0f0}
-.main-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:15px}
-.panel{background:rgba(0,26,0,0.95);border:2px solid #0f0;padding:20px;box-shadow:0 0 10px rgba(0,255,0,0.3);max-height:600px;overflow-y:auto}
-.panel::-webkit-scrollbar{width:8px}
-.panel::-webkit-scrollbar-track{background:#001a00}
-.panel::-webkit-scrollbar-thumb{background:#0f0;border-radius:4px}
-.panel h2{color:#0f0;font-size:1.2em;margin-bottom:15px;border-bottom:2px solid #0f0;padding-bottom:10px;position:sticky;top:0;background:rgba(0,26,0,0.95);z-index:10}
-.item{background:rgba(0,51,0,0.5);padding:12px;margin:10px 0;border-left:3px solid #0f0;transition:all 0.3s;cursor:pointer}
-.item:hover{background:rgba(0,51,0,0.9);border-left-color:#0ff;transform:translateX(5px)}
-.item h3{color:#0ff;font-size:1em;margin-bottom:8px;line-height:1.4}
-.item h3 a{color:#0ff;text-decoration:none}
-.item h3 a:hover{color:#0f0;text-decoration:underline}
-.item p{color:#0f0;font-size:0.85em;line-height:1.5;margin:5px 0}
-.item .details{display:none;margin-top:10px;padding:10px;background:rgba(0,77,0,0.3);border-left:2px solid #ff0}
-.item.expanded .details{display:block}
-.tag{display:inline-block;padding:3px 8px;background:rgba(0,255,0,0.2);border:1px solid #0f0;font-size:0.75em;margin:3px 3px 0 0;color:#0f0}
-.critical{border-left-color:#f00!important}
-.high{border-left-color:#ff0!important}
-.timestamp{font-size:0.75em;color:#0a0;margin-top:5px}
-.search-box{width:100%;padding:8px;background:#001a00;border:1px solid #0f0;color:#0f0;font-family:inherit;margin-bottom:10px}
-.search-box:focus{outline:none;box-shadow:0 0 10px #0f0}
-.full-width{grid-column:span 3}
-#map{height:500px;width:100%;border:2px solid #0f0;background:#000}
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}
-.stat{background:rgba(0,255,0,0.1);padding:15px;border:2px solid #0f0;text-align:center}
-.stat-value{font-size:2em;color:#0f0;font-weight:bold}
-.stat-label{font-size:0.8em;color:#0f0;margin-top:5px}
-.loading{text-align:center;padding:20px;color:#0f0}
-.secret{background:rgba(255,0,255,0.1);border-left-color:#f0f!important;padding:10px;margin:5px 0}
-.secret h4{color:#f0f;font-size:0.9em;margin-bottom:5px}
-.urgent{background:rgba(255,0,0,0.1);border-left-color:#f00!important;padding:10px;margin:5px 0}
-.urgent h4{color:#f00;font-size:0.9em;margin-bottom:5px}
-.proof{background:rgba(255,255,0,0.1);border-left-color:#ff0!important;padding:8px;margin:5px 0}
-.expand-btn{color:#0ff;font-size:0.85em;margin-top:5px;cursor:pointer}
-.expand-btn:hover{color:#ff0}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 TECH MASTERY LAB - Global Intelligence Hub</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Courier New', monospace;
+      background: #000;
+      color: #0f0;
+      overflow-x: hidden;
+    }
+    
+    #matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #0f0;
+      margin-bottom: 30px;
+      box-shadow: 0 0 20px #0f0;
+    }
+    
+    h1 {
+      font-size: 2.5em;
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff;
+      margin-bottom: 10px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff; }
+      to { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff; }
+    }
+    
+    .subtitle {
+      color: #0f0;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    button {
+      background: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      transition: all 0.3s;
+    }
+    
+    button:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 15px #0f0;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 2.5em;
+      color: #0ff;
+      font-weight: bold;
+    }
+    
+    .stat-label {
+      color: #0f0;
+      margin-top: 5px;
+    }
+    
+    .panel {
+      background: rgba(0,0,0,0.95);
+      border: 2px solid #0f0;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .panel h2 {
+      color: #0ff;
+      margin-bottom: 20px;
+      font-size: 1.8em;
+      text-shadow: 0 0 10px #0ff;
+    }
+    
+    .item {
+      background: rgba(0,20,0,0.8);
+      border-left: 3px solid #0f0;
+      padding: 15px;
+      margin-bottom: 15px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .item:hover {
+      background: rgba(0,40,0,0.9);
+      border-left-color: #0ff;
+      transform: translateX(5px);
+      box-shadow: 0 0 15px rgba(0,255,0,0.3);
+    }
+    
+    .item.critical {
+      border-left-color: #f00;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 5px #f00; }
+      50% { box-shadow: 0 0 20px #f00; }
+    }
+    
+    .item h3 {
+      color: #0ff;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    
+    .item p {
+      color: #0f0;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    
+    .item a {
+      color: #0ff;
+      text-decoration: none;
+    }
+    
+    .item a:hover {
+      text-decoration: underline;
+      color: #ff0;
+    }
+    
+    .tag {
+      display: inline-block;
+      background: #0f0;
+      color: #000;
+      padding: 3px 8px;
+      margin-right: 5px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+    
+    .meta {
+      margin-top: 10px;
+    }
+    
+    .timestamp {
+      color: #0a0;
+      font-size: 0.85em;
+      margin-top: 8px;
+    }
+    
+    .impact {
+      color: #ff0;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    
+    .expand-btn {
+      color: #0ff;
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
+      padding: 8px;
+      background: rgba(0,255,255,0.1);
+      border: 1px solid #0ff;
+    }
+    
+    .details {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #0ff;
+    }
+    
+    .item.expanded .details {
+      display: block;
+    }
+    
+    .item.expanded .expand-btn {
+      background: rgba(0,255,255,0.3);
+    }
+    
+    .secret {
+      background: rgba(128,0,128,0.2);
+      border: 2px solid #a0a;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .secret h4 {
+      color: #f0f;
+    }
+    
+    .urgent {
+      background: rgba(255,0,0,0.2);
+      border: 2px solid #f00;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    
+    .urgent h4 {
+      color: #f00;
+    }
+    
+    .proof {
+      background: rgba(255,255,0,0.1);
+      border-left: 3px solid #ff0;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    
+    #map {
+      height: 700px;
+      width: 100%;
+      border: 3px solid #0f0;
+      box-shadow: 0 0 30px rgba(0,255,0,0.5);
+      margin-top: 20px;
+    }
+    
+    .search-box {
+      width: 100%;
+      padding: 12px;
+      background: #000;
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      margin-bottom: 15px;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+    
+    .leaflet-popup-content-wrapper {
+      background: #000 !important;
+      color: #0f0 !important;
+      border: 2px solid #0f0 !important;
+    }
+    
+    .leaflet-popup-tip {
+      background: #000 !important;
+      border: 2px solid #0f0 !important;
+    }
+    
+    .marker-label {
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #0f0;
+      padding: 5px 10px;
+      color: #0f0;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    
+    .zoom-info {
+      position: absolute;
+      top: 10px;
+      right: 60px;
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #0f0;
+      padding: 10px;
+      color: #0f0;
+      z-index: 1000;
+      font-size: 0.9em;
+    }
+    
+    .lab-search {
+      position: absolute;
+      top: 10px;
+      left: 60px;
+      z-index: 1000;
+      width: 300px;
+    }
+    
+    @media (max-width: 768px) {
+      h1 { font-size: 1.8em; }
+      .stats { grid-template-columns: 1fr; }
+      #map { height: 500px; }
+      .lab-search { width: 200px; left: 10px; }
+      .zoom-info { right: 10px; font-size: 0.8em; }
+    }
+  </style>
 </head>
 <body>
-<canvas class="matrix-bg" id="matrix"></canvas>
-<div class="container">
-<div class="header">
-<h1><span class="status"></span>TECH INTELLIGENCE HUB - COMPLETE DASHBOARD</h1>
-<p style="font-size:0.9em;margin-top:5px;color:#0a0">Real-time: News • Research • GitHub • Reddit • Breakthroughs • Satellite • Auto-refresh every 2 min</p>
-<div class="controls">
-<button class="btn" onclick="refreshAll()">🔄 REFRESH ALL</button>
-<button class="btn" onclick="togglePanel('stats')">📊 STATS</button>
-<button class="btn" onclick="togglePanel('breakthroughs')">🚨 BREAKTHROUGHS</button>
-<button class="btn" onclick="togglePanel('news')">📰 NEWS</button>
-<button class="btn" onclick="togglePanel('research')">🔬 RESEARCH</button>
-<button class="btn" onclick="togglePanel('github')">💻 GITHUB</button>
-<button class="btn" onclick="togglePanel('reddit')">🕵️ REDDIT</button>
-<button class="btn" onclick="togglePanel('satellite')">🛰️ SATELLITE</button>
-</div>
-<p id="last-update" style="margin-top:10px;color:#0ff;font-size:0.85em">Initializing...</p>
-</div>
-
-<div class="main-grid">
-<!-- STATS PANEL -->
-<div class="panel full-width" id="stats-panel">
-<h2>📊 LIVE STATISTICS</h2>
-<div class="stat-grid">
-<div class="stat">
-<div class="stat-value" id="news-count">0</div>
-<div class="stat-label">NEWS ITEMS</div>
-</div>
-<div class="stat">
-<div class="stat-value" id="research-count">0</div>
-<div class="stat-label">RESEARCH PAPERS</div>
-</div>
-<div class="stat">
-<div class="stat-value" id="github-count">0</div>
-<div class="stat-label">GITHUB REPOS</div>
-</div>
-<div class="stat">
-<div class="stat-value" id="reddit-count">0</div>
-<div class="stat-label">REDDIT POSTS</div>
-</div>
-</div>
-</div>
-
-<!-- BREAKTHROUGHS PANEL -->
-<div class="panel full-width" id="breakthroughs-panel">
-<h2>🚨 MAJOR BREAKTHROUGHS (CLICK TO EXPAND FULL DETAILS)</h2>
-<div id="breakthroughs-container"></div>
-</div>
-
-<!-- NEWS PANEL -->
-<div class="panel" id="news-panel">
-<h2>📰 HACKER NEWS - TOP STORIES</h2>
-<input type="text" class="search-box" placeholder="SEARCH NEWS..." onkeyup="filterNews(this.value)">
-<div id="news-container"><div class="loading">Loading...</div></div>
-</div>
-
-<!-- RESEARCH PANEL -->
-<div class="panel" id="research-panel">
-<h2>🔬 ARXIV RESEARCH PAPERS</h2>
-<div id="research-container"><div class="loading">Loading...</div></div>
-</div>
-
-<!-- GITHUB PANEL -->
-<div class="panel" id="github-panel">
-<h2>💻 GITHUB TRENDING REPOS</h2>
-<div id="github-container"><div class="loading">Loading...</div></div>
-</div>
-
-<!-- REDDIT PANEL -->
-<div class="panel full-width" id="reddit-panel">
-<h2>🕵️ REDDIT TECH COMMUNITIES</h2>
-<div id="reddit-container"><div class="loading">Loading...</div></div>
-</div>
-
-<!-- SATELLITE PANEL -->
-<div class="panel full-width" id="satellite-panel">
-<h2>🛰️ LIVE SATELLITE VIEW - ZOOM & EXPLORE</h2>
-<div id="map"></div>
-</div>
-</div>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="intelligence-data.js"></script>
-<script src="app.js"></script>
+  <canvas id="matrix"></canvas>
+  
+  <div class="container">
+    <header>
+      <h1>🔐 TECH MASTERY LAB</h1>
+      <div class="subtitle">Global Intelligence Hub - Real-Time Monitoring</div>
+      <div class="subtitle" id="last-update">Initializing systems...</div>
+      
+      <div class="controls">
+        <button onclick="refreshAll()">🔄 REFRESH ALL</button>
+        <button onclick="togglePanel('stats')">📊 STATS</button>
+        <button onclick="togglePanel('breakthroughs')">🚨 BREAKTHROUGHS</button>
+        <button onclick="togglePanel('news')">📰 NEWS</button>
+        <button onclick="togglePanel('research')">🔬 RESEARCH</button>
+        <button onclick="togglePanel('github')">💻 GITHUB</button>
+        <button onclick="togglePanel('reddit')">🕵️ REDDIT</button>
+        <button onclick="togglePanel('satellite')">🛰️ SATELLITE</button>
+      </div>
+    </header>
+    
+    <div id="stats-panel" class="panel">
+      <h2>📊 LIVE STATISTICS</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="news-count">0</div>
+          <div class="stat-label">News Stories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="research-count">0</div>
+          <div class="stat-label">Research Papers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="github-count">0</div>
+          <div class="stat-label">GitHub Repos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="reddit-count">0</div>
+          <div class="stat-label">Reddit Posts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">27</div>
+          <div class="stat-label">Secret Labs Tracked</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="breakthroughs-panel" class="panel">
+      <h2>🚨 MAJOR BREAKTHROUGHS</h2>
+      <div id="breakthroughs-container"></div>
+    </div>
+    
+    <div id="news-panel" class="panel">
+      <h2>📰 HACKER NEWS - TOP STORIES</h2>
+      <input type="text" class="search-box" placeholder="🔍 Search news..." onkeyup="filterNews(this.value)">
+      <div id="news-container"></div>
+    </div>
+    
+    <div id="research-panel" class="panel">
+      <h2>🔬 ARXIV RESEARCH - LATEST PAPERS</h2>
+      <div id="research-container"></div>
+    </div>
+    
+    <div id="github-panel" class="panel">
+      <h2>💻 GITHUB TRENDING - TOP REPOSITORIES</h2>
+      <div id="github-container"></div>
+    </div>
+    
+    <div id="reddit-panel" class="panel">
+      <h2>🕵️ REDDIT - TECH COMMUNITIES</h2>
+      <div id="reddit-container"></div>
+    </div>
+    
+    <div id="satellite-panel" class="panel">
+      <h2>🛰️ GLOBAL SATELLITE VIEW - SECRET LABS & RESEARCH CENTERS</h2>
+      <p style="color:#0ff;margin-bottom:15px">
+        🔴 Classified Sites | 🔵 Tech Giants | 🟣 Space/Research | 🟠 India | 🟡 China | 🟢 Others
+      </p>
+      <div style="position:relative">
+        <input type="text" class="search-box lab-search" id="lab-search" placeholder="🔍 Search labs (e.g., Area 51, Google X, ISRO)...">
+        <div class="zoom-info" id="zoom-info">Zoom: 2 | Max: 20</div>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="intelligence-data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
