@@ -634,7 +634,7 @@ async function loadResearch() {
   }
 }
 
-// SATELLITE MAP (keeping existing code)
+// SATELLITE MAP
 function initMap() {
   try {
     map = L.map('map', {
@@ -804,10 +804,20 @@ function zoomToLocation(lat, lng) {
   });
 }
 
+// TOGGLE PANEL FUNCTION - NOW WITH SMOOTH TRANSITIONS
 function togglePanel(panelName) {
   const panel = document.getElementById(`${panelName}-panel`);
+  const button = event.target;
+  
   if (panel) {
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    if (panel.style.display === 'none') {
+      panel.style.display = 'block';
+      button.textContent = button.textContent.replace('SHOW', 'HIDE');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      panel.style.display = 'none';
+      button.textContent = button.textContent.replace('HIDE', 'SHOW');
+    }
   }
 }
 
