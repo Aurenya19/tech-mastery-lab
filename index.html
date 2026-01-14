@@ -16,6 +16,8 @@
   
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css">
+  <!-- Communities Stylesheet -->
+  <link rel="stylesheet" href="communities.css">
 </head>
 <body>
   <!-- Matrix Background Canvas -->
@@ -56,6 +58,10 @@
       <div class="stat-card">
         <span class="stat-card__number">100</span>
         <span class="stat-card__label">🧠 QUIZ QUESTIONS</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__number">40+</span>
+        <span class="stat-card__label">🌐 COMMUNITIES</span>
       </div>
     </div>
     
@@ -255,6 +261,31 @@
       </div>
     </section>
     
+    <!-- 🌐 TECH COMMUNITIES SECTION -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section__title">🌐 TECH COMMUNITIES - CONNECT & LEARN</h2>
+        <button class="btn toggle-btn" onclick="togglePanel('communities')">HIDE COMMUNITIES</button>
+      </div>
+      <div id="communities-panel">
+        
+        <!-- Community Type Filters -->
+        <div class="quiz-controls mb-lg">
+          <button class="btn btn--small" onclick="filterCommunities('all')">All Communities</button>
+          <button class="btn btn--small" onclick="filterCommunities('discord')">💬 Discord</button>
+          <button class="btn btn--small" onclick="filterCommunities('telegram')">✈️ Telegram</button>
+          <button class="btn btn--small" onclick="filterCommunities('whatsapp')">📱 WhatsApp</button>
+          <button class="btn btn--small" onclick="filterCommunities('linkedin')">💼 LinkedIn</button>
+          <button class="btn btn--small" onclick="filterCommunities('reddit')">🔴 Reddit</button>
+          <button class="btn btn--small" onclick="filterCommunities('youtube')">📺 YouTube</button>
+        </div>
+        
+        <!-- Communities Container -->
+        <div id="communities-container"></div>
+        
+      </div>
+    </section>
+    
     <!-- Global Satellite Map Section -->
     <section class="section">
       <div class="section-header">
@@ -290,6 +321,8 @@
   <script src="quiz-questions.js"></script>
   <script src="intelligence-data.js"></script>
   <script src="indian-labs.js"></script>
+  <script src="communities.js"></script>
   <script src="app.js"></script>
+  <script src="communities-app.js"></script>
 </body>
 </html>
