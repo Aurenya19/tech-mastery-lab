@@ -136,15 +136,15 @@
           </div>
           
           <div class="quiz-controls mb-lg">
-            <button class="btn btn--small" onclick="selectQuizCategory('all')">All</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('AI/ML')">AI/ML</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Space Tech')">Space</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Quantum Computing')">Quantum</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Cybersecurity')">Security</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Indian Tech')">Indian Tech</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Coding')">Coding</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Hardware')">Hardware</button>
-            <button class="btn btn--small" onclick="selectQuizCategory('Blockchain')">Blockchain</button>
+            <button class="btn btn--small" data-category="all">All</button>
+            <button class="btn btn--small" data-category="AI/ML">AI/ML</button>
+            <button class="btn btn--small" data-category="Space Tech">Space</button>
+            <button class="btn btn--small" data-category="Quantum Computing">Quantum</button>
+            <button class="btn btn--small" data-category="Cybersecurity">Security</button>
+            <button class="btn btn--small" data-category="Indian Tech">Indian Tech</button>
+            <button class="btn btn--small" data-category="Coding">Coding</button>
+            <button class="btn btn--small" data-category="Hardware">Hardware</button>
+            <button class="btn btn--small" data-category="Blockchain">Blockchain</button>
           </div>
           
           <div id="quiz-content">
@@ -287,6 +287,7 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="quiz-questions.js"></script>
   <script src="intelligence-data.js"></script>
   <script src="indian-labs.js"></script>
   <script src="app.js"></script>
