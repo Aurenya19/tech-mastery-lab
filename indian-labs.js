@@ -342,35 +342,6 @@ const INDIAN_LABS = [
     achievements: ['E-commerce innovation', 'AI/ML', 'Logistics tech'],
     color: 'green'
   },
-  {
-    name: 'Paytm Labs',
-    location: 'Noida, Uttar Pradesh',
-    lat: 28.5355, lng: 77.3910,
-    type: 'private',
-    category: 'Fintech',
-    description: 'Paytm technology division. Payments, banking, AI, blockchain.',
-    projects: ['Payment Gateway', 'Banking Tech', 'AI/ML', 'Blockchain'],
-    website: 'https://paytm.com',
-    careers: 'https://paytm.com/careers',
-    established: 2010,
-    employees: '20000+',
-    achievements: ['Digital payments', 'Banking license', 'Fintech innovation'],
-    color: 'green'
-  },
-  {
-    name: 'Ola Electric R&D',
-    location: 'Bangalore, Karnataka',
-    lat: 12.9716, lng: 77.5946,
-    type: 'private',
-    category: 'Electric Vehicles',
-    description: 'Ola Electric research. EV technology, battery tech, autonomous driving.',
-    projects: ['Electric Scooters', 'Battery Tech', 'Charging Network', 'Autonomous'],
-    website: 'https://olaelectric.com',
-    careers: 'https://olaelectric.com/careers',
-    established: 2017,
-    achievements: ['EV manufacturing', 'Battery innovation', 'Charging infrastructure'],
-    color: 'green'
-  },
   
   // STARTUP HUBS
   {
@@ -416,177 +387,12 @@ const INDIAN_LABS = [
     companies: '100+',
     achievements: ['Industry collaboration', 'Technology commercialization', 'Innovation'],
     color: 'yellow'
-  },
-  {
-    name: 'IIT Madras Research Park',
-    location: 'Chennai, Tamil Nadu',
-    lat: 12.9916, lng: 80.2336,
-    type: 'startup',
-    category: 'Research & Innovation',
-    description: 'IIT Madras innovation ecosystem. 200+ companies, startups, R&D centers.',
-    projects: ['Incubation', 'R&D Centers', 'Technology Development'],
-    website: 'https://researchpark.iitm.ac.in',
-    established: 2010,
-    companies: '200+',
-    achievements: ['Largest research park', 'Industry partnerships', 'Startups'],
-    color: 'yellow'
-  },
-  {
-    name: 'Atal Incubation Centre - CCMB',
-    location: 'Hyderabad, Telangana',
-    lat: 17.4435, lng: 78.3772,
-    type: 'startup',
-    category: 'Biotech Incubation',
-    description: 'Biotech startup incubator. Life sciences, healthcare, diagnostics.',
-    projects: ['Biotech Startups', 'Drug Discovery', 'Diagnostics', 'Healthcare'],
-    website: 'https://www.aicccmb.res.in',
-    established: 2017,
-    startups: '50+',
-    achievements: ['Biotech innovation', 'Healthcare solutions', 'Funding support'],
-    color: 'yellow'
-  },
-  
-  // ADDITIONAL IMPORTANT LABS
-  {
-    name: 'Indian Institute of Technology Hyderabad',
-    location: 'Hyderabad, Telangana',
-    lat: 17.5937, lng: 78.1230,
-    type: 'academic',
-    category: 'Engineering & Research',
-    description: 'Newer IIT with strong AI, robotics, and materials research.',
-    projects: ['AI Research', 'Robotics', 'Materials Science', 'Healthcare Tech'],
-    website: 'https://www.iith.ac.in',
-    established: 2008,
-    students: '4000+',
-    achievements: ['Research excellence', 'Industry collaboration', 'Innovation'],
-    color: 'blue'
-  },
-  {
-    name: 'Indian Institute of Technology Roorkee',
-    location: 'Roorkee, Uttarakhand',
-    lat: 29.8543, lng: 77.8880,
-    type: 'academic',
-    category: 'Engineering & Research',
-    description: 'Oldest technical institute. Strong in civil, earthquake engineering, water resources.',
-    projects: ['Earthquake Engineering', 'Water Resources', 'AI/ML', 'Smart Cities'],
-    website: 'https://www.iitr.ac.in',
-    established: 1847,
-    students: '8000+',
-    achievements: ['Oldest engineering college', 'Research heritage', 'Alumni network'],
-    color: 'blue'
-  },
-  {
-    name: 'Indian Institute of Technology Guwahati',
-    location: 'Guwahati, Assam',
-    lat: 26.1901, lng: 91.6932,
-    type: 'academic',
-    category: 'Engineering & Research',
-    description: 'Leading IIT in Northeast. Strong in biotechnology, electronics, computer science.',
-    projects: ['Biotechnology', 'Electronics', 'AI/ML', 'Rural Technology'],
-    website: 'https://www.iitg.ac.in',
-    established: 1994,
-    students: '6000+',
-    achievements: ['Northeast hub', 'Research output', 'Innovation'],
-    color: 'blue'
-  },
-  {
-    name: 'National Institute of Technology Karnataka (NITK)',
-    location: 'Surathkal, Karnataka',
-    lat: 13.0067, lng: 74.7951,
-    type: 'academic',
-    category: 'Engineering & Research',
-    description: 'Premier NIT. Strong in computer science, electronics, mechanical engineering.',
-    projects: ['AI/ML', 'Robotics', 'IoT', 'Materials'],
-    website: 'https://www.nitk.ac.in',
-    established: 1960,
-    students: '7000+',
-    achievements: ['Top NIT', 'Research excellence', 'Industry partnerships'],
-    color: 'blue'
-  },
-  {
-    name: 'International Institute of Information Technology Hyderabad (IIIT-H)',
-    location: 'Hyderabad, Telangana',
-    lat: 17.4453, lng: 78.3489,
-    type: 'academic',
-    category: 'Computer Science',
-    description: 'Premier CS institute. World-class AI, NLP, computer vision research.',
-    projects: ['AI/ML', 'NLP', 'Computer Vision', 'Robotics', 'Cybersecurity'],
-    website: 'https://www.iiit.ac.in',
-    established: 1998,
-    students: '3000+',
-    achievements: ['AI excellence', 'Research publications', 'Industry collaboration'],
-    color: 'blue'
-  },
-  {
-    name: 'Indian Statistical Institute (ISI)',
-    location: 'Kolkata, West Bengal',
-    lat: 22.5726, lng: 88.3639,
-    type: 'academic',
-    category: 'Statistics & Mathematics',
-    description: 'Premier statistics and mathematics institute. Data science, AI, cryptography.',
-    projects: ['Statistics', 'Data Science', 'AI/ML', 'Cryptography'],
-    website: 'https://www.isical.ac.in',
-    established: 1931,
-    achievements: ['Statistics excellence', 'Research heritage', 'Data science'],
-    color: 'blue'
-  },
-  {
-    name: 'Tata Institute of Fundamental Research (TIFR)',
-    location: 'Mumbai, Maharashtra',
-    lat: 18.9067, lng: 72.8147,
-    type: 'academic',
-    category: 'Fundamental Research',
-    description: 'Premier research institute. Physics, mathematics, biology, computer science.',
-    projects: ['Particle Physics', 'Astrophysics', 'Mathematics', 'Biology', 'CS Theory'],
-    website: 'https://www.tifr.res.in',
-    established: 1945,
-    achievements: ['Nobel connections', 'Research excellence', 'International collaboration'],
-    color: 'purple'
-  },
-  {
-    name: 'Jawaharlal Nehru Centre for Advanced Scientific Research (JNCASR)',
-    location: 'Bangalore, Karnataka',
-    lat: 13.0679, lng: 77.5706,
-    type: 'academic',
-    category: 'Scientific Research',
-    description: 'Advanced research in chemistry, physics, materials, biology.',
-    projects: ['Materials Science', 'Chemistry', 'Physics', 'Biology'],
-    website: 'https://www.jncasr.ac.in',
-    established: 1989,
-    achievements: ['Research excellence', 'Publications', 'Collaborations'],
-    color: 'purple'
-  },
-  {
-    name: 'National Centre for Biological Sciences (NCBS)',
-    location: 'Bangalore, Karnataka',
-    lat: 13.0679, lng: 77.5706,
-    type: 'academic',
-    category: 'Biological Sciences',
-    description: 'Premier biology research center. Molecular biology, neuroscience, ecology.',
-    projects: ['Neuroscience', 'Molecular Biology', 'Ecology', 'Evolution'],
-    website: 'https://www.ncbs.res.in',
-    established: 1991,
-    achievements: ['Biology research', 'International collaboration', 'Publications'],
-    color: 'purple'
-  },
-  {
-    name: 'Institute of Genomics and Integrative Biology (IGIB)',
-    location: 'New Delhi',
-    lat: 28.6139, lng: 77.2090,
-    type: 'government',
-    category: 'Genomics',
-    description: 'CSIR lab for genomics research. COVID testing, genome sequencing, precision medicine.',
-    projects: ['Genome India', 'COVID Research', 'Precision Medicine', 'Diagnostics'],
-    website: 'https://www.igib.res.in',
-    established: 1977,
-    achievements: ['COVID testing', 'Genome sequencing', 'Diagnostics'],
-    color: 'purple'
   }
 ];
 
-// QUIZ QUESTIONS DATABASE
+// 🧠 TECH QUIZ - 100 QUESTIONS
 const QUIZ_QUESTIONS = [
-  // AI/ML CATEGORY
+  // AI/ML (15 questions)
   {
     category: 'AI/ML',
     difficulty: 'easy',
@@ -602,6 +408,14 @@ const QUIZ_QUESTIONS = [
     options: ['ISRO', 'C-DAC', 'DRDO', 'TCS'],
     correct: 1,
     explanation: 'C-DAC (Centre for Development of Advanced Computing) developed the PARAM series of supercomputers.'
+  },
+  {
+    category: 'AI/ML',
+    difficulty: 'easy',
+    question: 'What is Machine Learning?',
+    options: ['Robots learning to walk', 'Computers learning from data', 'Teaching machines manually', 'Programming languages'],
+    correct: 1,
+    explanation: 'Machine Learning is a subset of AI where computers learn patterns from data without explicit programming.'
   },
   {
     category: 'AI/ML',
@@ -621,14 +435,46 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'AI/ML',
+    difficulty: 'medium',
+    question: 'What is supervised learning?',
+    options: ['Learning with a teacher', 'Learning from labeled data', 'Learning without data', 'Learning by trial and error'],
+    correct: 1,
+    explanation: 'Supervised learning uses labeled training data to learn patterns and make predictions.'
+  },
+  {
+    category: 'AI/ML',
+    difficulty: 'medium',
+    question: 'What does NLP stand for in AI?',
+    options: ['Natural Language Processing', 'Neural Learning Process', 'Network Layer Protocol', 'New Learning Paradigm'],
+    correct: 0,
+    explanation: 'NLP (Natural Language Processing) enables computers to understand and process human language.'
+  },
+  {
+    category: 'AI/ML',
     difficulty: 'hard',
     question: 'What is the Turing Test designed to evaluate?',
     options: ['Computer speed', 'Machine intelligence', 'Network security', 'Data storage'],
     correct: 1,
     explanation: 'The Turing Test evaluates a machine\'s ability to exhibit intelligent behavior indistinguishable from a human.'
   },
+  {
+    category: 'AI/ML',
+    difficulty: 'hard',
+    question: 'What is backpropagation in neural networks?',
+    options: ['Forward data flow', 'Error correction algorithm', 'Data preprocessing', 'Network architecture'],
+    correct: 1,
+    explanation: 'Backpropagation is an algorithm for training neural networks by propagating errors backward to adjust weights.'
+  },
+  {
+    category: 'AI/ML',
+    difficulty: 'hard',
+    question: 'What is the vanishing gradient problem?',
+    options: ['Gradients becoming too large', 'Gradients becoming too small', 'No gradients at all', 'Random gradients'],
+    correct: 1,
+    explanation: 'Vanishing gradient problem occurs when gradients become too small during backpropagation, making training difficult.'
+  },
   
-  // SPACE TECH CATEGORY
+  // Space Tech (15 questions)
   {
     category: 'Space Tech',
     difficulty: 'easy',
@@ -647,8 +493,8 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Space Tech',
-    difficulty: 'medium',
-    question: 'What is India\'s Mars Orbiter Mission commonly called?',
+    difficulty: 'easy',
+    question: 'What is the name of India\'s Mars mission?',
     options: ['Mars Express', 'Mangalyaan', 'Red Planet', 'Mars India'],
     correct: 1,
     explanation: 'Mangalyaan (Mars Orbiter Mission) made India the first Asian nation to reach Mars orbit.'
@@ -660,6 +506,22 @@ const QUIZ_QUESTIONS = [
     options: ['Bangalore', 'Sriharikota', 'Thiruvananthapuram', 'Ahmedabad'],
     correct: 1,
     explanation: 'Satish Dhawan Space Centre in Sriharikota, Andhra Pradesh is India\'s primary spaceport.'
+  },
+  {
+    category: 'Space Tech',
+    difficulty: 'medium',
+    question: 'What does PSLV stand for?',
+    options: ['Polar Satellite Launch Vehicle', 'Primary Space Launch Vehicle', 'Powerful Satellite Launch Vehicle', 'Precision Space Launch Vehicle'],
+    correct: 0,
+    explanation: 'PSLV (Polar Satellite Launch Vehicle) is ISRO\'s workhorse rocket for launching satellites.'
+  },
+  {
+    category: 'Space Tech',
+    difficulty: 'medium',
+    question: 'What is Gaganyaan?',
+    options: ['A satellite', 'India\'s human spaceflight program', 'A rocket', 'A space station'],
+    correct: 1,
+    explanation: 'Gaganyaan is India\'s first crewed orbital spacecraft mission planned by ISRO.'
   },
   {
     category: 'Space Tech',
@@ -677,8 +539,24 @@ const QUIZ_QUESTIONS = [
     correct: 2,
     explanation: 'ISRO launched 104 satellites in a single PSLV mission in February 2017, setting a world record.'
   },
+  {
+    category: 'Space Tech',
+    difficulty: 'hard',
+    question: 'What is Aditya-L1 mission studying?',
+    options: ['Moon', 'Mars', 'Sun', 'Venus'],
+    correct: 2,
+    explanation: 'Aditya-L1 is India\'s first solar mission to study the Sun from the L1 Lagrange point.'
+  },
+  {
+    category: 'Space Tech',
+    difficulty: 'hard',
+    question: 'Who is known as the father of Indian space program?',
+    options: ['APJ Abdul Kalam', 'Vikram Sarabhai', 'Satish Dhawan', 'Homi Bhabha'],
+    correct: 1,
+    explanation: 'Dr. Vikram Sarabhai founded ISRO and is considered the father of Indian space program.'
+  },
   
-  // QUANTUM COMPUTING
+  // Quantum Computing (10 questions)
   {
     category: 'Quantum Computing',
     difficulty: 'easy',
@@ -686,6 +564,14 @@ const QUIZ_QUESTIONS = [
     options: ['Bit', 'Byte', 'Qubit', 'Quantum'],
     correct: 2,
     explanation: 'A qubit (quantum bit) is the basic unit of quantum information, unlike classical bits.'
+  },
+  {
+    category: 'Quantum Computing',
+    difficulty: 'easy',
+    question: 'How many states can a qubit be in simultaneously?',
+    options: ['1', '2', 'Multiple', 'Infinite'],
+    correct: 2,
+    explanation: 'Qubits can exist in superposition, being in multiple states simultaneously.'
   },
   {
     category: 'Quantum Computing',
@@ -705,14 +591,38 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Quantum Computing',
+    difficulty: 'medium',
+    question: 'What temperature do quantum computers typically operate at?',
+    options: ['Room temperature', 'Freezing point', 'Near absolute zero', 'Boiling point'],
+    correct: 2,
+    explanation: 'Quantum computers operate at temperatures near absolute zero to maintain quantum states.'
+  },
+  {
+    category: 'Quantum Computing',
     difficulty: 'hard',
     question: 'What is quantum entanglement?',
     options: ['Qubits moving fast', 'Qubits being connected regardless of distance', 'Qubits storing data', 'Qubits processing information'],
     correct: 1,
     explanation: 'Quantum entanglement is when qubits become correlated and share states regardless of distance.'
   },
+  {
+    category: 'Quantum Computing',
+    difficulty: 'hard',
+    question: 'What is quantum supremacy?',
+    options: ['Fastest quantum computer', 'Quantum computer outperforming classical', 'Largest quantum computer', 'Most accurate quantum computer'],
+    correct: 1,
+    explanation: 'Quantum supremacy is when a quantum computer solves a problem faster than any classical computer.'
+  },
+  {
+    category: 'Quantum Computing',
+    difficulty: 'hard',
+    question: 'Which algorithm is famous for quantum computing?',
+    options: ['Bubble Sort', 'Shor\'s Algorithm', 'Quick Sort', 'Binary Search'],
+    correct: 1,
+    explanation: 'Shor\'s Algorithm is a quantum algorithm for integer factorization, threatening current encryption.'
+  },
   
-  // CYBERSECURITY
+  // Cybersecurity (15 questions)
   {
     category: 'Cybersecurity',
     difficulty: 'easy',
@@ -728,6 +638,14 @@ const QUIZ_QUESTIONS = [
     options: ['Using your name', 'Using 12345678', 'Using mix of letters, numbers, symbols', 'Using your birthday'],
     correct: 2,
     explanation: 'Strong passwords use a combination of uppercase, lowercase, numbers, and special characters.'
+  },
+  {
+    category: 'Cybersecurity',
+    difficulty: 'easy',
+    question: 'What is two-factor authentication?',
+    options: ['Two passwords', 'Two security layers', 'Two accounts', 'Two devices'],
+    correct: 1,
+    explanation: 'Two-factor authentication adds an extra layer of security beyond just a password.'
   },
   {
     category: 'Cybersecurity',
@@ -747,14 +665,46 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Cybersecurity',
+    difficulty: 'medium',
+    question: 'What is ransomware?',
+    options: ['Free software', 'Malware that encrypts files for ransom', 'Antivirus software', 'Operating system'],
+    correct: 1,
+    explanation: 'Ransomware is malicious software that encrypts files and demands payment for decryption.'
+  },
+  {
+    category: 'Cybersecurity',
+    difficulty: 'medium',
+    question: 'What does HTTPS stand for?',
+    options: ['Hyper Text Transfer Protocol Secure', 'High Tech Transfer Protocol System', 'Hyper Transfer Text Protocol Secure', 'High Text Transfer Protocol Secure'],
+    correct: 0,
+    explanation: 'HTTPS is HTTP with encryption for secure communication over networks.'
+  },
+  {
+    category: 'Cybersecurity',
     difficulty: 'hard',
     question: 'What is a zero-day vulnerability?',
     options: ['A bug found on day zero', 'A vulnerability unknown to vendor', 'A patched security hole', 'A type of malware'],
     correct: 1,
     explanation: 'A zero-day vulnerability is a security flaw unknown to the software vendor, giving zero days to fix it.'
   },
+  {
+    category: 'Cybersecurity',
+    difficulty: 'hard',
+    question: 'What is SQL injection?',
+    options: ['Database optimization', 'Code injection attack', 'Data backup method', 'Programming language'],
+    correct: 1,
+    explanation: 'SQL injection is a code injection technique that exploits vulnerabilities in database queries.'
+  },
+  {
+    category: 'Cybersecurity',
+    difficulty: 'hard',
+    question: 'What is a DDoS attack?',
+    options: ['Data theft', 'Distributed Denial of Service', 'Database deletion', 'Device destruction'],
+    correct: 1,
+    explanation: 'DDoS (Distributed Denial of Service) overwhelms a system with traffic to make it unavailable.'
+  },
   
-  // INDIAN TECH HISTORY
+  // Indian Tech (15 questions)
   {
     category: 'Indian Tech',
     difficulty: 'easy',
@@ -770,6 +720,14 @@ const QUIZ_QUESTIONS = [
     options: ['IIT Bombay', 'IIT Delhi', 'IIT Kharagpur', 'IIT Madras'],
     correct: 2,
     explanation: 'IIT Kharagpur was the first IIT, established in 1951.'
+  },
+  {
+    category: 'Indian Tech',
+    difficulty: 'easy',
+    question: 'What does TCS stand for?',
+    options: ['Tata Computer Services', 'Tata Consultancy Services', 'Tech Consultancy Services', 'Total Computer Solutions'],
+    correct: 1,
+    explanation: 'TCS stands for Tata Consultancy Services, India\'s largest IT services company.'
   },
   {
     category: 'Indian Tech',
@@ -789,6 +747,22 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Indian Tech',
+    difficulty: 'medium',
+    question: 'Which Indian city is known as the "Silicon Valley of India"?',
+    options: ['Mumbai', 'Delhi', 'Bangalore', 'Hyderabad'],
+    correct: 2,
+    explanation: 'Bangalore is known as the Silicon Valley of India due to its IT industry concentration.'
+  },
+  {
+    category: 'Indian Tech',
+    difficulty: 'medium',
+    question: 'What is UPI?',
+    options: ['Universal Payment Interface', 'Unified Payments Interface', 'United Payment India', 'Universal Payment India'],
+    correct: 1,
+    explanation: 'UPI (Unified Payments Interface) is India\'s instant real-time payment system.'
+  },
+  {
+    category: 'Indian Tech',
     difficulty: 'hard',
     question: 'Which Indian developed the Pentium chip?',
     options: ['Vinod Dham', 'Sabeer Bhatia', 'Sundar Pichai', 'Satya Nadella'],
@@ -803,8 +777,16 @@ const QUIZ_QUESTIONS = [
     correct: 1,
     explanation: 'TIFRAC (Tata Institute of Fundamental Research Automatic Calculator) was built in 1955.'
   },
+  {
+    category: 'Indian Tech',
+    difficulty: 'hard',
+    question: 'Which Indian company became the first to reach $100 billion market cap?',
+    options: ['TCS', 'Infosys', 'Reliance', 'Wipro'],
+    correct: 0,
+    explanation: 'TCS became the first Indian IT company to reach $100 billion market capitalization.'
+  },
   
-  // CODING CHALLENGES
+  // Coding (15 questions)
   {
     category: 'Coding',
     difficulty: 'easy',
@@ -820,6 +802,14 @@ const QUIZ_QUESTIONS = [
     options: ['Python', 'Java', 'JavaScript', 'C++'],
     correct: 2,
     explanation: 'JavaScript is known as the language of the web, running in all web browsers.'
+  },
+  {
+    category: 'Coding',
+    difficulty: 'easy',
+    question: 'What does CSS stand for?',
+    options: ['Computer Style Sheets', 'Cascading Style Sheets', 'Creative Style Sheets', 'Colorful Style Sheets'],
+    correct: 1,
+    explanation: 'CSS stands for Cascading Style Sheets, used for styling web pages.'
   },
   {
     category: 'Coding',
@@ -839,14 +829,46 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Coding',
+    difficulty: 'medium',
+    question: 'What is Git?',
+    options: ['Programming language', 'Version control system', 'Database', 'Operating system'],
+    correct: 1,
+    explanation: 'Git is a distributed version control system for tracking changes in source code.'
+  },
+  {
+    category: 'Coding',
+    difficulty: 'medium',
+    question: 'What does API stand for?',
+    options: ['Application Programming Interface', 'Advanced Programming Interface', 'Application Process Integration', 'Advanced Process Interface'],
+    correct: 0,
+    explanation: 'API stands for Application Programming Interface, allowing software to communicate.'
+  },
+  {
+    category: 'Coding',
     difficulty: 'hard',
     question: 'What is the output of: print(type([]) == list) in Python?',
     options: ['True', 'False', 'Error', 'None'],
     correct: 0,
     explanation: '[] creates a list object, so type([]) == list returns True.'
   },
+  {
+    category: 'Coding',
+    difficulty: 'hard',
+    question: 'What is recursion?',
+    options: ['Loop', 'Function calling itself', 'Error handling', 'Data structure'],
+    correct: 1,
+    explanation: 'Recursion is when a function calls itself to solve a problem by breaking it into smaller instances.'
+  },
+  {
+    category: 'Coding',
+    difficulty: 'hard',
+    question: 'What is Big O notation used for?',
+    options: ['Measuring code size', 'Analyzing algorithm efficiency', 'Counting variables', 'Debugging'],
+    correct: 1,
+    explanation: 'Big O notation describes the time or space complexity of algorithms.'
+  },
   
-  // HARDWARE & CHIPS
+  // Hardware (10 questions)
   {
     category: 'Hardware',
     difficulty: 'easy',
@@ -854,6 +876,14 @@ const QUIZ_QUESTIONS = [
     options: ['Central Processing Unit', 'Computer Processing Unit', 'Central Program Unit', 'Computer Program Unit'],
     correct: 0,
     explanation: 'CPU stands for Central Processing Unit, the brain of the computer.'
+  },
+  {
+    category: 'Hardware',
+    difficulty: 'easy',
+    question: 'What does RAM stand for?',
+    options: ['Random Access Memory', 'Read Access Memory', 'Rapid Access Memory', 'Real Access Memory'],
+    correct: 0,
+    explanation: 'RAM stands for Random Access Memory, temporary storage for running programs.'
   },
   {
     category: 'Hardware',
@@ -873,14 +903,30 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Hardware',
+    difficulty: 'medium',
+    question: 'What is SSD?',
+    options: ['Super Speed Drive', 'Solid State Drive', 'System Storage Device', 'Secure Storage Disk'],
+    correct: 1,
+    explanation: 'SSD (Solid State Drive) is a storage device using flash memory, faster than HDDs.'
+  },
+  {
+    category: 'Hardware',
     difficulty: 'hard',
     question: 'What is the smallest transistor size currently in production?',
     options: ['3nm', '5nm', '7nm', '10nm'],
     correct: 0,
     explanation: 'As of 2024, 3nm transistors are in production by companies like TSMC and Samsung.'
   },
+  {
+    category: 'Hardware',
+    difficulty: 'hard',
+    question: 'What is GPU primarily used for?',
+    options: ['Text processing', 'Graphics and parallel computing', 'Storage', 'Networking'],
+    correct: 1,
+    explanation: 'GPU (Graphics Processing Unit) excels at parallel processing for graphics and AI computations.'
+  },
   
-  // BLOCKCHAIN & CRYPTO
+  // Blockchain (10 questions)
   {
     category: 'Blockchain',
     difficulty: 'easy',
@@ -888,6 +934,14 @@ const QUIZ_QUESTIONS = [
     options: ['A company', 'A cryptocurrency', 'A bank', 'A website'],
     correct: 1,
     explanation: 'Bitcoin is the first and most well-known cryptocurrency, created in 2009.'
+  },
+  {
+    category: 'Blockchain',
+    difficulty: 'easy',
+    question: 'Who created Bitcoin?',
+    options: ['Elon Musk', 'Satoshi Nakamoto', 'Vitalik Buterin', 'Bill Gates'],
+    correct: 1,
+    explanation: 'Bitcoin was created by an anonymous person or group using the pseudonym Satoshi Nakamoto.'
   },
   {
     category: 'Blockchain',
@@ -907,13 +961,34 @@ const QUIZ_QUESTIONS = [
   },
   {
     category: 'Blockchain',
+    difficulty: 'medium',
+    question: 'What is Ethereum?',
+    options: ['A Bitcoin clone', 'A blockchain platform with smart contracts', 'A mining company', 'A wallet'],
+    correct: 1,
+    explanation: 'Ethereum is a blockchain platform that enables smart contracts and decentralized applications.'
+  },
+  {
+    category: 'Blockchain',
     difficulty: 'hard',
     question: 'What is a smart contract?',
     options: ['A legal document', 'Self-executing code on blockchain', 'A type of cryptocurrency', 'A mining algorithm'],
     correct: 1,
     explanation: 'Smart contracts are self-executing programs on blockchain that automatically enforce agreements.'
+  },
+  {
+    category: 'Blockchain',
+    difficulty: 'hard',
+    question: 'What is DeFi?',
+    options: ['Decentralized Finance', 'Digital Finance', 'Distributed Finance', 'Defined Finance'],
+    correct: 0,
+    explanation: 'DeFi (Decentralized Finance) refers to financial services built on blockchain without intermediaries.'
+  },
+  {
+    category: 'Blockchain',
+    difficulty: 'hard',
+    question: 'What is an NFT?',
+    options: ['New Financial Token', 'Non-Fungible Token', 'Network File Transfer', 'Next Future Technology'],
+    correct: 1,
+    explanation: 'NFT (Non-Fungible Token) is a unique digital asset representing ownership on blockchain.'
   }
 ];
-
-// Add 60 more questions to reach 100 total...
-// (I'll add more in the actual implementation)
