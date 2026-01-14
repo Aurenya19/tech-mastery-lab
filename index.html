@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔐 TECH MASTERY LAB - Global Intelligence Hub</title>
+  <title>🇮🇳 TECH MASTERY LAB - India's Ultimate Tech Hub</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
@@ -49,66 +49,23 @@
       color: #0ff;
       text-shadow: 0 0 10px #0ff;
       margin-bottom: 10px;
-      animation: glow 2s ease-in-out infinite alternate;
     }
     
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff; }
-      to { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff, 0 0 40px #0ff; }
-    }
-    
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .subtitle {
+    .tagline {
       color: #0f0;
       font-size: 1.2em;
-      margin-bottom: 15px;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-    
-    button {
-      background: #000;
-      color: #0f0;
-      border: 2px solid #0f0;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-      transition: all 0.3s;
-    }
-    
-    button:hover {
-      background: #0f0;
-      color: #000;
-      box-shadow: 0 0 15px #0f0;
-      transform: scale(1.05);
+      margin: 10px 0;
     }
     
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
-      margin-bottom: 30px;
+      margin: 30px 0;
     }
     
     .stat-card {
-      background: rgba(0,0,0,0.9);
+      background: rgba(0,255,0,0.1);
       border: 2px solid #0f0;
       padding: 20px;
       text-align: center;
@@ -116,8 +73,8 @@
     }
     
     .stat-card:hover {
-      border-color: #0ff;
-      box-shadow: 0 0 20px rgba(0,255,255,0.5);
+      background: rgba(0,255,0,0.2);
+      box-shadow: 0 0 15px #0f0;
       transform: translateY(-5px);
     }
     
@@ -125,39 +82,82 @@
       font-size: 2.5em;
       color: #0ff;
       font-weight: bold;
-      animation: countUp 1s ease-out;
-    }
-    
-    @keyframes countUp {
-      from { opacity: 0; transform: scale(0.5); }
-      to { opacity: 1; transform: scale(1); }
     }
     
     .stat-label {
       color: #0f0;
-      margin-top: 5px;
+      margin-top: 10px;
     }
     
-    .panel {
-      background: rgba(0,0,0,0.95);
+    .section {
+      background: rgba(0,0,0,0.9);
       border: 2px solid #0f0;
-      padding: 20px;
+      padding: 25px;
       margin-bottom: 30px;
+      box-shadow: 0 0 15px rgba(0,255,0,0.3);
     }
     
-    .panel h2 {
-      color: #0ff;
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    h2 {
+      color: #0ff;
       font-size: 1.8em;
       text-shadow: 0 0 10px #0ff;
     }
     
+    .toggle-btn {
+      background: #0f0;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .toggle-btn:hover {
+      background: #0ff;
+      box-shadow: 0 0 10px #0ff;
+    }
+    
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      background: #000;
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      margin: 15px 0;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      box-shadow: 0 0 10px #0f0;
+    }
+    
     .item {
-      background: rgba(0,20,0,0.8);
-      border-left: 3px solid #0f0;
-      padding: 15px;
+      background: rgba(0,255,0,0.05);
+      border: 1px solid #0f0;
+      padding: 20px;
       margin-bottom: 15px;
       transition: all 0.3s;
+      position: relative;
+    }
+    
+    .item:hover {
+      background: rgba(0,255,0,0.1);
+      border-color: #0ff;
+      box-shadow: 0 0 15px rgba(0,255,0,0.5);
+      transform: translateX(5px);
     }
     
     .item.clickable {
@@ -165,157 +165,165 @@
     }
     
     .item.clickable:hover {
-      background: rgba(0,40,0,0.9);
-      border-left-color: #0ff;
-      transform: translateX(5px);
-      box-shadow: 0 0 15px rgba(0,255,0,0.3);
-    }
-    
-    .item.critical {
-      border-left-color: #f00;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 5px #f00; }
-      50% { box-shadow: 0 0 20px #f00; }
+      background: rgba(0,255,255,0.1);
     }
     
     .item h3 {
       color: #0ff;
       margin-bottom: 10px;
-      font-size: 1.2em;
+      font-size: 1.3em;
     }
     
     .item p {
       color: #0f0;
       line-height: 1.6;
-      margin-bottom: 10px;
-    }
-    
-    .item a {
-      color: #0ff;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-    
-    .item a:hover {
-      text-decoration: underline;
-      color: #ff0;
-    }
-    
-    .tag {
-      display: inline-block;
-      background: #0f0;
-      color: #000;
-      padding: 3px 8px;
-      margin-right: 5px;
-      margin-top: 5px;
-      font-size: 0.8em;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-    
-    .tag:hover {
-      background: #0ff;
-      transform: scale(1.1);
+      margin: 10px 0;
     }
     
     .meta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-top: 10px;
+    }
+    
+    .tag {
+      background: rgba(0,255,0,0.2);
+      padding: 5px 10px;
+      border: 1px solid #0f0;
+      font-size: 0.85em;
+      color: #0f0;
     }
     
     .timestamp {
       color: #0a0;
       font-size: 0.85em;
-      margin-top: 8px;
+      margin-top: 10px;
+    }
+    
+    .click-hint {
+      color: #ff0;
+      font-size: 0.85em;
+      margin-top: 10px;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .critical {
+      border-color: #f00;
+      box-shadow: 0 0 10px rgba(255,0,0,0.5);
+    }
+    
+    .high {
+      border-color: #ff0;
+      box-shadow: 0 0 10px rgba(255,255,0,0.3);
     }
     
     .impact {
       color: #ff0;
       font-weight: bold;
-      margin-top: 8px;
-    }
-    
-    .click-hint {
-      color: #0ff;
-      font-size: 0.85em;
-      margin-top: 8px;
-      font-style: italic;
-      opacity: 0.7;
+      margin-top: 10px;
     }
     
     .expand-btn {
       color: #0ff;
-      margin-top: 10px;
+      margin-top: 15px;
+      cursor: pointer;
       font-weight: bold;
       text-align: center;
-      padding: 8px;
+      padding: 10px;
       background: rgba(0,255,255,0.1);
       border: 1px solid #0ff;
-      transition: all 0.3s;
     }
     
     .expand-btn:hover {
-      background: rgba(0,255,255,0.3);
+      background: rgba(0,255,255,0.2);
     }
     
     .details {
       display: none;
-      margin-top: 15px;
-      padding: 15px;
-      background: rgba(0,0,0,0.9);
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(0,0,0,0.5);
       border: 2px solid #0ff;
-      animation: slideIn 0.3s ease;
     }
     
     .item.expanded .details {
       display: block;
     }
     
-    .item.expanded .expand-btn {
-      background: rgba(0,255,255,0.3);
+    .item.expanded .expand-btn::before {
+      content: '▲ CLICK TO COLLAPSE ';
+    }
+    
+    .item:not(.expanded) .expand-btn::before {
+      content: '';
     }
     
     .secret {
-      background: rgba(128,0,128,0.2);
-      border: 2px solid #a0a;
-      padding: 15px;
-      margin: 15px 0;
-    }
-    
-    .secret h4 {
-      color: #f0f;
-    }
-    
-    .urgent {
-      background: rgba(255,0,0,0.2);
+      background: rgba(255,0,0,0.1);
       border: 2px solid #f00;
       padding: 15px;
       margin: 15px 0;
     }
     
-    .urgent h4 {
-      color: #f00;
+    .urgent {
+      background: rgba(255,255,0,0.1);
+      border: 2px solid #ff0;
+      padding: 15px;
+      margin: 15px 0;
     }
     
     .proof {
-      background: rgba(255,255,0,0.1);
-      border-left: 3px solid #ff0;
+      background: rgba(0,255,255,0.1);
       padding: 10px;
       margin: 10px 0;
+      border-left: 3px solid #0ff;
+    }
+    
+    #map {
+      height: 600px;
+      border: 2px solid #0f0;
+      margin-top: 20px;
+    }
+    
+    .zoom-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.8);
+      color: #0f0;
+      padding: 10px;
+      border: 2px solid #0f0;
+      z-index: 1000;
+      font-weight: bold;
     }
     
     .loading {
       text-align: center;
-      padding: 20px;
+      padding: 30px;
       color: #0ff;
       font-size: 1.2em;
       animation: pulse 1.5s infinite;
     }
     
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
     /* MODAL STYLES */
-    #detail-modal {
+    .modal {
       display: none;
       position: fixed;
       top: 0;
@@ -330,15 +338,15 @@
       padding: 20px;
     }
     
-    .modal-wrapper {
-      width: 100%;
-      max-width: 1200px;
+    .modal-content {
       background: #000;
       border: 3px solid #0f0;
-      box-shadow: 0 0 30px #0f0;
+      max-width: 1200px;
+      width: 100%;
       margin: 20px auto;
+      padding: 30px;
       position: relative;
-      animation: slideIn 0.3s ease;
+      box-shadow: 0 0 30px #0f0;
     }
     
     .modal-close {
@@ -348,24 +356,16 @@
       background: #f00;
       color: #fff;
       border: none;
-      width: 40px;
-      height: 40px;
-      font-size: 1.5em;
+      padding: 10px 20px;
       cursor: pointer;
+      font-family: 'Courier New', monospace;
       font-weight: bold;
-      z-index: 10001;
-      transition: all 0.3s;
+      font-size: 1.2em;
     }
     
     .modal-close:hover {
       background: #ff0;
       color: #000;
-      transform: rotate(90deg);
-    }
-    
-    #modal-content {
-      padding: 30px;
-      color: #0f0;
     }
     
     .detail-header {
@@ -374,14 +374,10 @@
       margin-bottom: 20px;
     }
     
-    .detail-header h2 {
-      color: #0ff;
-      font-size: 2em;
-      margin-bottom: 15px;
-      text-shadow: 0 0 10px #0ff;
-    }
-    
     .detail-meta {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
       margin: 15px 0;
     }
     
@@ -390,8 +386,8 @@
       background: #0f0;
       color: #000;
       padding: 10px 20px;
-      margin: 10px 10px 10px 0;
       text-decoration: none;
+      margin: 10px 10px 10px 0;
       font-weight: bold;
       transition: all 0.3s;
     }
@@ -399,15 +395,10 @@
     .external-link:hover {
       background: #0ff;
       box-shadow: 0 0 15px #0ff;
-      transform: scale(1.05);
-    }
-    
-    .detail-body {
-      line-height: 1.8;
     }
     
     .comment {
-      background: rgba(0,20,0,0.8);
+      background: rgba(0,255,0,0.05);
       border-left: 3px solid #0f0;
       padding: 15px;
       margin: 15px 0;
@@ -415,8 +406,7 @@
     
     .comment-meta {
       margin-bottom: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #0a0;
+      color: #0ff;
     }
     
     .comment-text {
@@ -424,31 +414,16 @@
       line-height: 1.6;
     }
     
-    .file-item {
-      background: rgba(0,20,0,0.6);
+    .file-item, .commit-item {
+      background: rgba(0,255,0,0.05);
       padding: 10px;
-      margin: 8px 0;
-      border-left: 2px solid #0f0;
-      transition: all 0.3s;
-    }
-    
-    .file-item:hover {
-      background: rgba(0,40,0,0.8);
-      border-left-color: #0ff;
-      transform: translateX(5px);
-    }
-    
-    .commit-item {
-      background: rgba(0,20,0,0.6);
-      padding: 12px;
       margin: 10px 0;
-      border-left: 2px solid #0f0;
+      border-left: 3px solid #0f0;
     }
     
     .commit-message {
       color: #0ff;
-      font-weight: bold;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
     
     .commit-meta {
@@ -456,209 +431,468 @@
       font-size: 0.9em;
     }
     
-    #map {
-      height: 700px;
-      width: 100%;
-      border: 3px solid #0f0;
-      box-shadow: 0 0 30px rgba(0,255,0,0.5);
-      margin-top: 20px;
+    /* CHAT STYLES */
+    .chat-container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 20px;
+      height: 600px;
     }
     
-    .search-box {
-      width: 100%;
-      padding: 12px;
+    .chat-rooms {
+      background: rgba(0,255,0,0.05);
+      border: 2px solid #0f0;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    
+    .chat-room {
+      padding: 10px;
+      margin: 5px 0;
+      background: rgba(0,255,0,0.1);
+      border: 1px solid #0f0;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .chat-room:hover, .chat-room.active {
+      background: rgba(0,255,255,0.2);
+      border-color: #0ff;
+    }
+    
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      border: 2px solid #0f0;
+      background: rgba(0,0,0,0.8);
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    
+    .chat-message {
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(0,255,0,0.05);
+      border-left: 3px solid #0f0;
+    }
+    
+    .chat-message.own {
+      background: rgba(0,255,255,0.05);
+      border-left-color: #0ff;
+    }
+    
+    .chat-user {
+      color: #0ff;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .chat-text {
+      color: #0f0;
+    }
+    
+    .chat-time {
+      color: #0a0;
+      font-size: 0.8em;
+      margin-top: 5px;
+    }
+    
+    .chat-input-area {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      border-top: 2px solid #0f0;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 10px;
       background: #000;
       border: 2px solid #0f0;
       color: #0f0;
       font-family: 'Courier New', monospace;
-      font-size: 1em;
-      margin-bottom: 15px;
+    }
+    
+    .chat-send {
+      background: #0f0;
+      color: #000;
+      border: none;
+      padding: 10px 30px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+    
+    .chat-send:hover {
+      background: #0ff;
+    }
+    
+    /* QUIZ STYLES */
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .quiz-score {
+      font-size: 1.5em;
+      color: #0ff;
+    }
+    
+    .quiz-timer {
+      font-size: 1.5em;
+      color: #ff0;
+    }
+    
+    .quiz-question {
+      background: rgba(0,255,0,0.1);
+      border: 2px solid #0f0;
+      padding: 30px;
+      margin: 20px 0;
+    }
+    
+    .question-text {
+      font-size: 1.3em;
+      color: #0ff;
+      margin-bottom: 20px;
+    }
+    
+    .quiz-options {
+      display: grid;
+      gap: 15px;
+    }
+    
+    .quiz-option {
+      background: rgba(0,255,0,0.05);
+      border: 2px solid #0f0;
+      padding: 15px;
+      cursor: pointer;
       transition: all 0.3s;
     }
     
-    .search-box:focus {
-      outline: none;
+    .quiz-option:hover {
+      background: rgba(0,255,255,0.1);
       border-color: #0ff;
-      box-shadow: 0 0 10px #0ff;
     }
     
-    .leaflet-popup-content-wrapper {
-      background: #000 !important;
-      color: #0f0 !important;
-      border: 2px solid #0f0 !important;
+    .quiz-option.correct {
+      background: rgba(0,255,0,0.3);
+      border-color: #0f0;
     }
     
-    .leaflet-popup-tip {
-      background: #000 !important;
-      border: 2px solid #0f0 !important;
+    .quiz-option.wrong {
+      background: rgba(255,0,0,0.3);
+      border-color: #f00;
     }
     
-    .marker-label {
-      background: rgba(0,0,0,0.9);
-      border: 2px solid #0f0;
-      padding: 5px 10px;
-      color: #0f0;
-      font-weight: bold;
-      white-space: nowrap;
+    .quiz-explanation {
+      background: rgba(0,255,255,0.1);
+      border: 2px solid #0ff;
+      padding: 15px;
+      margin-top: 15px;
+      color: #0ff;
     }
     
-    .zoom-info {
-      position: absolute;
-      top: 10px;
-      right: 60px;
-      background: rgba(0,0,0,0.9);
-      border: 2px solid #0f0;
-      padding: 10px;
-      color: #0f0;
-      z-index: 1000;
-      font-size: 0.9em;
+    .quiz-controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
     }
     
-    .lab-search {
-      position: absolute;
-      top: 10px;
-      left: 60px;
-      z-index: 1000;
-      width: 300px;
-    }
-    
-    .content-badge {
-      display: inline-block;
-      background: #ff0;
+    .quiz-btn {
+      background: #0f0;
       color: #000;
-      padding: 5px 10px;
+      border: none;
+      padding: 15px 30px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
       font-weight: bold;
-      margin-left: 10px;
-      animation: pulse 2s infinite;
+      font-size: 1.1em;
     }
     
+    .quiz-btn:hover {
+      background: #0ff;
+    }
+    
+    .quiz-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .tab {
+      background: rgba(0,255,0,0.1);
+      border: 2px solid #0f0;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .tab:hover, .tab.active {
+      background: rgba(0,255,255,0.2);
+      border-color: #0ff;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       h1 { font-size: 1.8em; }
-      .stats { grid-template-columns: 1fr; }
-      #map { height: 500px; }
-      .lab-search { width: 200px; left: 10px; }
-      .zoom-info { right: 10px; font-size: 0.8em; }
-      .modal-wrapper { margin: 10px; }
-      #modal-content { padding: 20px; }
-      .detail-header h2 { font-size: 1.5em; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .chat-container { grid-template-columns: 1fr; }
+      .chat-rooms { height: 150px; }
+      #map { height: 400px; }
     }
   </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
   
-  <!-- DETAIL MODAL -->
-  <div id="detail-modal">
-    <div class="modal-wrapper">
-      <button class="modal-close" onclick="closeModal()">✕</button>
-      <div id="modal-content"></div>
+  <div class="container">
+    <header>
+      <h1>🇮🇳 TECH MASTERY LAB</h1>
+      <p class="tagline">India's Ultimate Tech Intelligence Hub</p>
+      <p style="color:#0a0;margin-top:10px" id="last-update">Loading...</p>
+    </header>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="news-count">0</div>
+        <div class="stat-label">📰 NEWS STORIES</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="research-count">0</div>
+        <div class="stat-label">🔬 RESEARCH PAPERS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="github-count">0</div>
+        <div class="stat-label">💻 GITHUB REPOS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="reddit-count">0</div>
+        <div class="stat-label">🕵️ REDDIT POSTS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">🇮🇳 INDIAN LABS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100</div>
+        <div class="stat-label">🧠 QUIZ QUESTIONS</div>
+      </div>
+    </div>
+    
+    <!-- LIVE CHAT -->
+    <div class="section">
+      <div class="section-header">
+        <h2>💬 LIVE TECH CHAT</h2>
+        <button class="toggle-btn" onclick="togglePanel('chat')">HIDE CHAT</button>
+      </div>
+      <div id="chat-panel">
+        <div class="chat-container">
+          <div class="chat-rooms">
+            <h3 style="color:#0ff;margin-bottom:15px">ROOMS</h3>
+            <div class="chat-room active" data-room="general">💬 General Tech</div>
+            <div class="chat-room" data-room="ai">🤖 AI/ML</div>
+            <div class="chat-room" data-room="space">🚀 Space & ISRO</div>
+            <div class="chat-room" data-room="coding">💻 Coding Help</div>
+            <div class="chat-room" data-room="career">🎓 Career</div>
+            <div class="chat-room" data-room="india">🇮🇳 Indian Tech</div>
+            <div class="chat-room" data-room="quiz">🎮 Quiz Arena</div>
+            <div class="chat-room" data-room="research">🔬 Research</div>
+          </div>
+          <div class="chat-main">
+            <div class="chat-messages" id="chat-messages">
+              <div style="text-align:center;padding:50px;color:#0a0">
+                <p>💬 Welcome to Tech Mastery Chat!</p>
+                <p style="margin-top:10px">Set your nickname below to start chatting</p>
+              </div>
+            </div>
+            <div class="chat-input-area">
+              <input type="text" class="chat-input" id="chat-nickname" placeholder="Enter your nickname..." maxlength="20">
+              <button class="chat-send" onclick="setNickname()">SET NAME</button>
+            </div>
+            <div class="chat-input-area" id="chat-input-container" style="display:none">
+              <input type="text" class="chat-input" id="chat-input" placeholder="Type your message..." maxlength="500">
+              <button class="chat-send" onclick="sendMessage()">SEND</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- TECH QUIZ -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🧠 TECH QUIZ CHALLENGE</h2>
+        <button class="toggle-btn" onclick="togglePanel('quiz')">HIDE QUIZ</button>
+      </div>
+      <div id="quiz-panel">
+        <div class="quiz-container">
+          <div class="quiz-header">
+            <div class="quiz-score">Score: <span id="quiz-score">0</span></div>
+            <div class="quiz-timer">Time: <span id="quiz-timer">--</span></div>
+          </div>
+          
+          <div class="tabs">
+            <div class="tab active" onclick="selectQuizCategory('all')">All</div>
+            <div class="tab" onclick="selectQuizCategory('AI/ML')">AI/ML</div>
+            <div class="tab" onclick="selectQuizCategory('Space Tech')">Space</div>
+            <div class="tab" onclick="selectQuizCategory('Quantum Computing')">Quantum</div>
+            <div class="tab" onclick="selectQuizCategory('Cybersecurity')">Security</div>
+            <div class="tab" onclick="selectQuizCategory('Indian Tech')">Indian Tech</div>
+            <div class="tab" onclick="selectQuizCategory('Coding')">Coding</div>
+            <div class="tab" onclick="selectQuizCategory('Hardware')">Hardware</div>
+            <div class="tab" onclick="selectQuizCategory('Blockchain')">Blockchain</div>
+          </div>
+          
+          <div id="quiz-content">
+            <div style="text-align:center;padding:50px">
+              <h3 style="color:#0ff;margin-bottom:20px">Ready to test your tech knowledge?</h3>
+              <p style="color:#0f0;margin-bottom:30px">100 questions across 8 categories!</p>
+              <div class="quiz-controls">
+                <button class="quiz-btn" onclick="startQuiz('quick')">QUICK QUIZ (10Q)</button>
+                <button class="quiz-btn" onclick="startQuiz('timed')">TIMED CHALLENGE</button>
+                <button class="quiz-btn" onclick="startQuiz('practice')">PRACTICE MODE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- INDIAN LABS MAP -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🇮🇳 INDIAN TECH LABS & RESEARCH CENTERS</h2>
+        <button class="toggle-btn" onclick="togglePanel('indian-labs')">HIDE LABS</button>
+      </div>
+      <div id="indian-labs-panel">
+        <input type="text" class="search-box" id="indian-lab-search" placeholder="🔍 Search Indian labs (ISRO, IIT, DRDO, startups...)">
+        
+        <div class="tabs">
+          <div class="tab active" onclick="filterIndianLabs('all')">All (50+)</div>
+          <div class="tab" onclick="filterIndianLabs('government')">🏛️ Government</div>
+          <div class="tab" onclick="filterIndianLabs('academic')">🎓 Academic</div>
+          <div class="tab" onclick="filterIndianLabs('private')">🏢 Private</div>
+          <div class="tab" onclick="filterIndianLabs('startup')">🚀 Startups</div>
+        </div>
+        
+        <div id="indian-labs-map"></div>
+        <div class="zoom-info" id="indian-zoom-info">Zoom: 5 | Max: 22</div>
+        
+        <div id="indian-labs-list" style="margin-top:20px"></div>
+      </div>
+    </div>
+    
+    <!-- BREAKTHROUGHS -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🚨 TECH BREAKTHROUGHS & INTELLIGENCE</h2>
+        <button class="toggle-btn" onclick="togglePanel('breakthroughs')">HIDE BREAKTHROUGHS</button>
+      </div>
+      <div id="breakthroughs-panel">
+        <div id="breakthroughs-container"></div>
+      </div>
+    </div>
+    
+    <!-- NEWS -->
+    <div class="section">
+      <div class="section-header">
+        <h2>📰 HACKER NEWS (100+ Stories)</h2>
+        <button class="toggle-btn" onclick="togglePanel('news')">HIDE NEWS</button>
+      </div>
+      <div id="news-panel">
+        <input type="text" class="search-box" id="news-search" placeholder="🔍 Search news..." onkeyup="filterNews(this.value)">
+        <div id="news-container"></div>
+      </div>
+    </div>
+    
+    <!-- REDDIT -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🕵️ REDDIT TECH (50+ Posts from 10 Subreddits)</h2>
+        <button class="toggle-btn" onclick="togglePanel('reddit')">HIDE REDDIT</button>
+      </div>
+      <div id="reddit-panel">
+        <div id="reddit-container"></div>
+      </div>
+    </div>
+    
+    <!-- GITHUB -->
+    <div class="section">
+      <div class="section-header">
+        <h2>💻 GITHUB TRENDING (50+ Repos)</h2>
+        <button class="toggle-btn" onclick="togglePanel('github')">HIDE GITHUB</button>
+      </div>
+      <div id="github-panel">
+        <div id="github-container"></div>
+      </div>
+    </div>
+    
+    <!-- RESEARCH -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🔬 ARXIV RESEARCH (30+ Papers)</h2>
+        <button class="toggle-btn" onclick="togglePanel('research')">HIDE RESEARCH</button>
+      </div>
+      <div id="research-panel">
+        <div id="research-container"></div>
+      </div>
+    </div>
+    
+    <!-- GLOBAL SATELLITE MAP -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🛰️ GLOBAL SECRET LABS (Satellite View)</h2>
+        <button class="toggle-btn" onclick="togglePanel('satellite')">HIDE SATELLITE</button>
+      </div>
+      <div id="satellite-panel">
+        <input type="text" class="search-box" id="lab-search" placeholder="🔍 Search labs (Area 51, Google X, SpaceX...)">
+        <div id="map"></div>
+        <div class="zoom-info" id="zoom-info">Zoom: 2 | Max: 22 (ULTRA HD)</div>
+      </div>
     </div>
   </div>
   
-  <div class="container">
-    <header>
-      <h1>🔐 TECH MASTERY LAB</h1>
-      <div class="subtitle">
-        Global Intelligence Hub - Real-Time Monitoring
-        <span class="content-badge">100+ NEWS</span>
-        <span class="content-badge">50+ REDDIT</span>
-        <span class="content-badge">50+ GITHUB</span>
-      </div>
-      <div class="subtitle" id="last-update">Initializing systems...</div>
-      
-      <div class="controls">
-        <button onclick="refreshAll()">🔄 REFRESH ALL</button>
-        <button onclick="togglePanel('stats')">📊 STATS</button>
-        <button onclick="togglePanel('breakthroughs')">🚨 BREAKTHROUGHS</button>
-        <button onclick="togglePanel('news')">📰 NEWS (100+)</button>
-        <button onclick="togglePanel('research')">🔬 RESEARCH (30+)</button>
-        <button onclick="togglePanel('github')">💻 GITHUB (50+)</button>
-        <button onclick="togglePanel('reddit')">🕵️ REDDIT (50+)</button>
-        <button onclick="togglePanel('satellite')">🛰️ SATELLITE</button>
-      </div>
-    </header>
-    
-    <div id="stats-panel" class="panel">
-      <h2>📊 LIVE STATISTICS</h2>
-      <div class="stats">
-        <div class="stat-card">
-          <div class="stat-number" id="news-count">0</div>
-          <div class="stat-label">News Stories</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="research-count">0</div>
-          <div class="stat-label">Research Papers</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="github-count">0</div>
-          <div class="stat-label">GitHub Repos</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number" id="reddit-count">0</div>
-          <div class="stat-label">Reddit Posts</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">27</div>
-          <div class="stat-label">Secret Labs Tracked</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">60s</div>
-          <div class="stat-label">Auto-Refresh Rate</div>
-        </div>
-      </div>
-    </div>
-    
-    <div id="breakthroughs-panel" class="panel">
-      <h2>🚨 MAJOR BREAKTHROUGHS</h2>
-      <div id="breakthroughs-container"></div>
-    </div>
-    
-    <div id="news-panel" class="panel">
-      <h2>📰 HACKER NEWS - TOP 100+ STORIES</h2>
-      <p style="color:#0ff;margin-bottom:15px">👆 Click any story to view comments & details</p>
-      <input type="text" class="search-box" placeholder="🔍 Search news..." onkeyup="filterNews(this.value)">
-      <div id="news-container"></div>
-    </div>
-    
-    <div id="research-panel" class="panel">
-      <h2>🔬 ARXIV RESEARCH - 30+ LATEST PAPERS (6 CATEGORIES)</h2>
-      <p style="color:#0ff;margin-bottom:15px">AI • Machine Learning • Computer Vision • NLP • Robotics • Quantum Physics</p>
-      <p style="color:#0ff;margin-bottom:15px">👆 Click any paper to read abstract & view PDF</p>
-      <div id="research-container"></div>
-    </div>
-    
-    <div id="github-panel" class="panel">
-      <h2>💻 GITHUB TRENDING - 50+ TOP REPOSITORIES</h2>
-      <p style="color:#0ff;margin-bottom:15px">👆 Click any repo to browse files & commits</p>
-      <div id="github-container"></div>
-    </div>
-    
-    <div id="reddit-panel" class="panel">
-      <h2>🕵️ REDDIT - 50+ POSTS FROM 10 TECH COMMUNITIES</h2>
-      <p style="color:#0ff;margin-bottom:15px">
-        r/technology • r/Futurology • r/artificial • r/spacex • r/programming • 
-        r/MachineLearning • r/datascience • r/cybersecurity • r/startups • r/gadgets
-      </p>
-      <p style="color:#0ff;margin-bottom:15px">👆 Click any post to view thread & comments</p>
-      <div id="reddit-container"></div>
-    </div>
-    
-    <div id="satellite-panel" class="panel">
-      <h2>🛰️ GLOBAL SATELLITE VIEW - 27 SECRET LABS & RESEARCH CENTERS</h2>
-      <p style="color:#0ff;margin-bottom:15px">
-        🔴 Classified Sites | 🔵 Tech Giants | 🟣 Space/Research | 🟠 India | 🟡 China | 🟢 Others
-      </p>
-      <div style="position:relative">
-        <input type="text" class="search-box lab-search" id="lab-search" placeholder="🔍 Search labs (e.g., Area 51, Google X, ISRO)...">
-        <div class="zoom-info" id="zoom-info">Zoom: 2 | Max: 20</div>
-        <div id="map"></div>
-      </div>
+  <!-- MODAL -->
+  <div id="detail-modal" class="modal" onclick="if(event.target === this) closeModal()">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕ CLOSE</button>
+      <div id="modal-content"></div>
     </div>
   </div>
   
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-  <script src="intelligence-data.js"></script>
+  <script src="data.js"></script>
+  <script src="indian-labs.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
