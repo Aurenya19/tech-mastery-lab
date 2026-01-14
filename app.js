@@ -1,47 +1,64 @@
-// 🇮🇳 TECH MASTERY LAB - COMPLETE SYSTEM
-let allNews = [];
-let allReddit = [];
-let allGitHub = [];
-let allResearch = [];
-let map;
-let indianLabsMap;
-let markers = [];
-let indianMarkers = [];
-let markerCluster;
-let indianMarkerCluster;
-let allLocations = [];
-let newsPage = 1;
-let isLoading = false;
+// 🇮🇳 TECH MASTERY LAB - OPTIMIZED SYSTEM
+'use strict';
 
-// CHAT SYSTEM
-let currentRoom = 'general';
-let currentUser = null;
-let chatMessages = {};
+// ==================== STATE MANAGEMENT ====================
+const AppState = {
+  // Data
+  allNews: [],
+  allReddit: [],
+  allGitHub: [],
+  allResearch: [],
+  
+  // Maps
+  map: null,
+  indianLabsMap: null,
+  markers: [],
+  indianMarkers: [],
+  markerCluster: null,
+  indianMarkerCluster: null,
+  allLocations: [],
+  
+  // Pagination
+  newsPage: 1,
+  isLoading: false,
+  
+  // Chat
+  currentRoom: 'general',
+  currentUser: null,
+  chatMessages: {},
+  
+  // Quiz
+  quizQuestions: [],
+  currentQuiz: [],
+  currentQuestionIndex: 0,
+  quizScore: 0,
+  quizTimer: null,
+  quizTimeLeft: 0,
+  selectedCategory: 'all',
+  quizMode: null
+};
 
-// QUIZ SYSTEM
-let quizQuestions = [];
-let currentQuiz = [];
-let currentQuestionIndex = 0;
-let quizScore = 0;
-let quizTimer = null;
-let quizTimeLeft = 0;
-let selectedCategory = 'all';
-let quizMode = null;
-
-// Initialize everything
+// ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
-  initMatrix();
-  initMaps();
-  loadAllData();
-  initChat();
-  initQuiz();
-  initIndianLabs();
-  setupEventListeners();
+  try {
+    initMatrix();
+    initMaps();
+    loadAllData();
+    initChat();
+    initQuiz();
+    initIndianLabs();
+    setupEventListeners();
+  } catch (error) {
+    console.error('Initialization error:', error);
+    showError('Failed to initialize application. Please refresh the page.');
+  }
 });
 
-// Matrix background
+// ==================== MATRIX BACKGROUND ====================
 function initMatrix() {
   const canvas = document.getElementById('matrix');
+  if (!canvas) return;
+  
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -60,50 +77,43 @@ function initMatrix() {
     for (let i = 0; i < drops.length; i++) {
       const text = chars[Math.floor(Math.random() * chars.length)];
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
       drops[i]++;
     }
   }
+  
   setInterval(draw, 33);
+  
+  // Resize handler
+  window.addEventListener('resize', debounce(() => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }, 250));
 }
 
 // ==================== CHAT SYSTEM ====================
-
 function initChat() {
   // Initialize chat rooms
-  chatMessages = {
-    general: [
-      { user: 'System', text: 'Welcome to General Tech Talk! 💬', time: Date.now(), system: true }
-    ],
-    ai: [
-      { user: 'System', text: 'Welcome to AI/ML Discussion! 🤖', time: Date.now(), system: true }
-    ],
-    space: [
-      { user: 'System', text: 'Welcome to Space & ISRO! 🚀', time: Date.now(), system: true }
-    ],
-    coding: [
-      { user: 'System', text: 'Welcome to Coding Help! 💻', time: Date.now(), system: true }
-    ],
-    career: [
-      { user: 'System', text: 'Welcome to Career Guidance! 🎓', time: Date.now(), system: true }
-    ],
-    india: [
-      { user: 'System', text: 'Welcome to Indian Tech Scene! 🇮🇳', time: Date.now(), system: true }
-    ],
-    quiz: [
-      { user: 'System', text: 'Welcome to Quiz Arena! 🎮', time: Date.now(), system: true }
-    ],
-    research: [
-      { user: 'System', text: 'Welcome to Research Papers! 🔬', time: Date.now(), system: true }
-    ]
+  AppState.chatMessages = {
+    general: [{ user: 'System', text: 'Welcome to General Tech Talk! 💬', time: Date.now(), system: true }],
+    ai: [{ user: 'System', text: 'Welcome to AI/ML Discussion! 🤖', time: Date.now(), system: true }],
+    space: [{ user: 'System', text: 'Welcome to Space & ISRO! 🚀', time: Date.now(), system: true }],
+    coding: [{ user: 'System', text: 'Welcome to Coding Help! 💻', time: Date.now(), system: true }],
+    career: [{ user: 'System', text: 'Welcome to Career Guidance! 🎓', time: Date.now(), system: true }],
+    india: [{ user: 'System', text: 'Welcome to Indian Tech Scene! 🇮🇳', time: Date.now(), system: true }],
+    quiz: [{ user: 'System', text: 'Welcome to Quiz Arena! 🎮', time: Date.now(), system: true }],
+    research: [{ user: 'System', text: 'Welcome to Research Papers! 🔬', time: Date.now(), system: true }]
   };
   
-  // Setup room switching
-  document.querySelectorAll('.chat-room').forEach(room => {
-    room.addEventListener('click', () => {
-      document.querySelectorAll('.chat-room').forEach(r => r.classList.remove('active'));
-      room.classList.add('active');
-      currentRoom = room.dataset.room;
+  // Setup room switching - FIXED SELECTOR
+  document.querySelectorAll('.chat-room-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.chat-room-btn').forEach(b => b.classList.remove('chat-room-btn--active'));
+      btn.classList.add('chat-room-btn--active');
+      AppState.currentRoom = btn.dataset.room;
+      updateChatRoomTitle();
       displayChatMessages();
     });
   });
@@ -124,28 +134,49 @@ function initChat() {
   }
 }
 
+function updateChatRoomTitle() {
+  const roomTitles = {
+    general: 'General Tech Talk',
+    ai: 'AI/ML Discussion',
+    space: 'Space & ISRO',
+    coding: 'Coding Help',
+    career: 'Career Guidance',
+    india: 'Indian Tech Scene',
+    quiz: 'Quiz Arena',
+    research: 'Research Papers'
+  };
+  
+  const titleEl = document.getElementById('current-room');
+  if (titleEl) {
+    titleEl.textContent = roomTitles[AppState.currentRoom] || 'Chat Room';
+  }
+}
+
 function setNickname() {
   const input = document.getElementById('chat-nickname');
   const nickname = input.value.trim();
   
   if (!nickname) {
-    alert('Please enter a nickname!');
+    showError('Please enter a nickname!');
     return;
   }
   
   if (nickname.length < 2) {
-    alert('Nickname must be at least 2 characters!');
+    showError('Nickname must be at least 2 characters!');
     return;
   }
   
-  currentUser = nickname;
+  AppState.currentUser = nickname;
   
   // Hide nickname input, show chat input
-  input.parentElement.style.display = 'none';
-  document.getElementById('chat-input-container').style.display = 'flex';
+  const nicknameContainer = document.getElementById('nickname-container');
+  const messageContainer = document.getElementById('message-container');
+  
+  if (nicknameContainer) nicknameContainer.classList.add('hidden');
+  if (messageContainer) messageContainer.classList.remove('hidden');
   
   // Add welcome message
-  chatMessages[currentRoom].push({
+  AppState.chatMessages[AppState.currentRoom].push({
     user: 'System',
     text: `${nickname} joined the chat! 👋`,
     time: Date.now(),
@@ -156,8 +187,8 @@ function setNickname() {
 }
 
 function sendMessage() {
-  if (!currentUser) {
-    alert('Please set your nickname first!');
+  if (!AppState.currentUser) {
+    showError('Please set your nickname first!');
     return;
   }
   
@@ -167,9 +198,9 @@ function sendMessage() {
   if (!message) return;
   
   // Add message to current room
-  chatMessages[currentRoom].push({
-    user: currentUser,
-    text: message,
+  AppState.chatMessages[AppState.currentRoom].push({
+    user: AppState.currentUser,
+    text: sanitizeHTML(message),
     time: Date.now(),
     own: true
   });
@@ -177,7 +208,7 @@ function sendMessage() {
   input.value = '';
   displayChatMessages();
   
-  // Simulate bot response for demo
+  // Simulate bot response
   setTimeout(() => {
     const responses = [
       'Interesting point! 🤔',
@@ -190,7 +221,7 @@ function sendMessage() {
       'Good observation! 💡'
     ];
     
-    chatMessages[currentRoom].push({
+    AppState.chatMessages[AppState.currentRoom].push({
       user: 'TechBot',
       text: responses[Math.floor(Math.random() * responses.length)],
       time: Date.now()
@@ -202,891 +233,728 @@ function sendMessage() {
 
 function displayChatMessages() {
   const container = document.getElementById('chat-messages');
-  const messages = chatMessages[currentRoom] || [];
+  if (!container) return;
   
-  container.innerHTML = messages.map(msg => {
-    const timeStr = new Date(msg.time).toLocaleTimeString();
-    const ownClass = msg.own ? 'own' : '';
-    const systemClass = msg.system ? 'system' : '';
-    
-    return `
-      <div class="chat-message ${ownClass} ${systemClass}">
-        <div class="chat-user">${msg.user}</div>
-        <div class="chat-text">${msg.text}</div>
-        <div class="chat-time">${timeStr}</div>
-      </div>
-    `;
-  }).join('');
+  const messages = AppState.chatMessages[AppState.currentRoom] || [];
+  
+  container.innerHTML = messages.map(msg => `
+    <div class="chat-message ${msg.system ? 'chat-message--system' : ''} ${msg.own ? 'chat-message--own' : ''}">
+      <div class="chat-message__user">${sanitizeHTML(msg.user)}</div>
+      <div class="chat-message__text">${msg.text}</div>
+      <div class="chat-message__time">${formatTime(msg.time)}</div>
+    </div>
+  `).join('');
   
   // Scroll to bottom
   container.scrollTop = container.scrollHeight;
-}
-
-// ==================== QUIZ SYSTEM ====================
-
-function initQuiz() {
-  quizQuestions = QUIZ_QUESTIONS || [];
   
-  // Load saved score
-  const savedScore = localStorage.getItem('quiz-high-score');
-  if (savedScore) {
-    document.getElementById('quiz-score').textContent = savedScore;
+  // Update online count (simulated)
+  const onlineCount = document.getElementById('online-count');
+  if (onlineCount) {
+    onlineCount.textContent = `● ${Math.floor(Math.random() * 50) + 10} Online`;
   }
 }
 
+// ==================== QUIZ SYSTEM ====================
+function initQuiz() {
+  // Quiz questions will be loaded from intelligence-data.js
+  // This is just the initialization
+  AppState.quizQuestions = window.quizQuestions || [];
+}
+
 function selectQuizCategory(category) {
-  selectedCategory = category;
+  AppState.selectedCategory = category;
   
-  // Update active tab
-  document.querySelectorAll('.tabs .tab').forEach(tab => {
-    tab.classList.remove('active');
+  // Update button states
+  document.querySelectorAll('.quiz-controls .btn--small').forEach(btn => {
+    btn.classList.remove('btn--active');
   });
-  event.target.classList.add('active');
+  event.target.classList.add('btn--active');
 }
 
 function startQuiz(mode) {
-  quizMode = mode;
-  quizScore = 0;
-  currentQuestionIndex = 0;
+  AppState.quizMode = mode;
+  AppState.currentQuestionIndex = 0;
+  AppState.quizScore = 0;
   
   // Filter questions by category
-  let questions = selectedCategory === 'all' 
-    ? [...quizQuestions]
-    : quizQuestions.filter(q => q.category === selectedCategory);
+  let questions = AppState.selectedCategory === 'all' 
+    ? [...AppState.quizQuestions]
+    : AppState.quizQuestions.filter(q => q.category === AppState.selectedCategory);
   
-  // Shuffle questions
-  questions = questions.sort(() => Math.random() - 0.5);
+  // Shuffle and select questions based on mode
+  questions = shuffleArray(questions);
   
-  // Select questions based on mode
-  if (mode === 'quick') {
-    currentQuiz = questions.slice(0, 10);
-    quizTimeLeft = 0; // No timer
-  } else if (mode === 'timed') {
-    currentQuiz = questions.slice(0, 20);
-    quizTimeLeft = 600; // 10 minutes
+  const questionCounts = {
+    quick: 10,
+    timed: 20,
+    practice: 50
+  };
+  
+  AppState.currentQuiz = questions.slice(0, questionCounts[mode] || 10);
+  
+  // Start timer for timed mode
+  if (mode === 'timed') {
+    AppState.quizTimeLeft = AppState.currentQuiz.length * 30; // 30 seconds per question
     startQuizTimer();
-  } else {
-    currentQuiz = questions.slice(0, 50);
-    quizTimeLeft = 0; // No timer
   }
   
   displayQuestion();
 }
 
 function startQuizTimer() {
-  if (quizTimer) clearInterval(quizTimer);
+  if (AppState.quizTimer) clearInterval(AppState.quizTimer);
   
-  quizTimer = setInterval(() => {
-    quizTimeLeft--;
+  AppState.quizTimer = setInterval(() => {
+    AppState.quizTimeLeft--;
     
-    const minutes = Math.floor(quizTimeLeft / 60);
-    const seconds = quizTimeLeft % 60;
-    document.getElementById('quiz-timer').textContent = 
-      `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const timerEl = document.getElementById('quiz-timer');
+    if (timerEl) {
+      const minutes = Math.floor(AppState.quizTimeLeft / 60);
+      const seconds = AppState.quizTimeLeft % 60;
+      timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
     
-    if (quizTimeLeft <= 0) {
-      clearInterval(quizTimer);
+    if (AppState.quizTimeLeft <= 0) {
+      clearInterval(AppState.quizTimer);
       endQuiz();
     }
   }, 1000);
 }
 
 function displayQuestion() {
-  if (currentQuestionIndex >= currentQuiz.length) {
+  const container = document.getElementById('quiz-content');
+  if (!container) return;
+  
+  const question = AppState.currentQuiz[AppState.currentQuestionIndex];
+  if (!question) {
     endQuiz();
     return;
   }
   
-  const question = currentQuiz[currentQuestionIndex];
-  const content = document.getElementById('quiz-content');
-  
-  content.innerHTML = `
+  container.innerHTML = `
     <div class="quiz-question">
-      <div style="color:#0a0;margin-bottom:15px">
-        Question ${currentQuestionIndex + 1} of ${currentQuiz.length} | 
-        Category: ${question.category} | 
-        Difficulty: ${question.difficulty.toUpperCase()}
+      <div class="quiz-question__meta">
+        <span class="badge">${question.category}</span>
+        <span class="badge badge--warning">Question ${AppState.currentQuestionIndex + 1}/${AppState.currentQuiz.length}</span>
       </div>
-      
-      <div class="question-text">${question.question}</div>
-      
+      <div class="quiz-question__text">${sanitizeHTML(question.question)}</div>
       <div class="quiz-options">
         ${question.options.map((option, index) => `
-          <div class="quiz-option" onclick="selectAnswer(${index})">
-            ${String.fromCharCode(65 + index)}. ${option}
-          </div>
+          <button class="quiz-option" onclick="selectAnswer(${index})">
+            ${sanitizeHTML(option)}
+          </button>
         `).join('')}
-      </div>
-      
-      <div id="quiz-explanation" style="display:none"></div>
-      
-      <div class="quiz-controls">
-        <button class="quiz-btn" onclick="skipQuestion()">SKIP</button>
-        <button class="quiz-btn" onclick="endQuiz()">END QUIZ</button>
       </div>
     </div>
   `;
   
   // Update score display
-  document.getElementById('quiz-score').textContent = quizScore;
+  const scoreEl = document.getElementById('quiz-score');
+  if (scoreEl) scoreEl.textContent = AppState.quizScore;
 }
 
-function selectAnswer(selectedIndex) {
-  const question = currentQuiz[currentQuestionIndex];
-  const options = document.querySelectorAll('.quiz-option');
+function selectAnswer(answerIndex) {
+  const question = AppState.currentQuiz[AppState.currentQuestionIndex];
+  const isCorrect = answerIndex === question.correct;
   
-  // Disable all options
-  options.forEach(opt => opt.style.pointerEvents = 'none');
-  
-  // Show correct/wrong
-  options[selectedIndex].classList.add(
-    selectedIndex === question.correct ? 'correct' : 'wrong'
-  );
-  options[question.correct].classList.add('correct');
-  
-  // Update score
-  if (selectedIndex === question.correct) {
-    quizScore += question.difficulty === 'easy' ? 10 : 
-                  question.difficulty === 'medium' ? 20 : 30;
-    document.getElementById('quiz-score').textContent = quizScore;
+  if (isCorrect) {
+    AppState.quizScore++;
   }
   
-  // Show explanation
-  const explanationDiv = document.getElementById('quiz-explanation');
-  explanationDiv.innerHTML = `
-    <div class="quiz-explanation">
-      <strong>Explanation:</strong> ${question.explanation}
-    </div>
-  `;
-  explanationDiv.style.display = 'block';
+  // Show feedback
+  const options = document.querySelectorAll('.quiz-option');
+  options.forEach((opt, idx) => {
+    opt.disabled = true;
+    if (idx === question.correct) {
+      opt.classList.add('quiz-option--correct');
+    } else if (idx === answerIndex && !isCorrect) {
+      opt.classList.add('quiz-option--incorrect');
+    }
+  });
   
-  // Auto-advance after 3 seconds
+  // Move to next question after delay
   setTimeout(() => {
-    currentQuestionIndex++;
+    AppState.currentQuestionIndex++;
     displayQuestion();
-  }, 3000);
-}
-
-function skipQuestion() {
-  currentQuestionIndex++;
-  displayQuestion();
+  }, 1500);
 }
 
 function endQuiz() {
-  if (quizTimer) clearInterval(quizTimer);
-  
-  const percentage = Math.round((quizScore / (currentQuiz.length * 30)) * 100);
-  
-  // Save high score
-  const highScore = parseInt(localStorage.getItem('quiz-high-score') || '0');
-  if (quizScore > highScore) {
-    localStorage.setItem('quiz-high-score', quizScore);
+  if (AppState.quizTimer) {
+    clearInterval(AppState.quizTimer);
+    AppState.quizTimer = null;
   }
   
-  const content = document.getElementById('quiz-content');
-  content.innerHTML = `
-    <div style="text-align:center;padding:50px">
-      <h2 style="color:#0ff;margin-bottom:20px">🎉 QUIZ COMPLETED!</h2>
-      
-      <div style="font-size:3em;color:#0f0;margin:30px 0">
-        ${quizScore} POINTS
-      </div>
-      
-      <div style="color:#0f0;font-size:1.5em;margin:20px 0">
-        ${percentage}% Correct
-      </div>
-      
-      <div style="color:#0a0;margin:20px 0">
-        Questions: ${currentQuestionIndex} / ${currentQuiz.length}<br>
-        Mode: ${quizMode.toUpperCase()}<br>
-        Category: ${selectedCategory === 'all' ? 'ALL' : selectedCategory}
-      </div>
-      
-      ${quizScore > highScore ? `
-        <div style="color:#ff0;font-size:1.2em;margin:20px 0">
-          🏆 NEW HIGH SCORE! 🏆
-        </div>
-      ` : ''}
-      
-      <div class="quiz-controls" style="margin-top:30px">
-        <button class="quiz-btn" onclick="startQuiz('${quizMode}')">PLAY AGAIN</button>
-        <button class="quiz-btn" onclick="location.reload()">BACK TO MENU</button>
+  const container = document.getElementById('quiz-content');
+  if (!container) return;
+  
+  const percentage = Math.round((AppState.quizScore / AppState.currentQuiz.length) * 100);
+  
+  let message = '';
+  if (percentage >= 90) message = '🏆 OUTSTANDING! You\'re a tech genius!';
+  else if (percentage >= 70) message = '🎉 GREAT JOB! You know your stuff!';
+  else if (percentage >= 50) message = '👍 GOOD EFFORT! Keep learning!';
+  else message = '📚 KEEP PRACTICING! You\'ll get better!';
+  
+  container.innerHTML = `
+    <div class="quiz-score-display">
+      <h3 class="text-primary mb-md">QUIZ COMPLETE!</h3>
+      <div class="quiz-score__number">${AppState.quizScore}/${AppState.currentQuiz.length}</div>
+      <div class="quiz-score__percentage text-accent mb-lg">${percentage}%</div>
+      <p class="text-secondary mb-lg">${message}</p>
+      <div class="quiz-controls">
+        <button class="btn" onclick="startQuiz('${AppState.quizMode}')">TRY AGAIN</button>
+        <button class="btn btn--secondary" onclick="location.reload()">NEW QUIZ</button>
       </div>
     </div>
   `;
 }
 
-// ==================== INDIAN LABS SYSTEM ====================
-
+// ==================== INDIAN LABS ====================
 function initIndianLabs() {
-  if (!INDIAN_LABS) {
-    console.error('Indian labs data not loaded!');
-    return;
-  }
+  // Initialize Indian labs map
+  const mapEl = document.getElementById('indian-labs-map');
+  if (!mapEl) return;
   
-  // Initialize map
-  indianLabsMap = L.map('indian-labs-map').setView([20.5937, 78.9629], 5);
+  AppState.indianLabsMap = L.map('indian-labs-map').setView([20.5937, 78.9629], 5);
   
-  // Add tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
-  }).addTo(indianLabsMap);
+  L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+    maxZoom: 22,
+    subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    attribution: '© Google'
+  }).addTo(AppState.indianLabsMap);
   
-  // Add marker cluster
-  indianMarkerCluster = L.markerClusterGroup({
-    maxClusterRadius: 50,
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false
-  });
-  
-  // Add markers
-  INDIAN_LABS.forEach(lab => {
-    const color = lab.color || 'blue';
-    const icon = L.divIcon({
-      className: 'custom-marker',
-      html: `<div style="background:${color};width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px ${color}"></div>`,
-      iconSize: [30, 30]
+  // Add markers (data from indian-labs.js)
+  if (window.indianLabs) {
+    AppState.indianMarkerCluster = L.markerClusterGroup();
+    
+    window.indianLabs.forEach(lab => {
+      const marker = L.marker([lab.lat, lab.lng])
+        .bindPopup(`
+          <div class="item">
+            <h3 class="item__title">${lab.name}</h3>
+            <p class="item__description">${lab.description}</p>
+            <div class="item__meta">
+              <span class="tag">${lab.type}</span>
+              <span class="tag">${lab.location}</span>
+            </div>
+          </div>
+        `);
+      
+      AppState.indianMarkerCluster.addLayer(marker);
     });
     
-    const marker = L.marker([lab.lat, lab.lng], { icon })
-      .bindPopup(`
-        <div style="color:#000;min-width:250px">
-          <h3 style="margin-bottom:10px">${lab.name}</h3>
-          <p><strong>Location:</strong> ${lab.location}</p>
-          <p><strong>Type:</strong> ${lab.type}</p>
-          <p><strong>Category:</strong> ${lab.category}</p>
-          ${lab.established ? `<p><strong>Est:</strong> ${lab.established}</p>` : ''}
-          <button onclick="showLabDetail('${lab.name}')" style="margin-top:10px;padding:8px 15px;background:#0f0;border:none;cursor:pointer;font-weight:bold">
-            VIEW DETAILS
-          </button>
-        </div>
-      `);
-    
-    indianMarkerCluster.addLayer(marker);
-    indianMarkers.push({ marker, lab });
-  });
+    AppState.indianLabsMap.addLayer(AppState.indianMarkerCluster);
+    displayIndianLabsList();
+  }
   
-  indianLabsMap.addLayer(indianMarkerCluster);
-  
-  // Display labs list
-  displayIndianLabsList();
-  
-  // Setup search
-  document.getElementById('indian-lab-search').addEventListener('input', (e) => {
-    filterIndianLabsSearch(e.target.value);
-  });
-  
-  // Update zoom info
-  indianLabsMap.on('zoomend', () => {
-    const zoom = indianLabsMap.getZoom();
-    document.getElementById('indian-zoom-info').textContent = `Zoom: ${zoom} | Max: 22`;
+  // Zoom info
+  AppState.indianLabsMap.on('zoomend', () => {
+    const zoomEl = document.getElementById('indian-zoom-info');
+    if (zoomEl) {
+      zoomEl.textContent = `Zoom: ${AppState.indianLabsMap.getZoom()} | Max: 22`;
+    }
   });
 }
 
-function displayIndianLabsList(labs = INDIAN_LABS) {
+function displayIndianLabsList() {
   const container = document.getElementById('indian-labs-list');
+  if (!container || !window.indianLabs) return;
   
-  container.innerHTML = labs.map(lab => `
-    <div class="item clickable" onclick="showLabDetail('${lab.name}')">
-      <h3>${lab.name}</h3>
-      <div class="meta">
-        <span class="tag">${lab.type}</span>
-        <span class="tag">${lab.category}</span>
-        <span class="tag">📍 ${lab.location}</span>
-        ${lab.established ? `<span class="tag">Est. ${lab.established}</span>` : ''}
+  container.innerHTML = window.indianLabs.map(lab => `
+    <div class="item item--clickable" onclick="focusIndianLab(${lab.lat}, ${lab.lng})">
+      <h3 class="item__title">${sanitizeHTML(lab.name)}</h3>
+      <p class="item__description">${sanitizeHTML(lab.description)}</p>
+      <div class="item__meta">
+        <span class="tag">${sanitizeHTML(lab.type)}</span>
+        <span class="tag">${sanitizeHTML(lab.location)}</span>
       </div>
-      <p>${lab.description}</p>
-      <div class="click-hint">👆 Click for full details</div>
     </div>
   `).join('');
 }
 
+function focusIndianLab(lat, lng) {
+  if (AppState.indianLabsMap) {
+    AppState.indianLabsMap.setView([lat, lng], 15);
+    scrollToElement('indian-labs-map');
+  }
+}
+
 function filterIndianLabs(type) {
-  // Update active tab
-  document.querySelectorAll('.tabs .tab').forEach(tab => {
-    tab.classList.remove('active');
-  });
-  event.target.classList.add('active');
+  if (!window.indianLabs) return;
   
-  if (type === 'all') {
-    displayIndianLabsList(INDIAN_LABS);
-    indianLabsMap.addLayer(indianMarkerCluster);
-  } else {
-    const filtered = INDIAN_LABS.filter(lab => lab.type === type);
-    displayIndianLabsList(filtered);
-    
-    // Update map markers
-    indianLabsMap.removeLayer(indianMarkerCluster);
-    indianMarkerCluster.clearLayers();
-    
-    indianMarkers.forEach(({ marker, lab }) => {
-      if (lab.type === type) {
-        indianMarkerCluster.addLayer(marker);
-      }
-    });
-    
-    indianLabsMap.addLayer(indianMarkerCluster);
-  }
-}
-
-function filterIndianLabsSearch(query) {
-  if (!query) {
-    displayIndianLabsList(INDIAN_LABS);
-    return;
-  }
+  const filtered = type === 'all' 
+    ? window.indianLabs 
+    : window.indianLabs.filter(lab => lab.type.toLowerCase() === type);
   
-  const filtered = INDIAN_LABS.filter(lab => 
-    lab.name.toLowerCase().includes(query.toLowerCase()) ||
-    lab.location.toLowerCase().includes(query.toLowerCase()) ||
-    lab.category.toLowerCase().includes(query.toLowerCase()) ||
-    lab.description.toLowerCase().includes(query.toLowerCase())
-  );
+  const container = document.getElementById('indian-labs-list');
+  if (!container) return;
   
-  displayIndianLabsList(filtered);
-}
-
-function showLabDetail(labName) {
-  const lab = INDIAN_LABS.find(l => l.name === labName);
-  if (!lab) return;
-  
-  const content = `
-    <div class="detail-header">
-      <h2>${lab.name}</h2>
-      <div class="detail-meta">
-        <span class="tag">${lab.type}</span>
-        <span class="tag">${lab.category}</span>
-        <span class="tag">📍 ${lab.location}</span>
-        ${lab.established ? `<span class="tag">Est. ${lab.established}</span>` : ''}
-        ${lab.employees ? `<span class="tag">👥 ${lab.employees}</span>` : ''}
-        ${lab.budget ? `<span class="tag">💰 ${lab.budget}</span>` : ''}
+  container.innerHTML = filtered.map(lab => `
+    <div class="item item--clickable" onclick="focusIndianLab(${lab.lat}, ${lab.lng})">
+      <h3 class="item__title">${sanitizeHTML(lab.name)}</h3>
+      <p class="item__description">${sanitizeHTML(lab.description)}</p>
+      <div class="item__meta">
+        <span class="tag">${sanitizeHTML(lab.type)}</span>
+        <span class="tag">${sanitizeHTML(lab.location)}</span>
       </div>
     </div>
-    
-    <div class="detail-body">
-      <h3 style="color:#0ff;margin:20px 0 10px">📋 ABOUT</h3>
-      <p style="color:#0f0;line-height:1.8">${lab.description}</p>
-      
-      ${lab.projects ? `
-        <h3 style="color:#0ff;margin:20px 0 10px">🚀 CURRENT PROJECTS</h3>
-        <div class="meta">
-          ${lab.projects.map(p => `<span class="tag">${p}</span>`).join('')}
-        </div>
-      ` : ''}
-      
-      ${lab.achievements ? `
-        <h3 style="color:#0ff;margin:20px 0 10px">🏆 ACHIEVEMENTS</h3>
-        <ul style="color:#0f0;line-height:1.8;margin-left:20px">
-          ${lab.achievements.map(a => `<li>${a}</li>`).join('')}
-        </ul>
-      ` : ''}
-      
-      ${lab.howToJoin ? `
-        <h3 style="color:#0ff;margin:20px 0 10px">💼 HOW TO JOIN</h3>
-        <p style="color:#0f0;line-height:1.8">${lab.howToJoin}</p>
-      ` : ''}
-      
-      <h3 style="color:#0ff;margin:20px 0 10px">🔗 LINKS</h3>
-      <div>
-        ${lab.website ? `<a href="${lab.website}" target="_blank" class="external-link">🌐 Official Website</a>` : ''}
-        ${lab.careers ? `<a href="${lab.careers}" target="_blank" class="external-link">💼 Careers Page</a>` : ''}
-        ${lab.contact ? `<a href="mailto:${lab.contact}" class="external-link">📧 Contact</a>` : ''}
-      </div>
-      
-      <div style="margin-top:30px;padding:20px;background:rgba(0,255,0,0.1);border:2px solid #0f0">
-        <h4 style="color:#0ff;margin-bottom:10px">📍 LOCATION</h4>
-        <p style="color:#0f0">Coordinates: ${lab.lat}, ${lab.lng}</p>
-        <button onclick="zoomToLab(${lab.lat}, ${lab.lng})" class="external-link" style="margin-top:10px">
-          🗺️ VIEW ON MAP
-        </button>
-      </div>
-    </div>
-  `;
-  
-  openModal(content);
+  `).join('');
 }
 
-function zoomToLab(lat, lng) {
-  closeModal();
-  indianLabsMap.setView([lat, lng], 15, { animate: true });
-  
-  // Scroll to map
-  document.getElementById('indian-labs-panel').scrollIntoView({ behavior: 'smooth' });
-}
-
-// ==================== EXISTING FEATURES ====================
-
-// MODAL SYSTEM
-function openModal(content) {
-  const modal = document.getElementById('detail-modal');
-  const modalContent = document.getElementById('modal-content');
-  modalContent.innerHTML = content;
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  const modal = document.getElementById('detail-modal');
-  modal.style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
-
-// ESC key to close modal
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
-});
-
-// Initialize maps
+// ==================== MAPS INITIALIZATION ====================
 function initMaps() {
   // Global satellite map
-  map = L.map('map').setView([37.0902, -95.7129], 2);
-  
-  // Multiple tile layers
-  const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-    maxZoom: 22,
-    maxNativeZoom: 21,
-    attribution: 'Google Hybrid'
-  });
-  
-  const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-    maxZoom: 22,
-    maxNativeZoom: 21,
-    attribution: 'Google Satellite'
-  });
-  
-  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    maxZoom: 22,
-    maxNativeZoom: 19,
-    attribution: 'ESRI'
-  });
-  
-  const mapboxSatellite = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-    maxZoom: 22,
-    maxNativeZoom: 20,
-    attribution: 'Mapbox'
-  });
-  
-  const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 22,
-    maxNativeZoom: 19,
-    attribution: 'OpenStreetMap'
-  });
-  
-  // Add default layer
-  googleHybrid.addTo(map);
-  
-  // Layer control
-  const baseMaps = {
-    "🛰️ Google Hybrid": googleHybrid,
-    "🌍 Google Satellite": googleSatellite,
-    "📡 ESRI Satellite": esriSatellite,
-    "🗺️ Mapbox Satellite": mapboxSatellite,
-    "🗺️ Street Map": streetMap
-  };
-  
-  L.control.layers(baseMaps).addTo(map);
-  
-  // Marker cluster
-  markerCluster = L.markerClusterGroup({
-    maxClusterRadius: 50,
-    spiderfyOnMaxZoom: true,
-    showCoverageOnHover: false
-  });
-  
-  map.addLayer(markerCluster);
-  
-  // Add locations
-  if (typeof SECRET_LOCATIONS !== 'undefined') {
-    SECRET_LOCATIONS.forEach(loc => {
-      const color = loc.classification === 'TOP SECRET' ? 'red' :
-                    loc.classification === 'SECRET' ? 'orange' : 'yellow';
+  const mapEl = document.getElementById('map');
+  if (mapEl) {
+    AppState.map = L.map('map').setView([20, 0], 2);
+    
+    L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+      maxZoom: 22,
+      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      attribution: '© Google'
+    }).addTo(AppState.map);
+    
+    // Load locations from intelligence-data.js
+    if (window.secretLocations) {
+      AppState.markerCluster = L.markerClusterGroup();
       
-      const icon = L.divIcon({
-        className: 'custom-marker',
-        html: `<div style="background:${color};width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px ${color}"></div>`,
-        iconSize: [30, 30]
+      window.secretLocations.forEach(loc => {
+        const marker = L.marker([loc.lat, loc.lng])
+          .bindPopup(`
+            <div class="item">
+              <h3 class="item__title">${loc.name}</h3>
+              <p class="item__description">${loc.description}</p>
+              <div class="item__meta">
+                <span class="tag">${loc.type}</span>
+                <span class="tag">${loc.country}</span>
+              </div>
+            </div>
+          `);
+        
+        AppState.markerCluster.addLayer(marker);
       });
       
-      const marker = L.marker([loc.lat, loc.lng], { icon })
-        .bindPopup(`
-          <div style="color:#000;min-width:250px">
-            <h3 style="margin-bottom:10px">${loc.name}</h3>
-            <p><strong>Location:</strong> ${loc.location}</p>
-            <p><strong>Classification:</strong> ${loc.classification}</p>
-            <p><strong>Type:</strong> ${loc.type}</p>
-            <button onclick="map.setView([${loc.lat}, ${loc.lng}], 20, {animate:true})" 
-                    style="margin-top:10px;padding:8px 15px;background:#0f0;border:none;cursor:pointer;font-weight:bold">
-              🔍 ZOOM TO ULTRA HD
-            </button>
-          </div>
-        `);
-      
-      markerCluster.addLayer(marker);
-      markers.push(marker);
+      AppState.map.addLayer(AppState.markerCluster);
+    }
+    
+    // Zoom info
+    AppState.map.on('zoomend', () => {
+      const zoomEl = document.getElementById('zoom-info');
+      if (zoomEl) {
+        zoomEl.textContent = `Zoom: ${AppState.map.getZoom()} | Max: 22 (ULTRA HD)`;
+      }
     });
   }
-  
-  // Zoom info
-  map.on('zoomend', () => {
-    const zoom = map.getZoom();
-    document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | Max: 22 (ULTRA HD)`;
-    
-    if (zoom >= 18) {
-      console.log(`🛰️ ULTRA HD MODE: Zoom ${zoom}`);
-    }
-  });
-  
-  // Search functionality
-  document.getElementById('lab-search').addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    
-    if (!query) {
-      markerCluster.clearLayers();
-      markers.forEach(m => markerCluster.addLayer(m));
-      return;
-    }
-    
-    markerCluster.clearLayers();
-    
-    if (typeof SECRET_LOCATIONS !== 'undefined') {
-      SECRET_LOCATIONS.forEach((loc, index) => {
-        if (loc.name.toLowerCase().includes(query) || 
-            loc.location.toLowerCase().includes(query)) {
-          markerCluster.addLayer(markers[index]);
-        }
-      });
-    }
-  });
 }
 
-// Load all data
+// ==================== DATA LOADING ====================
 async function loadAllData() {
-  await Promise.all([
-    loadHackerNews(),
-    loadReddit(),
-    loadGitHub(),
-    loadResearch()
-  ]);
-  
-  updateStats();
-  document.getElementById('last-update').textContent = 
-    `Last Updated: ${new Date().toLocaleString()}`;
+  try {
+    updateLastUpdate();
+    
+    await Promise.all([
+      loadHackerNews(),
+      loadReddit(),
+      loadGitHub(),
+      loadResearch(),
+      loadBreakthroughs()
+    ]);
+    
+    updateStats();
+  } catch (error) {
+    console.error('Data loading error:', error);
+    showError('Failed to load some data. Please refresh the page.');
+  }
 }
 
-// Load Hacker News
 async function loadHackerNews() {
   try {
     const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
     const storyIds = await response.json();
     
     const stories = await Promise.all(
-      storyIds.slice(0, 100).map(async id => {
-        const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
-        return res.json();
-      })
+      storyIds.slice(0, 100).map(id =>
+        fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())
+      )
     );
     
-    allNews = stories.filter(s => s && s.title);
-    displayNews(allNews);
+    AppState.allNews = stories.filter(s => s && s.title);
+    displayNews();
   } catch (error) {
-    console.error('Error loading Hacker News:', error);
+    console.error('Hacker News error:', error);
   }
 }
 
-// Display news
-function displayNews(news) {
-  const container = document.getElementById('news-container');
-  
-  container.innerHTML = news.map(story => `
-    <div class="item clickable" onclick="showNewsDetail(${story.id}, '${story.title.replace(/'/g, "\\'")}', '${story.url || ''}', ${story.score}, ${story.descendants || 0}, '${story.by}', ${story.time})">
-      <h3>${story.title}</h3>
-      <div class="meta">
-        <span class="tag">⬆ ${story.score} points</span>
-        <span class="tag">💬 ${story.descendants || 0} comments</span>
-        <span class="tag">by ${story.by}</span>
-      </div>
-      <div class="timestamp">${new Date(story.time * 1000).toLocaleString()}</div>
-      <div class="click-hint">👆 Click to read comments</div>
-    </div>
-  `).join('');
-}
-
-// Filter news
-function filterNews(query) {
-  if (!query) {
-    displayNews(allNews);
-    return;
-  }
-  
-  const filtered = allNews.filter(story => 
-    story.title.toLowerCase().includes(query.toLowerCase())
-  );
-  
-  displayNews(filtered);
-}
-
-// Show news detail
-async function showNewsDetail(storyId, title, url, score, comments, by, time) {
-  const content = `
-    <div class="detail-header">
-      <h2>${title}</h2>
-      <div class="detail-meta">
-        <span class="tag">⬆ ${score} points</span>
-        <span class="tag">💬 ${comments} comments</span>
-        <span class="tag">by ${by}</span>
-        <span class="tag">${new Date(time * 1000).toLocaleString()}</span>
-      </div>
-      ${url ? `<a href="${url}" target="_blank" class="external-link">🔗 Read Original Article →</a>` : ''}
-    </div>
-    
-    <div class="detail-body">
-      <h3 style="color:#0ff;margin:20px 0 10px">💬 COMMENTS (Loading...)</h3>
-      <div id="comments-container">
-        <div class="loading">⏳ Loading comments...</div>
-      </div>
-    </div>
-  `;
-  
-  openModal(content);
-  
-  // Load comments
-  try {
-    const response = await fetch(`https://hacker-news.firebaseio.com/v0/item/${storyId}.json`);
-    const story = await response.json();
-    
-    if (story.kids && story.kids.length > 0) {
-      const commentPromises = story.kids.slice(0, 20).map(async id => {
-        try {
-          const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
-          return res.json();
-        } catch (e) {
-          return null;
-        }
-      });
-      
-      const comments = await Promise.all(commentPromises);
-      const validComments = comments.filter(c => c && c.text);
-      
-      const commentsHtml = validComments.map(comment => `
-        <div class="comment">
-          <div class="comment-meta">
-            <strong>${comment.by}</strong> • ${new Date(comment.time * 1000).toLocaleString()}
-          </div>
-          <div class="comment-text">${comment.text}</div>
-        </div>
-      `).join('');
-      
-      document.getElementById('comments-container').innerHTML = 
-        commentsHtml || '<p style="color:#0a0">No comments yet.</p>';
-    } else {
-      document.getElementById('comments-container').innerHTML = 
-        '<p style="color:#0a0">No comments yet.</p>';
-    }
-  } catch (error) {
-    document.getElementById('comments-container').innerHTML = 
-      '<p style="color:#f00">Error loading comments.</p>';
-  }
-}
-
-// Load Reddit
 async function loadReddit() {
-  const subreddits = [
-    'programming', 'technology', 'artificial', 'MachineLearning',
-    'datascience', 'cybersecurity', 'webdev', 'learnprogramming',
-    'cscareerquestions', 'startups'
-  ];
-  
   try {
-    const promises = subreddits.map(sub => 
-      fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=5`)
-        .then(r => r.json())
-        .catch(() => null)
+    const subreddits = ['technology', 'programming', 'artificial', 'MachineLearning', 'datascience', 
+                       'webdev', 'coding', 'learnprogramming', 'cscareerquestions', 'startups'];
+    
+    const posts = await Promise.all(
+      subreddits.map(sub =>
+        fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=5`)
+          .then(r => r.json())
+          .then(data => data.data.children.map(c => ({ ...c.data, subreddit: sub })))
+      )
     );
     
-    const results = await Promise.all(promises);
-    
-    allReddit = results
-      .filter(r => r && r.data && r.data.children)
-      .flatMap(r => r.data.children.map(c => c.data))
-      .sort((a, b) => b.score - a.score);
-    
-    displayReddit(allReddit);
+    AppState.allReddit = posts.flat();
+    displayReddit();
   } catch (error) {
-    console.error('Error loading Reddit:', error);
+    console.error('Reddit error:', error);
   }
 }
 
-// Display Reddit
-function displayReddit(posts) {
-  const container = document.getElementById('reddit-container');
-  
-  container.innerHTML = posts.map(post => `
-    <div class="item">
-      <h3>${post.title}</h3>
-      <div class="meta">
-        <span class="tag">r/${post.subreddit}</span>
-        <span class="tag">⬆ ${post.score}</span>
-        <span class="tag">💬 ${post.num_comments}</span>
-        <span class="tag">by u/${post.author}</span>
-      </div>
-      ${post.selftext ? `<p>${post.selftext.substring(0, 200)}...</p>` : ''}
-      <a href="https://reddit.com${post.permalink}" target="_blank" class="external-link">
-        Read on Reddit →
-      </a>
-    </div>
-  `).join('');
-}
-
-// Load GitHub
 async function loadGitHub() {
   try {
-    const response = await fetch('https://api.github.com/search/repositories?q=stars:>10000&sort=stars&order=desc&per_page=50');
+    const response = await fetch('https://api.github.com/search/repositories?q=stars:>1000&sort=stars&order=desc&per_page=50');
     const data = await response.json();
     
-    allGitHub = data.items || [];
-    displayGitHub(allGitHub);
+    AppState.allGitHub = data.items || [];
+    displayGitHub();
   } catch (error) {
-    console.error('Error loading GitHub:', error);
+    console.error('GitHub error:', error);
   }
 }
 
-// Display GitHub
-function displayGitHub(repos) {
-  const container = document.getElementById('github-container');
-  
-  container.innerHTML = repos.map(repo => `
-    <div class="item">
-      <h3>${repo.full_name}</h3>
-      <div class="meta">
-        <span class="tag">⭐ ${repo.stargazers_count.toLocaleString()}</span>
-        <span class="tag">🔱 ${repo.forks_count.toLocaleString()}</span>
-        <span class="tag">${repo.language || 'Unknown'}</span>
-      </div>
-      <p>${repo.description || 'No description'}</p>
-      <a href="${repo.html_url}" target="_blank" class="external-link">
-        View on GitHub →
-      </a>
-    </div>
-  `).join('');
-}
-
-// Load Research
 async function loadResearch() {
   try {
-    const categories = ['cs.AI', 'cs.LG', 'cs.CL', 'cs.CV'];
-    const promises = categories.map(cat =>
-      fetch(`https://export.arxiv.org/api/query?search_query=cat:${cat}&sortBy=submittedDate&sortOrder=descending&max_results=10`)
-        .then(r => r.text())
-        .catch(() => null)
-    );
+    const categories = ['cs.AI', 'cs.LG', 'cs.CV', 'cs.CL', 'cs.RO'];
+    const papers = [];
     
-    const results = await Promise.all(promises);
+    for (const cat of categories) {
+      const response = await fetch(`https://export.arxiv.org/api/query?search_query=cat:${cat}&sortBy=submittedDate&sortOrder=descending&max_results=6`);
+      const text = await response.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, 'text/xml');
+      
+      const entries = xml.querySelectorAll('entry');
+      entries.forEach(entry => {
+        papers.push({
+          title: entry.querySelector('title')?.textContent,
+          summary: entry.querySelector('summary')?.textContent,
+          authors: Array.from(entry.querySelectorAll('author name')).map(a => a.textContent),
+          link: entry.querySelector('id')?.textContent,
+          published: entry.querySelector('published')?.textContent,
+          category: cat
+        });
+      });
+    }
     
-    allResearch = results
-      .filter(r => r)
-      .flatMap(parseArxiv)
-      .slice(0, 30);
-    
-    displayResearch(allResearch);
+    AppState.allResearch = papers;
+    displayResearch();
   } catch (error) {
-    console.error('Error loading research:', error);
+    console.error('Research error:', error);
   }
 }
 
-// Parse ArXiv XML
-function parseArxiv(xml) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, 'text/xml');
-  const entries = doc.querySelectorAll('entry');
-  
-  return Array.from(entries).map(entry => ({
-    title: entry.querySelector('title')?.textContent?.trim(),
-    summary: entry.querySelector('summary')?.textContent?.trim(),
-    authors: Array.from(entry.querySelectorAll('author name')).map(a => a.textContent),
-    published: entry.querySelector('published')?.textContent,
-    link: entry.querySelector('id')?.textContent,
-    pdfLink: entry.querySelector('link[title="pdf"]')?.getAttribute('href')
-  }));
+async function loadBreakthroughs() {
+  // Breakthroughs will be loaded from breakthrough-detector.js
+  if (window.detectBreakthroughs) {
+    const breakthroughs = window.detectBreakthroughs(AppState.allNews, AppState.allResearch);
+    displayBreakthroughs(breakthroughs);
+  }
 }
 
-// Display Research
-function displayResearch(papers) {
-  const container = document.getElementById('research-container');
+// ==================== DISPLAY FUNCTIONS ====================
+function displayNews() {
+  const container = document.getElementById('news-container');
+  if (!container) return;
   
-  container.innerHTML = papers.map(paper => `
-    <div class="item">
-      <h3>${paper.title}</h3>
-      <div class="meta">
-        <span class="tag">👥 ${paper.authors.slice(0, 3).join(', ')}${paper.authors.length > 3 ? ' et al.' : ''}</span>
-        <span class="tag">📅 ${new Date(paper.published).toLocaleDateString()}</span>
+  container.innerHTML = AppState.allNews.map(story => `
+    <div class="item item--clickable" onclick="openModal('news', ${story.id})">
+      <h3 class="item__title">${sanitizeHTML(story.title)}</h3>
+      <div class="item__meta">
+        <span class="tag">👍 ${story.score || 0}</span>
+        <span class="tag">💬 ${story.descendants || 0}</span>
+        ${story.url ? `<a href="${story.url}" target="_blank" class="tag" onclick="event.stopPropagation()">🔗 Link</a>` : ''}
       </div>
-      <p>${paper.summary?.substring(0, 200)}...</p>
-      <div>
-        <a href="${paper.link}" target="_blank" class="external-link">Read Abstract →</a>
-        ${paper.pdfLink ? `<a href="${paper.pdfLink}" target="_blank" class="external-link">📄 PDF</a>` : ''}
+      <div class="timestamp">${formatTime(story.time * 1000)}</div>
+      <div class="click-hint">Click for details →</div>
+    </div>
+  `).join('');
+}
+
+function displayReddit() {
+  const container = document.getElementById('reddit-container');
+  if (!container) return;
+  
+  container.innerHTML = AppState.allReddit.map(post => `
+    <div class="item item--clickable" onclick="window.open('https://reddit.com${post.permalink}', '_blank')">
+      <h3 class="item__title">${sanitizeHTML(post.title)}</h3>
+      <div class="item__meta">
+        <span class="tag">r/${post.subreddit}</span>
+        <span class="tag">👍 ${post.ups || 0}</span>
+        <span class="tag">💬 ${post.num_comments || 0}</span>
+      </div>
+      <div class="timestamp">${formatTime(post.created_utc * 1000)}</div>
+    </div>
+  `).join('');
+}
+
+function displayGitHub() {
+  const container = document.getElementById('github-container');
+  if (!container) return;
+  
+  container.innerHTML = AppState.allGitHub.map(repo => `
+    <div class="item item--clickable" onclick="window.open('${repo.html_url}', '_blank')">
+      <h3 class="item__title">${sanitizeHTML(repo.full_name)}</h3>
+      <p class="item__description">${sanitizeHTML(repo.description || 'No description')}</p>
+      <div class="item__meta">
+        <span class="tag">⭐ ${repo.stargazers_count}</span>
+        <span class="tag">🔱 ${repo.forks_count}</span>
+        <span class="tag">${repo.language || 'Unknown'}</span>
       </div>
     </div>
   `).join('');
 }
 
-// Update stats
-function updateStats() {
-  document.getElementById('news-count').textContent = allNews.length;
-  document.getElementById('research-count').textContent = allResearch.length;
-  document.getElementById('github-count').textContent = allGitHub.length;
-  document.getElementById('reddit-count').textContent = allReddit.length;
-}
-
-// Toggle panels
-function togglePanel(panelName) {
-  const panel = document.getElementById(`${panelName}-panel`);
-  const btn = event.target;
+function displayResearch() {
+  const container = document.getElementById('research-container');
+  if (!container) return;
   
-  if (panel.style.display === 'none') {
-    panel.style.display = 'block';
-    btn.textContent = `HIDE ${panelName.toUpperCase().replace('-', ' ')}`;
-  } else {
-    panel.style.display = 'none';
-    btn.textContent = `SHOW ${panelName.toUpperCase().replace('-', ' ')}`;
-  }
-}
-
-// Setup event listeners
-function setupEventListeners() {
-  // Existing listeners are already set up in init functions
-}
-
-// Load breakthroughs
-async function loadBreakthroughs() {
-  // This would load from your data.js file
-  if (typeof BREAKTHROUGHS !== 'undefined') {
-    displayBreakthroughs(BREAKTHROUGHS);
-  }
+  container.innerHTML = AppState.allResearch.map(paper => `
+    <div class="item item--clickable" onclick="window.open('${paper.link}', '_blank')">
+      <h3 class="item__title">${sanitizeHTML(paper.title)}</h3>
+      <p class="item__description">${sanitizeHTML(paper.summary?.substring(0, 200))}...</p>
+      <div class="item__meta">
+        <span class="tag">${paper.category}</span>
+        <span class="tag">👥 ${paper.authors?.length || 0} authors</span>
+      </div>
+      <div class="timestamp">${formatTime(new Date(paper.published).getTime())}</div>
+    </div>
+  `).join('');
 }
 
 function displayBreakthroughs(breakthroughs) {
   const container = document.getElementById('breakthroughs-container');
+  if (!container || !breakthroughs) return;
   
-  container.innerHTML = breakthroughs.map(item => {
-    const classNames = ['item'];
-    if (item.classification === 'TOP SECRET') classNames.push('critical');
-    else if (item.classification === 'SECRET') classNames.push('high');
-    
-    return `
-      <div class="${classNames.join(' ')}">
-        <h3>${item.title}</h3>
-        <div class="meta">
-          <span class="tag">${item.classification}</span>
-          <span class="tag">${item.category}</span>
-          <span class="tag">${item.source}</span>
-        </div>
-        <p>${item.description}</p>
-        ${item.impact ? `<div class="impact">⚡ IMPACT: ${item.impact}</div>` : ''}
-        <div class="timestamp">${item.date}</div>
+  container.innerHTML = breakthroughs.map(item => `
+    <div class="item item--${item.priority}" onclick="openModal('breakthrough', '${item.id}')">
+      <div class="item__meta">
+        <span class="badge badge--danger">${item.priority.toUpperCase()}</span>
+        <span class="badge">${item.type}</span>
       </div>
-    `;
-  }).join('');
+      <h3 class="item__title">${sanitizeHTML(item.title)}</h3>
+      <p class="item__description">${sanitizeHTML(item.description)}</p>
+      <div class="click-hint">Click for full analysis →</div>
+    </div>
+  `).join('');
 }
 
-// Initialize breakthroughs
-setTimeout(loadBreakthroughs, 1000);
+// ==================== UTILITY FUNCTIONS ====================
+function updateStats() {
+  const updates = {
+    'news-count': AppState.allNews.length,
+    'research-count': AppState.allResearch.length,
+    'github-count': AppState.allGitHub.length,
+    'reddit-count': AppState.allReddit.length
+  };
+  
+  Object.entries(updates).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) animateNumber(el, value);
+  });
+}
+
+function animateNumber(element, target) {
+  const duration = 1000;
+  const start = 0;
+  const startTime = Date.now();
+  
+  function update() {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const current = Math.floor(start + (target - start) * progress);
+    
+    element.textContent = current;
+    
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+  
+  update();
+}
+
+function updateLastUpdate() {
+  const el = document.getElementById('last-update');
+  if (el) {
+    el.textContent = `Last updated: ${new Date().toLocaleString()}`;
+  }
+}
+
+function formatTime(timestamp) {
+  const now = Date.now();
+  const diff = now - timestamp;
+  
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  
+  if (minutes < 1) return 'Just now';
+  if (minutes < 60) return `${minutes}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  return `${days}d ago`;
+}
+
+function sanitizeHTML(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function scrollToElement(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function showError(message) {
+  console.error(message);
+  // Could add a toast notification here
+  alert(message);
+}
+
+// ==================== PANEL TOGGLES ====================
+function togglePanel(panelName) {
+  const panel = document.getElementById(`${panelName}-panel`);
+  const button = event.target;
+  
+  if (!panel) return;
+  
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    button.textContent = `HIDE ${panelName.toUpperCase()}`;
+  } else {
+    panel.style.display = 'none';
+    button.textContent = `SHOW ${panelName.toUpperCase()}`;
+  }
+}
+
+// ==================== MODAL SYSTEM ====================
+function openModal(type, id) {
+  const modal = document.getElementById('detail-modal');
+  const content = document.getElementById('modal-content');
+  
+  if (!modal || !content) return;
+  
+  let data;
+  if (type === 'news') {
+    data = AppState.allNews.find(n => n.id === id);
+  }
+  
+  if (!data) return;
+  
+  content.innerHTML = `
+    <h2 class="text-primary mb-lg">${sanitizeHTML(data.title)}</h2>
+    <div class="item__meta mb-lg">
+      <span class="tag">👍 ${data.score || 0}</span>
+      <span class="tag">💬 ${data.descendants || 0}</span>
+      ${data.url ? `<a href="${data.url}" target="_blank" class="btn btn--small">Open Link</a>` : ''}
+    </div>
+    <div class="timestamp mb-lg">${formatTime(data.time * 1000)}</div>
+    ${data.text ? `<div class="item__description">${sanitizeHTML(data.text)}</div>` : ''}
+  `;
+  
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('detail-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+}
+
+// ==================== SEARCH & FILTER ====================
+function filterNews(query) {
+  const filtered = AppState.allNews.filter(story =>
+    story.title?.toLowerCase().includes(query.toLowerCase())
+  );
+  
+  const container = document.getElementById('news-container');
+  if (!container) return;
+  
+  container.innerHTML = filtered.map(story => `
+    <div class="item item--clickable" onclick="openModal('news', ${story.id})">
+      <h3 class="item__title">${sanitizeHTML(story.title)}</h3>
+      <div class="item__meta">
+        <span class="tag">👍 ${story.score || 0}</span>
+        <span class="tag">💬 ${story.descendants || 0}</span>
+      </div>
+      <div class="timestamp">${formatTime(story.time * 1000)}</div>
+    </div>
+  `).join('');
+}
+
+// ==================== EVENT LISTENERS ====================
+function setupEventListeners() {
+  // Search inputs
+  const newsSearch = document.getElementById('news-search');
+  if (newsSearch) {
+    newsSearch.addEventListener('input', debounce((e) => {
+      filterNews(e.target.value);
+    }, 300));
+  }
+  
+  const labSearch = document.getElementById('lab-search');
+  if (labSearch) {
+    labSearch.addEventListener('input', debounce((e) => {
+      // Implement lab search
+    }, 300));
+  }
+  
+  const indianLabSearch = document.getElementById('indian-lab-search');
+  if (indianLabSearch) {
+    indianLabSearch.addEventListener('input', debounce((e) => {
+      // Implement Indian lab search
+    }, 300));
+  }
+  
+  // Close modal on escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+}
+
+// ==================== EXPOSE GLOBAL FUNCTIONS ====================
+window.togglePanel = togglePanel;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.filterNews = filterNews;
+window.setNickname = setNickname;
+window.sendMessage = sendMessage;
+window.selectQuizCategory = selectQuizCategory;
+window.startQuiz = startQuiz;
+window.selectAnswer = selectAnswer;
+window.filterIndianLabs = filterIndianLabs;
+window.focusIndianLab = focusIndianLab;
