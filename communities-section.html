@@ -1,0 +1,24 @@
+<!-- 🌐 TECH COMMUNITIES SECTION -->
+<section class="section">
+  <div class="section-header">
+    <h2 class="section__title">🌐 TECH COMMUNITIES - CONNECT & LEARN</h2>
+    <button class="btn toggle-btn" onclick="togglePanel('communities')">HIDE COMMUNITIES</button>
+  </div>
+  <div id="communities-panel">
+    
+    <!-- Community Type Filters -->
+    <div class="quiz-controls mb-lg">
+      <button class="btn btn--small" onclick="filterCommunities('all')">All Communities</button>
+      <button class="btn btn--small" onclick="filterCommunities('discord')">💬 Discord</button>
+      <button class="btn btn--small" onclick="filterCommunities('telegram')">✈️ Telegram</button>
+      <button class="btn btn--small" onclick="filterCommunities('whatsapp')">📱 WhatsApp</button>
+      <button class="btn btn--small" onclick="filterCommunities('linkedin')">💼 LinkedIn</button>
+      <button class="btn btn--small" onclick="filterCommunities('reddit')">🔴 Reddit</button>
+      <button class="btn btn--small" onclick="filterCommunities('youtube')">📺 YouTube</button>
+    </div>
+    
+    <!-- Communities Container -->
+    <div id="communities-container"></div>
+    
+  </div>
+</section>
