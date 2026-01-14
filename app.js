@@ -1,14 +1,43 @@
-// ENHANCED TECH INTELLIGENCE SYSTEM - WITH DEEP PAGES
+// 🇮🇳 TECH MASTERY LAB - COMPLETE SYSTEM
 let allNews = [];
 let allReddit = [];
 let allGitHub = [];
 let allResearch = [];
 let map;
+let indianLabsMap;
 let markers = [];
+let indianMarkers = [];
 let markerCluster;
+let indianMarkerCluster;
 let allLocations = [];
 let newsPage = 1;
 let isLoading = false;
+
+// CHAT SYSTEM
+let currentRoom = 'general';
+let currentUser = null;
+let chatMessages = {};
+
+// QUIZ SYSTEM
+let quizQuestions = [];
+let currentQuiz = [];
+let currentQuestionIndex = 0;
+let quizScore = 0;
+let quizTimer = null;
+let quizTimeLeft = 0;
+let selectedCategory = 'all';
+let quizMode = null;
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', () => {
+  initMatrix();
+  initMaps();
+  loadAllData();
+  initChat();
+  initQuiz();
+  initIndianLabs();
+  setupEventListeners();
+});
 
 // Matrix background
 function initMatrix() {
@@ -38,6 +67,555 @@ function initMatrix() {
   setInterval(draw, 33);
 }
 
+// ==================== CHAT SYSTEM ====================
+
+function initChat() {
+  // Initialize chat rooms
+  chatMessages = {
+    general: [
+      { user: 'System', text: 'Welcome to General Tech Talk! 💬', time: Date.now(), system: true }
+    ],
+    ai: [
+      { user: 'System', text: 'Welcome to AI/ML Discussion! 🤖', time: Date.now(), system: true }
+    ],
+    space: [
+      { user: 'System', text: 'Welcome to Space & ISRO! 🚀', time: Date.now(), system: true }
+    ],
+    coding: [
+      { user: 'System', text: 'Welcome to Coding Help! 💻', time: Date.now(), system: true }
+    ],
+    career: [
+      { user: 'System', text: 'Welcome to Career Guidance! 🎓', time: Date.now(), system: true }
+    ],
+    india: [
+      { user: 'System', text: 'Welcome to Indian Tech Scene! 🇮🇳', time: Date.now(), system: true }
+    ],
+    quiz: [
+      { user: 'System', text: 'Welcome to Quiz Arena! 🎮', time: Date.now(), system: true }
+    ],
+    research: [
+      { user: 'System', text: 'Welcome to Research Papers! 🔬', time: Date.now(), system: true }
+    ]
+  };
+  
+  // Setup room switching
+  document.querySelectorAll('.chat-room').forEach(room => {
+    room.addEventListener('click', () => {
+      document.querySelectorAll('.chat-room').forEach(r => r.classList.remove('active'));
+      room.classList.add('active');
+      currentRoom = room.dataset.room;
+      displayChatMessages();
+    });
+  });
+  
+  // Setup enter key for chat input
+  const chatInput = document.getElementById('chat-input');
+  if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+  }
+  
+  const nicknameInput = document.getElementById('chat-nickname');
+  if (nicknameInput) {
+    nicknameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') setNickname();
+    });
+  }
+}
+
+function setNickname() {
+  const input = document.getElementById('chat-nickname');
+  const nickname = input.value.trim();
+  
+  if (!nickname) {
+    alert('Please enter a nickname!');
+    return;
+  }
+  
+  if (nickname.length < 2) {
+    alert('Nickname must be at least 2 characters!');
+    return;
+  }
+  
+  currentUser = nickname;
+  
+  // Hide nickname input, show chat input
+  input.parentElement.style.display = 'none';
+  document.getElementById('chat-input-container').style.display = 'flex';
+  
+  // Add welcome message
+  chatMessages[currentRoom].push({
+    user: 'System',
+    text: `${nickname} joined the chat! 👋`,
+    time: Date.now(),
+    system: true
+  });
+  
+  displayChatMessages();
+}
+
+function sendMessage() {
+  if (!currentUser) {
+    alert('Please set your nickname first!');
+    return;
+  }
+  
+  const input = document.getElementById('chat-input');
+  const message = input.value.trim();
+  
+  if (!message) return;
+  
+  // Add message to current room
+  chatMessages[currentRoom].push({
+    user: currentUser,
+    text: message,
+    time: Date.now(),
+    own: true
+  });
+  
+  input.value = '';
+  displayChatMessages();
+  
+  // Simulate bot response for demo
+  setTimeout(() => {
+    const responses = [
+      'Interesting point! 🤔',
+      'I agree! 👍',
+      'Can you elaborate more?',
+      'That\'s a great question!',
+      'Thanks for sharing! 🙏',
+      'I learned something new today!',
+      'Let me think about that...',
+      'Good observation! 💡'
+    ];
+    
+    chatMessages[currentRoom].push({
+      user: 'TechBot',
+      text: responses[Math.floor(Math.random() * responses.length)],
+      time: Date.now()
+    });
+    
+    displayChatMessages();
+  }, 1000 + Math.random() * 2000);
+}
+
+function displayChatMessages() {
+  const container = document.getElementById('chat-messages');
+  const messages = chatMessages[currentRoom] || [];
+  
+  container.innerHTML = messages.map(msg => {
+    const timeStr = new Date(msg.time).toLocaleTimeString();
+    const ownClass = msg.own ? 'own' : '';
+    const systemClass = msg.system ? 'system' : '';
+    
+    return `
+      <div class="chat-message ${ownClass} ${systemClass}">
+        <div class="chat-user">${msg.user}</div>
+        <div class="chat-text">${msg.text}</div>
+        <div class="chat-time">${timeStr}</div>
+      </div>
+    `;
+  }).join('');
+  
+  // Scroll to bottom
+  container.scrollTop = container.scrollHeight;
+}
+
+// ==================== QUIZ SYSTEM ====================
+
+function initQuiz() {
+  quizQuestions = QUIZ_QUESTIONS || [];
+  
+  // Load saved score
+  const savedScore = localStorage.getItem('quiz-high-score');
+  if (savedScore) {
+    document.getElementById('quiz-score').textContent = savedScore;
+  }
+}
+
+function selectQuizCategory(category) {
+  selectedCategory = category;
+  
+  // Update active tab
+  document.querySelectorAll('.tabs .tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  event.target.classList.add('active');
+}
+
+function startQuiz(mode) {
+  quizMode = mode;
+  quizScore = 0;
+  currentQuestionIndex = 0;
+  
+  // Filter questions by category
+  let questions = selectedCategory === 'all' 
+    ? [...quizQuestions]
+    : quizQuestions.filter(q => q.category === selectedCategory);
+  
+  // Shuffle questions
+  questions = questions.sort(() => Math.random() - 0.5);
+  
+  // Select questions based on mode
+  if (mode === 'quick') {
+    currentQuiz = questions.slice(0, 10);
+    quizTimeLeft = 0; // No timer
+  } else if (mode === 'timed') {
+    currentQuiz = questions.slice(0, 20);
+    quizTimeLeft = 600; // 10 minutes
+    startQuizTimer();
+  } else {
+    currentQuiz = questions.slice(0, 50);
+    quizTimeLeft = 0; // No timer
+  }
+  
+  displayQuestion();
+}
+
+function startQuizTimer() {
+  if (quizTimer) clearInterval(quizTimer);
+  
+  quizTimer = setInterval(() => {
+    quizTimeLeft--;
+    
+    const minutes = Math.floor(quizTimeLeft / 60);
+    const seconds = quizTimeLeft % 60;
+    document.getElementById('quiz-timer').textContent = 
+      `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    
+    if (quizTimeLeft <= 0) {
+      clearInterval(quizTimer);
+      endQuiz();
+    }
+  }, 1000);
+}
+
+function displayQuestion() {
+  if (currentQuestionIndex >= currentQuiz.length) {
+    endQuiz();
+    return;
+  }
+  
+  const question = currentQuiz[currentQuestionIndex];
+  const content = document.getElementById('quiz-content');
+  
+  content.innerHTML = `
+    <div class="quiz-question">
+      <div style="color:#0a0;margin-bottom:15px">
+        Question ${currentQuestionIndex + 1} of ${currentQuiz.length} | 
+        Category: ${question.category} | 
+        Difficulty: ${question.difficulty.toUpperCase()}
+      </div>
+      
+      <div class="question-text">${question.question}</div>
+      
+      <div class="quiz-options">
+        ${question.options.map((option, index) => `
+          <div class="quiz-option" onclick="selectAnswer(${index})">
+            ${String.fromCharCode(65 + index)}. ${option}
+          </div>
+        `).join('')}
+      </div>
+      
+      <div id="quiz-explanation" style="display:none"></div>
+      
+      <div class="quiz-controls">
+        <button class="quiz-btn" onclick="skipQuestion()">SKIP</button>
+        <button class="quiz-btn" onclick="endQuiz()">END QUIZ</button>
+      </div>
+    </div>
+  `;
+  
+  // Update score display
+  document.getElementById('quiz-score').textContent = quizScore;
+}
+
+function selectAnswer(selectedIndex) {
+  const question = currentQuiz[currentQuestionIndex];
+  const options = document.querySelectorAll('.quiz-option');
+  
+  // Disable all options
+  options.forEach(opt => opt.style.pointerEvents = 'none');
+  
+  // Show correct/wrong
+  options[selectedIndex].classList.add(
+    selectedIndex === question.correct ? 'correct' : 'wrong'
+  );
+  options[question.correct].classList.add('correct');
+  
+  // Update score
+  if (selectedIndex === question.correct) {
+    quizScore += question.difficulty === 'easy' ? 10 : 
+                  question.difficulty === 'medium' ? 20 : 30;
+    document.getElementById('quiz-score').textContent = quizScore;
+  }
+  
+  // Show explanation
+  const explanationDiv = document.getElementById('quiz-explanation');
+  explanationDiv.innerHTML = `
+    <div class="quiz-explanation">
+      <strong>Explanation:</strong> ${question.explanation}
+    </div>
+  `;
+  explanationDiv.style.display = 'block';
+  
+  // Auto-advance after 3 seconds
+  setTimeout(() => {
+    currentQuestionIndex++;
+    displayQuestion();
+  }, 3000);
+}
+
+function skipQuestion() {
+  currentQuestionIndex++;
+  displayQuestion();
+}
+
+function endQuiz() {
+  if (quizTimer) clearInterval(quizTimer);
+  
+  const percentage = Math.round((quizScore / (currentQuiz.length * 30)) * 100);
+  
+  // Save high score
+  const highScore = parseInt(localStorage.getItem('quiz-high-score') || '0');
+  if (quizScore > highScore) {
+    localStorage.setItem('quiz-high-score', quizScore);
+  }
+  
+  const content = document.getElementById('quiz-content');
+  content.innerHTML = `
+    <div style="text-align:center;padding:50px">
+      <h2 style="color:#0ff;margin-bottom:20px">🎉 QUIZ COMPLETED!</h2>
+      
+      <div style="font-size:3em;color:#0f0;margin:30px 0">
+        ${quizScore} POINTS
+      </div>
+      
+      <div style="color:#0f0;font-size:1.5em;margin:20px 0">
+        ${percentage}% Correct
+      </div>
+      
+      <div style="color:#0a0;margin:20px 0">
+        Questions: ${currentQuestionIndex} / ${currentQuiz.length}<br>
+        Mode: ${quizMode.toUpperCase()}<br>
+        Category: ${selectedCategory === 'all' ? 'ALL' : selectedCategory}
+      </div>
+      
+      ${quizScore > highScore ? `
+        <div style="color:#ff0;font-size:1.2em;margin:20px 0">
+          🏆 NEW HIGH SCORE! 🏆
+        </div>
+      ` : ''}
+      
+      <div class="quiz-controls" style="margin-top:30px">
+        <button class="quiz-btn" onclick="startQuiz('${quizMode}')">PLAY AGAIN</button>
+        <button class="quiz-btn" onclick="location.reload()">BACK TO MENU</button>
+      </div>
+    </div>
+  `;
+}
+
+// ==================== INDIAN LABS SYSTEM ====================
+
+function initIndianLabs() {
+  if (!INDIAN_LABS) {
+    console.error('Indian labs data not loaded!');
+    return;
+  }
+  
+  // Initialize map
+  indianLabsMap = L.map('indian-labs-map').setView([20.5937, 78.9629], 5);
+  
+  // Add tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(indianLabsMap);
+  
+  // Add marker cluster
+  indianMarkerCluster = L.markerClusterGroup({
+    maxClusterRadius: 50,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false
+  });
+  
+  // Add markers
+  INDIAN_LABS.forEach(lab => {
+    const color = lab.color || 'blue';
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background:${color};width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px ${color}"></div>`,
+      iconSize: [30, 30]
+    });
+    
+    const marker = L.marker([lab.lat, lab.lng], { icon })
+      .bindPopup(`
+        <div style="color:#000;min-width:250px">
+          <h3 style="margin-bottom:10px">${lab.name}</h3>
+          <p><strong>Location:</strong> ${lab.location}</p>
+          <p><strong>Type:</strong> ${lab.type}</p>
+          <p><strong>Category:</strong> ${lab.category}</p>
+          ${lab.established ? `<p><strong>Est:</strong> ${lab.established}</p>` : ''}
+          <button onclick="showLabDetail('${lab.name}')" style="margin-top:10px;padding:8px 15px;background:#0f0;border:none;cursor:pointer;font-weight:bold">
+            VIEW DETAILS
+          </button>
+        </div>
+      `);
+    
+    indianMarkerCluster.addLayer(marker);
+    indianMarkers.push({ marker, lab });
+  });
+  
+  indianLabsMap.addLayer(indianMarkerCluster);
+  
+  // Display labs list
+  displayIndianLabsList();
+  
+  // Setup search
+  document.getElementById('indian-lab-search').addEventListener('input', (e) => {
+    filterIndianLabsSearch(e.target.value);
+  });
+  
+  // Update zoom info
+  indianLabsMap.on('zoomend', () => {
+    const zoom = indianLabsMap.getZoom();
+    document.getElementById('indian-zoom-info').textContent = `Zoom: ${zoom} | Max: 22`;
+  });
+}
+
+function displayIndianLabsList(labs = INDIAN_LABS) {
+  const container = document.getElementById('indian-labs-list');
+  
+  container.innerHTML = labs.map(lab => `
+    <div class="item clickable" onclick="showLabDetail('${lab.name}')">
+      <h3>${lab.name}</h3>
+      <div class="meta">
+        <span class="tag">${lab.type}</span>
+        <span class="tag">${lab.category}</span>
+        <span class="tag">📍 ${lab.location}</span>
+        ${lab.established ? `<span class="tag">Est. ${lab.established}</span>` : ''}
+      </div>
+      <p>${lab.description}</p>
+      <div class="click-hint">👆 Click for full details</div>
+    </div>
+  `).join('');
+}
+
+function filterIndianLabs(type) {
+  // Update active tab
+  document.querySelectorAll('.tabs .tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  if (type === 'all') {
+    displayIndianLabsList(INDIAN_LABS);
+    indianLabsMap.addLayer(indianMarkerCluster);
+  } else {
+    const filtered = INDIAN_LABS.filter(lab => lab.type === type);
+    displayIndianLabsList(filtered);
+    
+    // Update map markers
+    indianLabsMap.removeLayer(indianMarkerCluster);
+    indianMarkerCluster.clearLayers();
+    
+    indianMarkers.forEach(({ marker, lab }) => {
+      if (lab.type === type) {
+        indianMarkerCluster.addLayer(marker);
+      }
+    });
+    
+    indianLabsMap.addLayer(indianMarkerCluster);
+  }
+}
+
+function filterIndianLabsSearch(query) {
+  if (!query) {
+    displayIndianLabsList(INDIAN_LABS);
+    return;
+  }
+  
+  const filtered = INDIAN_LABS.filter(lab => 
+    lab.name.toLowerCase().includes(query.toLowerCase()) ||
+    lab.location.toLowerCase().includes(query.toLowerCase()) ||
+    lab.category.toLowerCase().includes(query.toLowerCase()) ||
+    lab.description.toLowerCase().includes(query.toLowerCase())
+  );
+  
+  displayIndianLabsList(filtered);
+}
+
+function showLabDetail(labName) {
+  const lab = INDIAN_LABS.find(l => l.name === labName);
+  if (!lab) return;
+  
+  const content = `
+    <div class="detail-header">
+      <h2>${lab.name}</h2>
+      <div class="detail-meta">
+        <span class="tag">${lab.type}</span>
+        <span class="tag">${lab.category}</span>
+        <span class="tag">📍 ${lab.location}</span>
+        ${lab.established ? `<span class="tag">Est. ${lab.established}</span>` : ''}
+        ${lab.employees ? `<span class="tag">👥 ${lab.employees}</span>` : ''}
+        ${lab.budget ? `<span class="tag">💰 ${lab.budget}</span>` : ''}
+      </div>
+    </div>
+    
+    <div class="detail-body">
+      <h3 style="color:#0ff;margin:20px 0 10px">📋 ABOUT</h3>
+      <p style="color:#0f0;line-height:1.8">${lab.description}</p>
+      
+      ${lab.projects ? `
+        <h3 style="color:#0ff;margin:20px 0 10px">🚀 CURRENT PROJECTS</h3>
+        <div class="meta">
+          ${lab.projects.map(p => `<span class="tag">${p}</span>`).join('')}
+        </div>
+      ` : ''}
+      
+      ${lab.achievements ? `
+        <h3 style="color:#0ff;margin:20px 0 10px">🏆 ACHIEVEMENTS</h3>
+        <ul style="color:#0f0;line-height:1.8;margin-left:20px">
+          ${lab.achievements.map(a => `<li>${a}</li>`).join('')}
+        </ul>
+      ` : ''}
+      
+      ${lab.howToJoin ? `
+        <h3 style="color:#0ff;margin:20px 0 10px">💼 HOW TO JOIN</h3>
+        <p style="color:#0f0;line-height:1.8">${lab.howToJoin}</p>
+      ` : ''}
+      
+      <h3 style="color:#0ff;margin:20px 0 10px">🔗 LINKS</h3>
+      <div>
+        ${lab.website ? `<a href="${lab.website}" target="_blank" class="external-link">🌐 Official Website</a>` : ''}
+        ${lab.careers ? `<a href="${lab.careers}" target="_blank" class="external-link">💼 Careers Page</a>` : ''}
+        ${lab.contact ? `<a href="mailto:${lab.contact}" class="external-link">📧 Contact</a>` : ''}
+      </div>
+      
+      <div style="margin-top:30px;padding:20px;background:rgba(0,255,0,0.1);border:2px solid #0f0">
+        <h4 style="color:#0ff;margin-bottom:10px">📍 LOCATION</h4>
+        <p style="color:#0f0">Coordinates: ${lab.lat}, ${lab.lng}</p>
+        <button onclick="zoomToLab(${lab.lat}, ${lab.lng})" class="external-link" style="margin-top:10px">
+          🗺️ VIEW ON MAP
+        </button>
+      </div>
+    </div>
+  `;
+  
+  openModal(content);
+}
+
+function zoomToLab(lat, lng) {
+  closeModal();
+  indianLabsMap.setView([lat, lng], 15, { animate: true });
+  
+  // Scroll to map
+  document.getElementById('indian-labs-panel').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ==================== EXISTING FEATURES ====================
+
 // MODAL SYSTEM
 function openModal(content) {
   const modal = document.getElementById('detail-modal');
@@ -53,7 +631,201 @@ function closeModal() {
   document.body.style.overflow = 'auto';
 }
 
-// HACKER NEWS DETAIL PAGE
+// ESC key to close modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Initialize maps
+function initMaps() {
+  // Global satellite map
+  map = L.map('map').setView([37.0902, -95.7129], 2);
+  
+  // Multiple tile layers
+  const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+    maxZoom: 22,
+    maxNativeZoom: 21,
+    attribution: 'Google Hybrid'
+  });
+  
+  const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+    maxZoom: 22,
+    maxNativeZoom: 21,
+    attribution: 'Google Satellite'
+  });
+  
+  const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 22,
+    maxNativeZoom: 19,
+    attribution: 'ESRI'
+  });
+  
+  const mapboxSatellite = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    maxZoom: 22,
+    maxNativeZoom: 20,
+    attribution: 'Mapbox'
+  });
+  
+  const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 22,
+    maxNativeZoom: 19,
+    attribution: 'OpenStreetMap'
+  });
+  
+  // Add default layer
+  googleHybrid.addTo(map);
+  
+  // Layer control
+  const baseMaps = {
+    "🛰️ Google Hybrid": googleHybrid,
+    "🌍 Google Satellite": googleSatellite,
+    "📡 ESRI Satellite": esriSatellite,
+    "🗺️ Mapbox Satellite": mapboxSatellite,
+    "🗺️ Street Map": streetMap
+  };
+  
+  L.control.layers(baseMaps).addTo(map);
+  
+  // Marker cluster
+  markerCluster = L.markerClusterGroup({
+    maxClusterRadius: 50,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false
+  });
+  
+  map.addLayer(markerCluster);
+  
+  // Add locations
+  if (typeof SECRET_LOCATIONS !== 'undefined') {
+    SECRET_LOCATIONS.forEach(loc => {
+      const color = loc.classification === 'TOP SECRET' ? 'red' :
+                    loc.classification === 'SECRET' ? 'orange' : 'yellow';
+      
+      const icon = L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="background:${color};width:30px;height:30px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px ${color}"></div>`,
+        iconSize: [30, 30]
+      });
+      
+      const marker = L.marker([loc.lat, loc.lng], { icon })
+        .bindPopup(`
+          <div style="color:#000;min-width:250px">
+            <h3 style="margin-bottom:10px">${loc.name}</h3>
+            <p><strong>Location:</strong> ${loc.location}</p>
+            <p><strong>Classification:</strong> ${loc.classification}</p>
+            <p><strong>Type:</strong> ${loc.type}</p>
+            <button onclick="map.setView([${loc.lat}, ${loc.lng}], 20, {animate:true})" 
+                    style="margin-top:10px;padding:8px 15px;background:#0f0;border:none;cursor:pointer;font-weight:bold">
+              🔍 ZOOM TO ULTRA HD
+            </button>
+          </div>
+        `);
+      
+      markerCluster.addLayer(marker);
+      markers.push(marker);
+    });
+  }
+  
+  // Zoom info
+  map.on('zoomend', () => {
+    const zoom = map.getZoom();
+    document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | Max: 22 (ULTRA HD)`;
+    
+    if (zoom >= 18) {
+      console.log(`🛰️ ULTRA HD MODE: Zoom ${zoom}`);
+    }
+  });
+  
+  // Search functionality
+  document.getElementById('lab-search').addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    
+    if (!query) {
+      markerCluster.clearLayers();
+      markers.forEach(m => markerCluster.addLayer(m));
+      return;
+    }
+    
+    markerCluster.clearLayers();
+    
+    if (typeof SECRET_LOCATIONS !== 'undefined') {
+      SECRET_LOCATIONS.forEach((loc, index) => {
+        if (loc.name.toLowerCase().includes(query) || 
+            loc.location.toLowerCase().includes(query)) {
+          markerCluster.addLayer(markers[index]);
+        }
+      });
+    }
+  });
+}
+
+// Load all data
+async function loadAllData() {
+  await Promise.all([
+    loadHackerNews(),
+    loadReddit(),
+    loadGitHub(),
+    loadResearch()
+  ]);
+  
+  updateStats();
+  document.getElementById('last-update').textContent = 
+    `Last Updated: ${new Date().toLocaleString()}`;
+}
+
+// Load Hacker News
+async function loadHackerNews() {
+  try {
+    const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+    const storyIds = await response.json();
+    
+    const stories = await Promise.all(
+      storyIds.slice(0, 100).map(async id => {
+        const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+        return res.json();
+      })
+    );
+    
+    allNews = stories.filter(s => s && s.title);
+    displayNews(allNews);
+  } catch (error) {
+    console.error('Error loading Hacker News:', error);
+  }
+}
+
+// Display news
+function displayNews(news) {
+  const container = document.getElementById('news-container');
+  
+  container.innerHTML = news.map(story => `
+    <div class="item clickable" onclick="showNewsDetail(${story.id}, '${story.title.replace(/'/g, "\\'")}', '${story.url || ''}', ${story.score}, ${story.descendants || 0}, '${story.by}', ${story.time})">
+      <h3>${story.title}</h3>
+      <div class="meta">
+        <span class="tag">⬆ ${story.score} points</span>
+        <span class="tag">💬 ${story.descendants || 0} comments</span>
+        <span class="tag">by ${story.by}</span>
+      </div>
+      <div class="timestamp">${new Date(story.time * 1000).toLocaleString()}</div>
+      <div class="click-hint">👆 Click to read comments</div>
+    </div>
+  `).join('');
+}
+
+// Filter news
+function filterNews(query) {
+  if (!query) {
+    displayNews(allNews);
+    return;
+  }
+  
+  const filtered = allNews.filter(story => 
+    story.title.toLowerCase().includes(query.toLowerCase())
+  );
+  
+  displayNews(filtered);
+}
+
+// Show news detail
 async function showNewsDetail(storyId, title, url, score, comments, by, time) {
   const content = `
     <div class="detail-header">
@@ -98,794 +870,223 @@ async function showNewsDetail(storyId, title, url, score, comments, by, time) {
       const commentsHtml = validComments.map(comment => `
         <div class="comment">
           <div class="comment-meta">
-            <strong style="color:#0ff">${comment.by}</strong>
-            <span style="color:#0a0;margin-left:10px">${new Date(comment.time * 1000).toLocaleString()}</span>
+            <strong>${comment.by}</strong> • ${new Date(comment.time * 1000).toLocaleString()}
           </div>
           <div class="comment-text">${comment.text}</div>
         </div>
       `).join('');
       
       document.getElementById('comments-container').innerHTML = 
-        commentsHtml || '<p style="color:#0a0">No comments yet</p>';
+        commentsHtml || '<p style="color:#0a0">No comments yet.</p>';
     } else {
       document.getElementById('comments-container').innerHTML = 
-        '<p style="color:#0a0">No comments yet</p>';
+        '<p style="color:#0a0">No comments yet.</p>';
     }
   } catch (error) {
-    console.error('Comments error:', error);
     document.getElementById('comments-container').innerHTML = 
-      '<p style="color:#f00">Error loading comments</p>';
+      '<p style="color:#f00">Error loading comments.</p>';
   }
 }
 
-// GITHUB DETAIL PAGE
-async function showGitHubDetail(repo) {
-  const content = `
-    <div class="detail-header">
-      <h2>${repo.full_name}</h2>
-      <div class="detail-meta">
-        <span class="tag">${repo.language || 'Unknown'}</span>
-        <span class="tag">⭐ ${repo.stargazers_count.toLocaleString()}</span>
-        <span class="tag">🍴 ${repo.forks_count.toLocaleString()}</span>
-        <span class="tag">👁️ ${repo.watchers_count.toLocaleString()}</span>
-      </div>
-      <p style="color:#0f0;margin:15px 0">${repo.description || 'No description'}</p>
-      <a href="${repo.html_url}" target="_blank" class="external-link">🔗 View on GitHub →</a>
-    </div>
-    
-    <div class="detail-body">
-      <h3 style="color:#0ff;margin:20px 0 10px">📁 REPOSITORY FILES (Loading...)</h3>
-      <div id="files-container">
-        <div class="loading">⏳ Loading files...</div>
-      </div>
-      
-      <h3 style="color:#0ff;margin:30px 0 10px">📊 RECENT COMMITS (Loading...)</h3>
-      <div id="commits-container">
-        <div class="loading">⏳ Loading commits...</div>
-      </div>
-    </div>
-  `;
+// Load Reddit
+async function loadReddit() {
+  const subreddits = [
+    'programming', 'technology', 'artificial', 'MachineLearning',
+    'datascience', 'cybersecurity', 'webdev', 'learnprogramming',
+    'cscareerquestions', 'startups'
+  ];
   
-  openModal(content);
-  
-  // Load files
   try {
-    const filesRes = await fetch(`https://api.github.com/repos/${repo.full_name}/contents`);
-    const files = await filesRes.json();
+    const promises = subreddits.map(sub => 
+      fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=5`)
+        .then(r => r.json())
+        .catch(() => null)
+    );
     
-    const filesHtml = files.slice(0, 20).map(file => `
-      <div class="file-item">
-        <span style="color:#0ff">${file.type === 'dir' ? '📁' : '📄'}</span>
-        <span style="color:#0f0;margin-left:10px">${file.name}</span>
-        <span style="color:#0a0;margin-left:10px;font-size:0.85em">${(file.size / 1024).toFixed(1)} KB</span>
-      </div>
-    `).join('');
+    const results = await Promise.all(promises);
     
-    document.getElementById('files-container').innerHTML = filesHtml;
+    allReddit = results
+      .filter(r => r && r.data && r.data.children)
+      .flatMap(r => r.data.children.map(c => c.data))
+      .sort((a, b) => b.score - a.score);
+    
+    displayReddit(allReddit);
   } catch (error) {
-    console.error('Files error:', error);
-    document.getElementById('files-container').innerHTML = 
-      '<p style="color:#f00">Error loading files</p>';
-  }
-  
-  // Load commits
-  try {
-    const commitsRes = await fetch(`https://api.github.com/repos/${repo.full_name}/commits?per_page=10`);
-    const commits = await commitsRes.json();
-    
-    const commitsHtml = commits.map(commit => `
-      <div class="commit-item">
-        <div class="commit-message">${commit.commit.message.split('\n')[0]}</div>
-        <div class="commit-meta">
-          <strong style="color:#0ff">${commit.commit.author.name}</strong>
-          <span style="color:#0a0;margin-left:10px">${new Date(commit.commit.author.date).toLocaleString()}</span>
-          <span style="color:#ff0;margin-left:10px">${commit.sha.substring(0, 7)}</span>
-        </div>
-      </div>
-    `).join('');
-    
-    document.getElementById('commits-container').innerHTML = commitsHtml;
-  } catch (error) {
-    console.error('Commits error:', error);
-    document.getElementById('commits-container').innerHTML = 
-      '<p style="color:#f00">Error loading commits</p>';
+    console.error('Error loading Reddit:', error);
   }
 }
 
-// ARXIV DETAIL PAGE
-function showResearchDetail(paper) {
-  const content = `
-    <div class="detail-header">
-      <h2>${paper.title}</h2>
-      <div class="detail-meta">
-        <span class="tag">${paper.category}</span>
-        <span class="tag">👥 ${paper.authors.split(',').length} authors</span>
-        <span class="tag">${new Date(paper.published).toLocaleDateString()}</span>
-      </div>
-      <a href="${paper.link}" target="_blank" class="external-link">🔗 View on ArXiv →</a>
-      <a href="${paper.link.replace('abs', 'pdf')}" target="_blank" class="external-link">📄 Download PDF →</a>
-    </div>
-    
-    <div class="detail-body">
-      <h3 style="color:#0ff;margin:20px 0 10px">👥 AUTHORS</h3>
-      <p style="color:#0f0">${paper.authors}</p>
-      
-      <h3 style="color:#0ff;margin:20px 0 10px">📋 ABSTRACT</h3>
-      <p style="color:#0f0;line-height:1.8">${paper.summary}...</p>
-      
-      <h3 style="color:#0ff;margin:20px 0 10px">📄 PDF VIEWER</h3>
-      <iframe src="${paper.link.replace('abs', 'pdf')}" 
-              style="width:100%;height:600px;border:2px solid #0f0;background:#000"
-              title="PDF Viewer"></iframe>
-    </div>
-  `;
+// Display Reddit
+function displayReddit(posts) {
+  const container = document.getElementById('reddit-container');
   
-  openModal(content);
-}
-
-// REDDIT DETAIL PAGE
-async function showRedditDetail(post) {
-  const content = `
-    <div class="detail-header">
-      <h2>${post.title}</h2>
-      <div class="detail-meta">
+  container.innerHTML = posts.map(post => `
+    <div class="item">
+      <h3>${post.title}</h3>
+      <div class="meta">
         <span class="tag">r/${post.subreddit}</span>
         <span class="tag">⬆ ${post.score}</span>
-        <span class="tag">💬 ${post.comments}</span>
-        <span class="tag">u/${post.author}</span>
+        <span class="tag">💬 ${post.num_comments}</span>
+        <span class="tag">by u/${post.author}</span>
       </div>
-      <a href="${post.url}" target="_blank" class="external-link">🔗 View on Reddit →</a>
+      ${post.selftext ? `<p>${post.selftext.substring(0, 200)}...</p>` : ''}
+      <a href="https://reddit.com${post.permalink}" target="_blank" class="external-link">
+        Read on Reddit →
+      </a>
     </div>
-    
-    <div class="detail-body">
-      <h3 style="color:#0ff;margin:20px 0 10px">💬 TOP COMMENTS (Loading...)</h3>
-      <div id="reddit-comments-container">
-        <div class="loading">⏳ Loading comments...</div>
-      </div>
-    </div>
-  `;
-  
-  openModal(content);
-  
-  // Load comments
+  `).join('');
+}
+
+// Load GitHub
+async function loadGitHub() {
   try {
-    const commentsRes = await fetch(`${post.url}.json`);
-    const data = await commentsRes.json();
+    const response = await fetch('https://api.github.com/search/repositories?q=stars:>10000&sort=stars&order=desc&per_page=50');
+    const data = await response.json();
     
-    if (data[1] && data[1].data && data[1].data.children) {
-      const comments = data[1].data.children
-        .filter(c => c.data.body)
-        .slice(0, 15);
-      
-      const commentsHtml = comments.map(comment => `
-        <div class="comment">
-          <div class="comment-meta">
-            <strong style="color:#0ff">u/${comment.data.author}</strong>
-            <span style="color:#0a0;margin-left:10px">⬆ ${comment.data.score}</span>
-            <span style="color:#0a0;margin-left:10px">${new Date(comment.data.created_utc * 1000).toLocaleString()}</span>
-          </div>
-          <div class="comment-text">${comment.data.body}</div>
-        </div>
-      `).join('');
-      
-      document.getElementById('reddit-comments-container').innerHTML = 
-        commentsHtml || '<p style="color:#0a0">No comments yet</p>';
-    } else {
-      document.getElementById('reddit-comments-container').innerHTML = 
-        '<p style="color:#0a0">No comments yet</p>';
-    }
+    allGitHub = data.items || [];
+    displayGitHub(allGitHub);
   } catch (error) {
-    console.error('Reddit comments error:', error);
-    document.getElementById('reddit-comments-container').innerHTML = 
-      '<p style="color:#f00">Error loading comments</p>';
+    console.error('Error loading GitHub:', error);
   }
 }
 
-// LOADING INDICATOR
-function showLoading(containerId) {
-  const container = document.getElementById(containerId);
-  const loadingDiv = document.createElement('div');
-  loadingDiv.className = 'loading';
-  loadingDiv.innerHTML = '⏳ Loading fresh data...';
-  container.appendChild(loadingDiv);
+// Display GitHub
+function displayGitHub(repos) {
+  const container = document.getElementById('github-container');
+  
+  container.innerHTML = repos.map(repo => `
+    <div class="item">
+      <h3>${repo.full_name}</h3>
+      <div class="meta">
+        <span class="tag">⭐ ${repo.stargazers_count.toLocaleString()}</span>
+        <span class="tag">🔱 ${repo.forks_count.toLocaleString()}</span>
+        <span class="tag">${repo.language || 'Unknown'}</span>
+      </div>
+      <p>${repo.description || 'No description'}</p>
+      <a href="${repo.html_url}" target="_blank" class="external-link">
+        View on GitHub →
+      </a>
+    </div>
+  `).join('');
 }
 
-function hideLoading(containerId) {
-  const container = document.getElementById(containerId);
-  const loading = container.querySelector('.loading');
-  if (loading) loading.remove();
+// Load Research
+async function loadResearch() {
+  try {
+    const categories = ['cs.AI', 'cs.LG', 'cs.CL', 'cs.CV'];
+    const promises = categories.map(cat =>
+      fetch(`https://export.arxiv.org/api/query?search_query=cat:${cat}&sortBy=submittedDate&sortOrder=descending&max_results=10`)
+        .then(r => r.text())
+        .catch(() => null)
+    );
+    
+    const results = await Promise.all(promises);
+    
+    allResearch = results
+      .filter(r => r)
+      .flatMap(parseArxiv)
+      .slice(0, 30);
+    
+    displayResearch(allResearch);
+  } catch (error) {
+    console.error('Error loading research:', error);
+  }
 }
 
-// AUTO-UPDATE BREAKTHROUGHS
-async function autoUpdateBreakthroughs() {
-  console.log('🔄 Auto-updating breakthroughs...');
-  displayBreakthroughs();
-  console.log('✅ Breakthroughs updated');
+// Parse ArXiv XML
+function parseArxiv(xml) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml, 'text/xml');
+  const entries = doc.querySelectorAll('entry');
+  
+  return Array.from(entries).map(entry => ({
+    title: entry.querySelector('title')?.textContent?.trim(),
+    summary: entry.querySelector('summary')?.textContent?.trim(),
+    authors: Array.from(entry.querySelectorAll('author name')).map(a => a.textContent),
+    published: entry.querySelector('published')?.textContent,
+    link: entry.querySelector('id')?.textContent,
+    pdfLink: entry.querySelector('link[title="pdf"]')?.getAttribute('href')
+  }));
 }
 
-// BREAKTHROUGHS with expandable details
-function displayBreakthroughs() {
+// Display Research
+function displayResearch(papers) {
+  const container = document.getElementById('research-container');
+  
+  container.innerHTML = papers.map(paper => `
+    <div class="item">
+      <h3>${paper.title}</h3>
+      <div class="meta">
+        <span class="tag">👥 ${paper.authors.slice(0, 3).join(', ')}${paper.authors.length > 3 ? ' et al.' : ''}</span>
+        <span class="tag">📅 ${new Date(paper.published).toLocaleDateString()}</span>
+      </div>
+      <p>${paper.summary?.substring(0, 200)}...</p>
+      <div>
+        <a href="${paper.link}" target="_blank" class="external-link">Read Abstract →</a>
+        ${paper.pdfLink ? `<a href="${paper.pdfLink}" target="_blank" class="external-link">📄 PDF</a>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Update stats
+function updateStats() {
+  document.getElementById('news-count').textContent = allNews.length;
+  document.getElementById('research-count').textContent = allResearch.length;
+  document.getElementById('github-count').textContent = allGitHub.length;
+  document.getElementById('reddit-count').textContent = allReddit.length;
+}
+
+// Toggle panels
+function togglePanel(panelName) {
+  const panel = document.getElementById(`${panelName}-panel`);
+  const btn = event.target;
+  
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    btn.textContent = `HIDE ${panelName.toUpperCase().replace('-', ' ')}`;
+  } else {
+    panel.style.display = 'none';
+    btn.textContent = `SHOW ${panelName.toUpperCase().replace('-', ' ')}`;
+  }
+}
+
+// Setup event listeners
+function setupEventListeners() {
+  // Existing listeners are already set up in init functions
+}
+
+// Load breakthroughs
+async function loadBreakthroughs() {
+  // This would load from your data.js file
+  if (typeof BREAKTHROUGHS !== 'undefined') {
+    displayBreakthroughs(BREAKTHROUGHS);
+  }
+}
+
+function displayBreakthroughs(breakthroughs) {
   const container = document.getElementById('breakthroughs-container');
   
-  container.innerHTML = INTELLIGENCE_DATA.map((item, index) => {
-    const impactLevel = item.impact.startsWith('CRITICAL') ? 'critical' : 
-                       item.impact.startsWith('HIGH') ? 'high' : '';
+  container.innerHTML = breakthroughs.map(item => {
+    const classNames = ['item'];
+    if (item.classification === 'TOP SECRET') classNames.push('critical');
+    else if (item.classification === 'SECRET') classNames.push('high');
     
     return `
-      <div class="item ${impactLevel}" onclick="toggleExpand(${index})">
+      <div class="${classNames.join(' ')}">
         <h3>${item.title}</h3>
-        <p>${item.description}</p>
         <div class="meta">
+          <span class="tag">${item.classification}</span>
           <span class="tag">${item.category}</span>
           <span class="tag">${item.source}</span>
-          <span class="tag">${new Date(item.date).toLocaleDateString()}</span>
         </div>
-        <div class="impact" style="color:#ff0;font-weight:bold;margin-top:8px">${item.impact}</div>
-        <div class="expand-btn">▼ CLICK TO EXPAND FULL INTELLIGENCE REPORT</div>
-        
-        <div class="details" id="details-${index}">
-          <h4 style="color:#0ff;margin:10px 0">📋 EXECUTIVE SUMMARY</h4>
-          <p>${item.deepDive.summary}</p>
-          
-          <h4 style="color:#0ff;margin:15px 0 10px">🔬 TECHNICAL DETAILS</h4>
-          ${item.deepDive.technical.map(t => `<p><strong style="color:#0f0">${t.title}:</strong> ${t.detail}</p>`).join('')}
-          
-          ${item.deepDive.secrets ? `
-            <div class="secret">
-              <h4>🔐 CLASSIFIED/HIDDEN INFORMATION</h4>
-              ${item.deepDive.secrets.map(s => `<p><strong>• ${s.title}:</strong> ${s.detail}</p>`).join('')}
-            </div>
-          ` : ''}
-          
-          ${item.deepDive.urgent ? `
-            <div class="urgent">
-              <h4>⚠️ URGENT CONCERNS & ACTION ITEMS</h4>
-              ${item.deepDive.urgent.map(u => `<p><strong>• ${u.title}:</strong> ${u.detail}</p>`).join('')}
-            </div>
-          ` : ''}
-          
-          <h4 style="color:#0ff;margin:15px 0 10px">✅ PROOF & VERIFICATION</h4>
-          ${item.deepDive.proofs.map(p => `
-            <div class="proof">
-              <strong style="color:#ff0">${p.type}:</strong> ${p.detail}
-              <br><a href="${p.url}" target="_blank" style="color:#0ff">View Source →</a>
-            </div>
-          `).join('')}
-          
-          <h4 style="color:#0ff;margin:15px 0 10px">📅 TIMELINE</h4>
-          ${item.deepDive.timeline.map(t => `<p><strong style="color:#0ff">${t.date}:</strong> ${t.event}</p>`).join('')}
-          
-          <h4 style="color:#0ff;margin:15px 0 10px">🎯 IMPLICATIONS</h4>
-          <ul style="margin-left:20px">
-            ${item.deepDive.implications.map(i => `<li>${i}</li>`).join('')}
-          </ul>
-          
-          <h4 style="color:#0ff;margin:15px 0 10px">🔗 OFFICIAL SOURCES</h4>
-          <ul style="margin-left:20px">
-            ${item.deepDive.sources.map(s => `<li><a href="${s.url}" target="_blank" style="color:#0ff">${s.name}</a></li>`).join('')}
-          </ul>
-        </div>
+        <p>${item.description}</p>
+        ${item.impact ? `<div class="impact">⚡ IMPACT: ${item.impact}</div>` : ''}
+        <div class="timestamp">${item.date}</div>
       </div>
     `;
   }).join('');
 }
 
-function toggleExpand(index) {
-  const item = document.getElementById(`details-${index}`).parentElement;
-  item.classList.toggle('expanded');
-}
-
-// ENHANCED HACKER NEWS - 100+ STORIES
-async function loadNews() {
-  if (isLoading) return;
-  isLoading = true;
-  
-  try {
-    showLoading('news-container');
-    console.log('📰 Loading Hacker News (100+ stories)...');
-    
-    const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-    const storyIds = await response.json();
-    
-    const stories = await Promise.all(
-      storyIds.slice(0, 100).map(async id => {
-        try {
-          const storyRes = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
-          return storyRes.json();
-        } catch (e) {
-          console.error('Story fetch error:', e);
-          return null;
-        }
-      })
-    );
-    
-    allNews = stories.filter(s => s && s.title).map(story => ({
-      id: story.id,
-      title: story.title,
-      url: story.url || `https://news.ycombinator.com/item?id=${story.id}`,
-      source: 'Hacker News',
-      score: story.score,
-      comments: story.descendants || 0,
-      time: story.time,
-      by: story.by
-    }));
-    
-    hideLoading('news-container');
-    displayNews(allNews);
-    document.getElementById('news-count').textContent = allNews.length;
-    console.log(`✅ Loaded ${allNews.length} news stories`);
-  } catch (error) {
-    console.error('News error:', error);
-    hideLoading('news-container');
-    document.getElementById('news-container').innerHTML = 
-      '<div class="item"><p style="color:#f00">⚠️ Error loading news. Retrying in 30 seconds...</p></div>';
-    setTimeout(loadNews, 30000);
-  } finally {
-    isLoading = false;
-  }
-}
-
-function displayNews(news) {
-  const container = document.getElementById('news-container');
-  if (!news || news.length === 0) {
-    container.innerHTML = '<div class="item"><p>No news available</p></div>';
-    return;
-  }
-  
-  container.innerHTML = news.map((item, index) => `
-    <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both" 
-         onclick='showNewsDetail(${item.id}, ${JSON.stringify(item.title)}, ${JSON.stringify(item.url)}, ${item.score}, ${item.comments}, ${JSON.stringify(item.by)}, ${item.time})'>
-      <h3>${item.title}</h3>
-      <div>
-        <span class="tag">${item.source}</span>
-        <span class="tag">⬆ ${item.score}</span>
-        <span class="tag">💬 ${item.comments}</span>
-        <span class="tag">by ${item.by}</span>
-      </div>
-      <div class="timestamp">${new Date(item.time * 1000).toLocaleString()}</div>
-      <div class="click-hint">👆 Click to view comments & details</div>
-    </div>
-  `).join('');
-}
-
-function filterNews(query) {
-  if (!query) {
-    displayNews(allNews);
-    return;
-  }
-  const filtered = allNews.filter(item => 
-    item.title.toLowerCase().includes(query.toLowerCase())
-  );
-  displayNews(filtered);
-  document.getElementById('news-count').textContent = filtered.length;
-}
-
-// ENHANCED REDDIT - 50+ POSTS from 10 SUBREDDITS
-async function loadReddit() {
-  try {
-    showLoading('reddit-container');
-    console.log('🕵️ Loading Reddit (50+ posts from 10 subreddits)...');
-    
-    const subreddits = [
-      'technology', 'Futurology', 'artificial', 'spacex', 'programming',
-      'MachineLearning', 'datascience', 'cybersecurity', 'startups', 'gadgets'
-    ];
-    
-    allReddit = [];
-    
-    for (const sub of subreddits) {
-      try {
-        const response = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=10`);
-        const data = await response.json();
-        
-        data.data.children.forEach(post => {
-          allReddit.push({
-            title: post.data.title,
-            url: `https://reddit.com${post.data.permalink}`,
-            score: post.data.score,
-            comments: post.data.num_comments,
-            subreddit: sub,
-            author: post.data.author,
-            created: post.data.created_utc
-          });
-        });
-      } catch (e) {
-        console.error(`Error loading r/${sub}:`, e);
-      }
-    }
-    
-    allReddit.sort((a, b) => b.score - a.score);
-    
-    hideLoading('reddit-container');
-    document.getElementById('reddit-container').innerHTML = allReddit.map((post, index) => `
-      <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both"
-           onclick='showRedditDetail(${JSON.stringify(post)})'>
-        <h3>${post.title}</h3>
-        <div>
-          <span class="tag">r/${post.subreddit}</span>
-          <span class="tag">⬆ ${post.score}</span>
-          <span class="tag">💬 ${post.comments}</span>
-          <span class="tag">u/${post.author}</span>
-        </div>
-        <div class="timestamp">${new Date(post.created * 1000).toLocaleString()}</div>
-        <div class="click-hint">👆 Click to view thread & comments</div>
-      </div>
-    `).join('');
-    
-    document.getElementById('reddit-count').textContent = allReddit.length;
-    console.log(`✅ Loaded ${allReddit.length} Reddit posts`);
-  } catch (error) {
-    console.error('Reddit error:', error);
-    hideLoading('reddit-container');
-  }
-}
-
-// ENHANCED GITHUB - 50+ REPOS
-async function loadGitHub() {
-  try {
-    showLoading('github-container');
-    console.log('💻 Loading GitHub (50+ trending repos)...');
-    
-    const queries = [
-      'stars:>1000 created:>2024-01-01',
-      'stars:>5000 pushed:>2024-01-01',
-      'stars:>10000'
-    ];
-    
-    allGitHub = [];
-    
-    for (const query of queries) {
-      try {
-        const response = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=20`);
-        const data = await response.json();
-        
-        if (data.items) {
-          data.items.forEach(repo => {
-            if (!allGitHub.find(r => r.id === repo.id)) {
-              allGitHub.push(repo);
-            }
-          });
-        }
-      } catch (e) {
-        console.error('GitHub query error:', e);
-      }
-    }
-    
-    hideLoading('github-container');
-    document.getElementById('github-container').innerHTML = allGitHub.slice(0, 50).map((repo, index) => `
-      <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both"
-           onclick='showGitHubDetail(${JSON.stringify(repo)})'>
-        <h3>${repo.full_name}</h3>
-        <p>${repo.description || 'No description'}</p>
-        <div>
-          <span class="tag">${repo.language || 'Unknown'}</span>
-          <span class="tag">⭐ ${repo.stargazers_count.toLocaleString()}</span>
-          <span class="tag">🍴 ${repo.forks_count.toLocaleString()}</span>
-          <span class="tag">👁️ ${repo.watchers_count.toLocaleString()}</span>
-        </div>
-        <div class="timestamp">Updated: ${new Date(repo.updated_at).toLocaleString()}</div>
-        <div class="click-hint">👆 Click to browse files & commits</div>
-      </div>
-    `).join('');
-    
-    document.getElementById('github-count').textContent = allGitHub.length;
-    console.log(`✅ Loaded ${allGitHub.length} GitHub repos`);
-  } catch (error) {
-    console.error('GitHub error:', error);
-    hideLoading('github-container');
-  }
-}
-
-// ENHANCED ARXIV - 30+ PAPERS from MULTIPLE CATEGORIES
-async function loadResearch() {
-  try {
-    showLoading('research-container');
-    console.log('🔬 Loading ArXiv (30+ research papers)...');
-    
-    const categories = ['cs.AI', 'cs.LG', 'cs.CV', 'cs.CL', 'cs.RO', 'quant-ph'];
-    allResearch = [];
-    
-    for (const cat of categories) {
-      const url = `https://export.arxiv.org/api/query?search_query=cat:${cat}&sortBy=submittedDate&sortOrder=descending&max_results=10`;
-      try {
-        const response = await fetch(url);
-        const text = await response.text();
-        
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, 'text/xml');
-        const entries = xml.querySelectorAll('entry');
-        
-        entries.forEach(entry => {
-          const title = entry.querySelector('title')?.textContent.trim();
-          const summary = entry.querySelector('summary')?.textContent.trim().substring(0, 300);
-          const published = entry.querySelector('published')?.textContent;
-          const link = entry.querySelector('id')?.textContent;
-          const authors = Array.from(entry.querySelectorAll('author name')).map(a => a.textContent).join(', ');
-          
-          if (title) {
-            allResearch.push({ title, summary, published, link, category: cat, authors });
-          }
-        });
-      } catch (e) {
-        console.error(`ArXiv ${cat} error:`, e);
-      }
-    }
-    
-    hideLoading('research-container');
-    document.getElementById('research-container').innerHTML = allResearch.map((paper, index) => `
-      <div class="item clickable" style="animation: slideIn 0.3s ease ${index * 0.02}s both"
-           onclick='showResearchDetail(${JSON.stringify(paper)})'>
-        <h3>${paper.title}</h3>
-        <p>${paper.summary}...</p>
-        <div>
-          <span class="tag">${paper.category}</span>
-          <span class="tag">👥 ${paper.authors.split(',').length} authors</span>
-        </div>
-        <div class="timestamp">${new Date(paper.published).toLocaleString()}</div>
-        <div class="click-hint">👆 Click to read abstract & view PDF</div>
-      </div>
-    `).join('');
-    
-    document.getElementById('research-count').textContent = allResearch.length;
-    console.log(`✅ Loaded ${allResearch.length} research papers`);
-  } catch (error) {
-    console.error('ArXiv error:', error);
-    hideLoading('research-container');
-  }
-}
-
-// ULTRA HD SATELLITE MAP - ZOOM 22 MAX
-function initMap() {
-  try {
-    map = L.map('map', {
-      center: [20, 0],
-      zoom: 2,
-      maxZoom: 22,
-      minZoom: 2,
-      zoomControl: true,
-      preferCanvas: true
-    });
-    
-    // GOOGLE HYBRID - ULTRA HD (Best quality)
-    const googleHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
-      attribution: 'Map data ©2024 Google',
-      maxZoom: 22,
-      maxNativeZoom: 21,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    }).addTo(map);
-    
-    // GOOGLE SATELLITE - PURE IMAGERY
-    const googleSatellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-      attribution: 'Imagery ©2024 Google',
-      maxZoom: 22,
-      maxNativeZoom: 21,
-      subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    });
-    
-    // ESRI WORLD IMAGERY - HIGH RES
-    const esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles © Esri',
-      maxZoom: 22,
-      maxNativeZoom: 19
-    });
-    
-    // MAPBOX SATELLITE - CRYSTAL CLEAR
-    const mapboxSatellite = L.tileLayer('https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.jpg?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-      attribution: 'Imagery © Mapbox',
-      maxZoom: 22,
-      maxNativeZoom: 20
-    });
-    
-    // STREET MAP
-    const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 22,
-      maxNativeZoom: 19
-    });
-    
-    // LABELS OVERLAY
-    const labels = L.tileLayer('https://mt1.google.com/vt/lyrs=h&x={x}&y={y}&z={z}', {
-      attribution: 'Labels © Google',
-      maxZoom: 22,
-      maxNativeZoom: 21
-    });
-    
-    const baseMaps = {
-      "🛰️ Google Hybrid (ULTRA HD)": googleHybrid,
-      "🌍 Google Satellite (Pure)": googleSatellite,
-      "🗺️ ESRI Satellite": esriSatellite,
-      "📡 Mapbox Satellite": mapboxSatellite,
-      "🗺️ Street Map": streetMap
-    };
-    
-    const overlays = {
-      "🏷️ Labels": labels
-    };
-    
-    L.control.layers(baseMaps, overlays).addTo(map);
-    
-    map.on('zoomend', function() {
-      const zoom = map.getZoom();
-      document.getElementById('zoom-info').textContent = `Zoom: ${zoom} | Max: 22 (ULTRA HD)`;
-      if (zoom >= 18) console.log('🔍 ULTRA HD street-level view active');
-    });
-    
-    markerCluster = L.markerClusterGroup({
-      maxClusterRadius: 50,
-      spiderfyOnMaxZoom: true,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: true
-    });
-    
-    allLocations = [
-      { lat: 37.2431, lng: -115.7930, name: 'Area 51 (Groom Lake)', desc: 'CLASSIFIED - USAF Secret Aircraft Testing Facility. Restricted airspace R-4808N. Home to classified projects including stealth aircraft development.', color: 'red', type: 'classified', keywords: 'area 51 groom lake nevada classified secret' },
-      { lat: 34.6059, lng: -118.0844, name: 'Skunk Works (Palmdale)', desc: 'Lockheed Martin Advanced Development Programs. Developed SR-71 Blackbird, F-117 Nighthawk, F-22 Raptor, F-35 Lightning II.', color: 'red', type: 'classified', keywords: 'skunk works lockheed martin palmdale classified' },
-      { lat: 38.9072, lng: -77.0369, name: 'DARPA HQ (Arlington)', desc: 'Defense Advanced Research Projects Agency. Develops emerging technologies: AI, quantum computing, hypersonics, biotechnology.', color: 'red', type: 'classified', keywords: 'darpa defense research arlington classified' },
-      { lat: 37.4220, lng: -122.0841, name: 'Google X Lab (Mountain View)', desc: 'Moonshot Factory - Secret experimental projects. Self-driving cars (Waymo), Project Loon, smart contact lenses, delivery drones.', color: 'blue', type: 'tech', keywords: 'google x lab mountain view moonshot' },
-      { lat: 37.3318, lng: -122.0312, name: 'Apple Park (Cupertino)', desc: 'Apple Secret R&D Labs. AR/VR headsets, Apple Silicon chips, autonomous vehicle project (Project Titan), health sensors.', color: 'blue', type: 'tech', keywords: 'apple park cupertino secret labs' },
-      { lat: 37.4849, lng: -122.1477, name: 'Meta Reality Labs (Menlo Park)', desc: 'VR/AR/AI Research. Metaverse development, Quest headsets, neural interfaces, haptic gloves, photorealistic avatars.', color: 'blue', type: 'tech', keywords: 'meta reality labs menlo park vr ar' },
-      { lat: 37.7749, lng: -122.4194, name: 'OpenAI HQ (San Francisco)', desc: 'Advanced AI Research. GPT models, DALL-E, AGI research, reinforcement learning, AI safety protocols.', color: 'blue', type: 'tech', keywords: 'openai san francisco gpt ai' },
-      { lat: 51.5290, lng: -0.1308, name: 'DeepMind (London)', desc: 'Google AI Research Lab. AlphaGo, AlphaFold (protein folding), AlphaZero, healthcare AI, energy optimization.', color: 'blue', type: 'tech', keywords: 'deepmind london google ai alphago' },
-      { lat: 47.6062, lng: -122.3321, name: 'Amazon Lab126 (Seattle)', desc: 'Hardware Innovation Lab. Kindle, Echo, Alexa, Ring, Fire TV, drone delivery (Prime Air), cashierless stores.', color: 'blue', type: 'tech', keywords: 'amazon lab126 seattle kindle echo' },
-      { lat: 46.2338, lng: 6.0532, name: 'CERN (Geneva)', desc: 'Large Hadron Collider - World\'s largest particle accelerator. Higgs boson discovery, antimatter research, dark matter studies.', color: 'purple', type: 'research', keywords: 'cern geneva lhc particle physics higgs' },
-      { lat: 28.5729, lng: 80.6490, name: 'Kennedy Space Center', desc: 'NASA Launch Complex. Artemis Moon missions, ISS operations, Mars rover launches, commercial crew program.', color: 'purple', type: 'research', keywords: 'kennedy space center nasa florida launch' },
-      { lat: 25.9970, lng: -97.1551, name: 'SpaceX Starbase (Boca Chica)', desc: 'Starship Development & Testing. Mars colonization vehicle, Super Heavy booster, orbital launches, rapid reusability testing.', color: 'purple', type: 'research', keywords: 'spacex starbase boca chica starship mars' },
-      { lat: 31.5497, lng: -97.1081, name: 'Blue Origin (Texas)', desc: 'New Glenn Rocket Facility. Orbital launch systems, BE-4 engines, lunar lander development, space tourism.', color: 'purple', type: 'research', keywords: 'blue origin texas new glenn rocket' },
-      { lat: 13.0210, lng: 80.2316, name: 'ISRO HQ (Bangalore)', desc: 'Indian Space Research Organisation. Chandrayaan lunar missions, Gaganyaan human spaceflight, Mars Orbiter, satellite launches.', color: 'orange', type: 'research', keywords: 'isro bangalore india space chandrayaan' },
-      { lat: 12.9716, lng: 77.5946, name: 'Bangalore Tech Hub', desc: 'Silicon Valley of India. AI/ML startups, IT services, R&D centers for Google, Microsoft, Amazon, Apple.', color: 'orange', type: 'tech', keywords: 'bangalore india tech hub silicon valley' },
-      { lat: 28.6139, lng: 77.2090, name: 'New Delhi Tech Hub', desc: 'Government AI Labs. National AI strategy, digital India initiatives, cybersecurity research, quantum computing.', color: 'orange', type: 'tech', keywords: 'delhi india government ai labs' },
-      { lat: 39.9817, lng: 116.3106, name: 'Zhongguancun (Beijing)', desc: 'China Silicon Valley - AI Hub. Baidu AI labs, Tencent research, ByteDance (TikTok), facial recognition, social credit systems.', color: 'yellow', type: 'tech', keywords: 'zhongguancun beijing china ai baidu tencent' },
-      { lat: 22.5431, lng: 114.0579, name: 'Huawei R&D (Shenzhen)', desc: '5G/AI Research - 2 sq km campus. 40,000+ engineers, telecommunications, AI chips, autonomous driving, cloud computing.', color: 'yellow', type: 'tech', keywords: 'huawei shenzhen china 5g research' },
-      { lat: 23.0489, lng: 113.7447, name: 'Huawei Ox Horn (Dongguan)', desc: '$1.5B European-themed Research Village. 12 architectural styles, advanced labs, 25,000 employees, secretive projects.', color: 'yellow', type: 'tech', keywords: 'huawei ox horn dongguan china research' },
-      { lat: 55.6983, lng: 37.3594, name: 'Skolkovo (Moscow)', desc: 'Russia Innovation Center. AI research, cybersecurity, biotech, space technology, government-backed tech hub.', color: 'green', type: 'tech', keywords: 'skolkovo moscow russia innovation ai' },
-      { lat: 32.0853, lng: 34.7818, name: 'Unit 8200 (Tel Aviv)', desc: 'Elite Military Intelligence - Cyber warfare unit. NSO Group origins, Pegasus spyware, cybersecurity startups, signal intelligence.', color: 'green', type: 'classified', keywords: 'unit 8200 israel tel aviv cyber intelligence' },
-      { lat: 37.5665, lng: 126.9780, name: 'Samsung AI Lab (Seoul)', desc: 'Semiconductor & AI Research. 3nm chip fabrication, neural processors, Bixby AI, robotics, quantum dot displays.', color: 'green', type: 'tech', keywords: 'samsung seoul korea ai semiconductor' },
-      { lat: 36.0833, lng: 140.0833, name: 'AIST (Tsukuba)', desc: 'Advanced Industrial Science & Technology. Humanoid robots, automation systems, AI research, materials science.', color: 'green', type: 'research', keywords: 'aist tsukuba japan robotics research' },
-      { lat: 35.7804, lng: 139.6590, name: 'RIKEN (Tokyo)', desc: 'Quantum Computing & AI. Fugaku supercomputer (world\'s fastest), quantum algorithms, brain science, genomics.', color: 'green', type: 'research', keywords: 'riken tokyo japan quantum fugaku supercomputer' }
-    ];
-    
-    allLocations.forEach((loc, index) => {
-      const markerColor = loc.color;
-      const markerSize = loc.type === 'classified' ? 12 : 10;
-      
-      const marker = L.circleMarker([loc.lat, loc.lng], {
-        radius: markerSize,
-        fillColor: markerColor,
-        color: '#0f0',
-        weight: 3,
-        opacity: 1,
-        fillOpacity: 0.8
-      });
-      
-      const typeLabel = loc.type === 'classified' ? '🔒 CLASSIFIED' : 
-                       loc.type === 'tech' ? '💻 TECH LAB' : 
-                       '🔬 RESEARCH';
-      
-      marker.bindPopup(`
-        <div style="color:#0f0;background:#000;padding:15px;border:2px solid #0f0;min-width:250px">
-          <b style="color:#ff0;font-size:1.2em">${loc.name}</b><br><br>
-          <span style="color:#0ff;font-weight:bold">${typeLabel}</span><br><br>
-          <span style="color:#0f0;line-height:1.6">${loc.desc}</span><br><br>
-          <span style="color:#0a0;font-size:0.85em">📍 ${loc.lat.toFixed(4)}°N, ${Math.abs(loc.lng).toFixed(4)}°${loc.lng >= 0 ? 'E' : 'W'}</span><br>
-          <button onclick="zoomToLocation(${loc.lat}, ${loc.lng})" style="margin-top:10px;background:#0f0;color:#000;border:none;padding:8px 15px;cursor:pointer;font-weight:bold">
-            🔍 ZOOM TO ULTRA HD
-          </button>
-        </div>
-      `);
-      
-      if (loc.type === 'classified') {
-        marker.on('mouseover', function() {
-          this.setStyle({ fillOpacity: 1, radius: 15, weight: 4 });
-        });
-        marker.on('mouseout', function() {
-          this.setStyle({ fillOpacity: 0.8, radius: 12, weight: 3 });
-        });
-      } else {
-        marker.on('mouseover', function() {
-          this.setStyle({ fillOpacity: 1, radius: 13, weight: 4 });
-        });
-        marker.on('mouseout', function() {
-          this.setStyle({ fillOpacity: 0.8, radius: 10, weight: 3 });
-        });
-      }
-      
-      markerCluster.addLayer(marker);
-      markers.push({ marker, location: loc, index });
-    });
-    
-    map.addLayer(markerCluster);
-    
-    document.getElementById('lab-search').addEventListener('input', function(e) {
-      const query = e.target.value.toLowerCase();
-      
-      if (!query) {
-        map.setView([20, 0], 2);
-        return;
-      }
-      
-      const matches = allLocations.filter(loc => 
-        loc.keywords.includes(query) || 
-        loc.name.toLowerCase().includes(query) ||
-        loc.desc.toLowerCase().includes(query)
-      );
-      
-      if (matches.length > 0) {
-        const firstMatch = matches[0];
-        map.setView([firstMatch.lat, firstMatch.lng], 18);
-        
-        markers.forEach(m => {
-          if (m.location.name === firstMatch.name) {
-            m.marker.openPopup();
-          }
-        });
-      }
-    });
-    
-    console.log('✅ Map initialized with', allLocations.length, 'secret locations');
-    console.log('🛰️ ULTRA HD satellite imagery - Zoom up to level 22!');
-  } catch (error) {
-    console.error('Map error:', error);
-  }
-}
-
-function zoomToLocation(lat, lng) {
-  map.setView([lat, lng], 20, {
-    animate: true,
-    duration: 1.5
-  });
-}
-
-// TOGGLE PANEL FUNCTION - NOW WITH SMOOTH TRANSITIONS
-function togglePanel(panelName) {
-  const panel = document.getElementById(`${panelName}-panel`);
-  const button = event.target;
-  
-  if (panel) {
-    if (panel.style.display === 'none') {
-      panel.style.display = 'block';
-      button.textContent = button.textContent.replace('SHOW', 'HIDE');
-      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      panel.style.display = 'none';
-      button.textContent = button.textContent.replace('HIDE', 'SHOW');
-    }
-  }
-}
-
-async function refreshAll() {
-  console.log('=== REFRESHING ALL DATA ===');
-  const now = new Date();
-  document.getElementById('last-update').textContent = 
-    `Last updated: ${now.toLocaleString()} • Next auto-refresh in 1 minute`;
-  
-  await Promise.all([
-    loadNews(),
-    loadResearch(),
-    loadGitHub(),
-    loadReddit(),
-    autoUpdateBreakthroughs()
-  ]);
-  
-  console.log('=== REFRESH COMPLETE ===');
-}
-
-window.onload = () => {
-  console.log('🚀 Tech Intelligence Hub initializing...');
-  console.log('📊 Loading 100+ news, 50+ Reddit posts, 50+ GitHub repos, 30+ papers');
-  console.log('🛰️ ULTRA HD satellite maps - Zoom level 22 max!');
-  
-  initMatrix();
-  initMap();
-  displayBreakthroughs();
-  refreshAll();
-  
-  setInterval(refreshAll, 60000);
-  
-  console.log('✅ System online - Auto-refresh every 60 seconds');
-  console.log('👆 Click any item to view detailed information!');
-};
-
-// Close modal on ESC key
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
-});
+// Initialize breakthroughs
+setTimeout(loadBreakthroughs, 1000);
