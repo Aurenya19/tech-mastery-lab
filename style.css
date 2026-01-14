@@ -290,6 +290,11 @@ body {
   font-size: var(--font-size-sm);
 }
 
+.btn--active {
+  background: var(--color-primary);
+  box-shadow: var(--shadow-primary);
+}
+
 /* ============================================
    INPUTS
    ============================================ */
@@ -377,6 +382,7 @@ body {
   color: var(--color-secondary);
   display: inline-block;
   transition: all var(--transition-fast);
+  text-decoration: none;
 }
 
 .tag:hover {
@@ -605,6 +611,16 @@ body {
   }
 }
 
+.chat-message--system {
+  border-left-color: var(--color-accent);
+  background: rgba(255, 255, 0, 0.05);
+}
+
+.chat-message--own {
+  border-left-color: var(--color-primary);
+  background: rgba(0, 255, 255, 0.05);
+}
+
 .chat-message__user {
   color: var(--color-primary);
   font-weight: bold;
@@ -685,6 +701,12 @@ body {
   margin-bottom: var(--spacing-lg);
 }
 
+.quiz-question__meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
 .quiz-question__text {
   color: var(--color-primary);
   font-size: var(--font-size-lg);
@@ -706,22 +728,52 @@ body {
   cursor: pointer;
   transition: all var(--transition-base);
   text-align: left;
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
 }
 
-.quiz-option:hover {
+.quiz-option:hover:not(:disabled) {
   background: var(--color-bg-medium);
   border-color: var(--color-primary);
   transform: translateX(5px);
 }
 
+.quiz-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .quiz-option--correct {
   background: rgba(0, 255, 0, 0.2);
   border-color: var(--color-secondary);
+  animation: correctPulse 0.5s ease;
+}
+
+@keyframes correctPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
 }
 
 .quiz-option--incorrect {
   background: rgba(255, 0, 0, 0.2);
   border-color: var(--color-danger);
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .quiz-score-display {
@@ -736,6 +788,11 @@ body {
   color: var(--color-primary);
   font-weight: bold;
   margin: var(--spacing-lg) 0;
+}
+
+.quiz-score__percentage {
+  font-size: var(--font-size-2xl);
+  margin: var(--spacing-md) 0;
 }
 
 /* ============================================
