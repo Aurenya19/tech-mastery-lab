@@ -1,403 +1,358 @@
-// 🌐 TECH COMMUNITIES - CONNECT WITH FELLOW LEARNERS & PROFESSIONALS
+// 🌐 TECH COMMUNITIES - PERMANENT LINKS (NO EXPIRY!)
 
 const communities = {
-  // DISCORD SERVERS
-  discord: [
-    {
-      name: 'Tech Mastery Lab Official',
-      description: 'Our official Discord server! Join for live discussions, study groups, project collaborations.',
-      members: 'New Server',
-      link: 'https://discord.gg/techmastery',
-      topics: ['All Tech Topics', 'Study Groups', 'Career Guidance', 'Project Help'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'Indian Developers Community',
-      description: 'Largest Indian dev community. Daily coding challenges, job postings, tech discussions.',
-      members: '50,000+',
-      link: 'https://discord.gg/indian-devs',
-      topics: ['Web Dev', 'Mobile Dev', 'DSA', 'System Design'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'ISRO & Space Enthusiasts India',
-      description: 'Space tech discussions, ISRO updates, satellite tracking, astronomy.',
-      members: '15,000+',
-      link: 'https://discord.gg/isro-space',
-      topics: ['Space Tech', 'ISRO Missions', 'Astronomy', 'Astrophysics'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'AI/ML India',
-      description: 'Machine learning, deep learning, AI research discussions.',
-      members: '30,000+',
-      link: 'https://discord.gg/aiml-india',
-      topics: ['Machine Learning', 'Deep Learning', 'NLP', 'Computer Vision'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'Cybersecurity India',
-      description: 'Ethical hacking, CTF challenges, security research.',
-      members: '20,000+',
-      link: 'https://discord.gg/cybersec-india',
-      topics: ['Ethical Hacking', 'CTF', 'Bug Bounty', 'Security Research'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'Blockchain India',
-      description: 'Crypto, Web3, smart contracts, DeFi discussions.',
-      members: '25,000+',
-      link: 'https://discord.gg/blockchain-india',
-      topics: ['Blockchain', 'Cryptocurrency', 'Web3', 'Smart Contracts'],
-      language: 'English',
-      active: true
-    }
-  ],
-
-  // TELEGRAM GROUPS
-  telegram: [
-    {
-      name: 'Tech Mastery Lab Chat',
-      description: 'Official Telegram group for quick discussions and updates.',
-      members: 'New Group',
-      link: 'https://t.me/techmasterylab',
-      topics: ['All Tech Topics', 'Quick Help', 'Resource Sharing'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'Indian Coders',
-      description: 'Daily coding problems, interview prep, job alerts.',
-      members: '100,000+',
-      link: 'https://t.me/indiancoders',
-      topics: ['Coding', 'DSA', 'Interview Prep', 'Job Alerts'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'ISRO Updates Official',
-      description: 'Official ISRO mission updates and space news.',
-      members: '200,000+',
-      link: 'https://t.me/isro_official',
-      topics: ['ISRO Missions', 'Space News', 'Launch Updates'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'AI/ML Researchers India',
-      description: 'Research papers, ML projects, AI news.',
-      members: '50,000+',
-      link: 'https://t.me/aiml_india',
-      topics: ['AI Research', 'ML Projects', 'Research Papers'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'Ethical Hackers India',
-      description: 'Bug bounty tips, security tools, CTF announcements.',
-      members: '75,000+',
-      link: 'https://t.me/ethicalhackers_india',
-      topics: ['Bug Bounty', 'Security Tools', 'CTF'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'Web3 India',
-      description: 'Blockchain jobs, crypto news, Web3 projects.',
-      members: '60,000+',
-      link: 'https://t.me/web3_india',
-      topics: ['Web3', 'Crypto', 'Blockchain Jobs'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'IIT JEE Advanced Prep',
-      description: 'JEE preparation, study materials, doubt solving.',
-      members: '150,000+',
-      link: 'https://t.me/iitjee_prep',
-      topics: ['JEE Preparation', 'Study Materials', 'Mock Tests'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'GATE CS/IT Preparation',
-      description: 'GATE exam prep, previous papers, study groups.',
-      members: '120,000+',
-      link: 'https://t.me/gate_csit',
-      topics: ['GATE Prep', 'Previous Papers', 'Study Groups'],
-      language: 'English + Hindi',
-      active: true
-    }
-  ],
-
-  // WHATSAPP GROUPS
-  whatsapp: [
-    {
-      name: 'Tech Mastery Lab WhatsApp',
-      description: 'Official WhatsApp community for daily updates and quick help.',
-      members: 'New Community',
-      link: 'https://chat.whatsapp.com/techmastery',
-      topics: ['Daily Updates', 'Quick Help', 'Resource Sharing'],
-      language: 'English + Hindi',
-      active: true,
-      note: 'Limited to 1024 members per group'
-    },
-    {
-      name: 'Indian Developers Hub',
-      description: 'Web dev, mobile dev, coding discussions.',
-      members: '500+',
-      link: 'https://chat.whatsapp.com/indian-devs',
-      topics: ['Web Development', 'Mobile Apps', 'Coding'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'AI/ML Study Group',
-      description: 'Machine learning projects, study materials.',
-      members: '400+',
-      link: 'https://chat.whatsapp.com/aiml-study',
-      topics: ['Machine Learning', 'Projects', 'Study Materials'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'Cybersecurity Enthusiasts',
-      description: 'Security news, tools, ethical hacking tips.',
-      members: '600+',
-      link: 'https://chat.whatsapp.com/cybersec',
-      topics: ['Security News', 'Tools', 'Ethical Hacking'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
-      name: 'Space Tech India',
-      description: 'ISRO updates, space news, astronomy.',
-      members: '800+',
-      link: 'https://chat.whatsapp.com/space-india',
-      topics: ['ISRO', 'Space News', 'Astronomy'],
-      language: 'English + Hindi',
-      active: true
-    }
-  ],
-
-  // LINKEDIN GROUPS
-  linkedin: [
-    {
-      name: 'Indian Tech Professionals',
-      description: 'Professional networking, job opportunities, industry insights.',
-      members: '500,000+',
-      link: 'https://www.linkedin.com/groups/indian-tech-professionals',
-      topics: ['Networking', 'Jobs', 'Industry News'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'ISRO & Space Technology India',
-      description: 'Space industry professionals, ISRO careers, aerospace engineering.',
-      members: '100,000+',
-      link: 'https://www.linkedin.com/groups/isro-space-india',
-      topics: ['Space Industry', 'ISRO Careers', 'Aerospace'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'AI & Machine Learning India',
-      description: 'AI professionals, ML engineers, data scientists.',
-      members: '300,000+',
-      link: 'https://www.linkedin.com/groups/ai-ml-india',
-      topics: ['AI Jobs', 'ML Engineering', 'Data Science'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'Cybersecurity Professionals India',
-      description: 'Security experts, ethical hackers, security analysts.',
-      members: '200,000+',
-      link: 'https://www.linkedin.com/groups/cybersec-india',
-      topics: ['Security Jobs', 'Certifications', 'Industry Trends'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'IIT Alumni Network',
-      description: 'IIT graduates, networking, mentorship.',
-      members: '400,000+',
-      link: 'https://www.linkedin.com/groups/iit-alumni',
-      topics: ['Alumni Network', 'Mentorship', 'Career Growth'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'Blockchain & Web3 India',
-      description: 'Blockchain developers, crypto professionals, Web3 builders.',
-      members: '150,000+',
-      link: 'https://www.linkedin.com/groups/blockchain-india',
-      topics: ['Blockchain Jobs', 'Web3', 'Crypto Industry'],
-      language: 'English',
-      active: true
-    }
-  ],
-
-  // REDDIT COMMUNITIES
+  // REDDIT COMMUNITIES (NEVER EXPIRE!)
   reddit: [
     {
-      name: 'r/IndianTech',
-      description: 'Indian tech industry discussions, news, careers.',
-      members: '50,000+',
-      link: 'https://www.reddit.com/r/IndianTech',
-      topics: ['Tech Industry', 'Careers', 'News'],
+      name: 'r/programming',
+      description: 'General programming discussions, news, and resources. 6M+ members.',
+      members: '6,000,000+',
+      link: 'https://reddit.com/r/programming',
+      topics: ['Programming', 'Software Development', 'Tech News'],
       language: 'English',
       active: true
     },
     {
-      name: 'r/ISRO',
-      description: 'ISRO missions, space technology, Indian space program.',
-      members: '100,000+',
-      link: 'https://www.reddit.com/r/ISRO',
-      topics: ['ISRO Missions', 'Space Tech', 'Launch Updates'],
+      name: 'r/learnprogramming',
+      description: 'Best place to learn coding. Beginner-friendly, active community.',
+      members: '4,500,000+',
+      link: 'https://reddit.com/r/learnprogramming',
+      topics: ['Learning', 'Tutorials', 'Beginner Help', 'Career Advice'],
       language: 'English',
       active: true
     },
     {
       name: 'r/developersIndia',
-      description: 'Indian developers community, coding, career advice.',
-      members: '200,000+',
-      link: 'https://www.reddit.com/r/developersIndia',
-      topics: ['Coding', 'Career Advice', 'Tech Discussions'],
+      description: 'Indian developers community. Jobs, salaries, career advice.',
+      members: '300,000+',
+      link: 'https://reddit.com/r/developersIndia',
+      topics: ['Indian Tech', 'Jobs', 'Salaries', 'Career'],
+      language: 'English + Hindi',
+      active: true
+    },
+    {
+      name: 'r/MachineLearning',
+      description: 'ML research, papers, projects. Cutting-edge AI discussions.',
+      members: '2,800,000+',
+      link: 'https://reddit.com/r/MachineLearning',
+      topics: ['Machine Learning', 'AI Research', 'Deep Learning'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'r/ISRO',
+      description: 'ISRO missions, Indian space program, launch discussions.',
+      members: '100,000+',
+      link: 'https://reddit.com/r/ISRO',
+      topics: ['ISRO', 'Space Tech', 'Indian Space Program'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'r/webdev',
+      description: 'Web development - frontend, backend, full-stack.',
+      members: '2,000,000+',
+      link: 'https://reddit.com/r/webdev',
+      topics: ['Web Development', 'JavaScript', 'React', 'Node.js'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'r/cscareerquestions',
+      description: 'CS career advice, interviews, job search, salaries.',
+      members: '1,500,000+',
+      link: 'https://reddit.com/r/cscareerquestions',
+      topics: ['Career', 'Interviews', 'Job Search', 'Salaries'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'r/cybersecurity',
+      description: 'Cybersecurity news, ethical hacking, security research.',
+      members: '800,000+',
+      link: 'https://reddit.com/r/cybersecurity',
+      topics: ['Cybersecurity', 'Ethical Hacking', 'Security'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'r/CryptoCurrency',
+      description: 'Crypto news, blockchain tech, trading discussions.',
+      members: '7,000,000+',
+      link: 'https://reddit.com/r/CryptoCurrency',
+      topics: ['Cryptocurrency', 'Blockchain', 'Web3'],
       language: 'English',
       active: true
     },
     {
       name: 'r/IndianGaming',
-      description: 'Gaming tech, hardware, game development.',
-      members: '300,000+',
-      link: 'https://www.reddit.com/r/IndianGaming',
-      topics: ['Gaming', 'Hardware', 'Game Dev'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'r/Indian_Academia',
-      description: 'Academic discussions, research, higher education.',
-      members: '150,000+',
-      link: 'https://www.reddit.com/r/Indian_Academia',
-      topics: ['Research', 'Higher Education', 'Academic Careers'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'r/CyberSecurityIndia',
-      description: 'Cybersecurity news, ethical hacking, security research.',
-      members: '25,000+',
-      link: 'https://www.reddit.com/r/CyberSecurityIndia',
-      topics: ['Security News', 'Ethical Hacking', 'Research'],
-      language: 'English',
-      active: true
-    },
-    {
-      name: 'r/IndiaInvestments',
-      description: 'Tech stocks, crypto, blockchain investments.',
-      members: '400,000+',
-      link: 'https://www.reddit.com/r/IndiaInvestments',
-      topics: ['Tech Stocks', 'Crypto', 'Investments'],
-      language: 'English',
+      description: 'Indian gaming community, game dev, esports.',
+      members: '500,000+',
+      link: 'https://reddit.com/r/IndianGaming',
+      topics: ['Gaming', 'Game Development', 'Esports'],
+      language: 'English + Hindi',
       active: true
     }
   ],
 
-  // YOUTUBE CHANNELS (Educational Communities)
+  // YOUTUBE CHANNELS (PERMANENT!)
   youtube: [
     {
-      name: 'Tech Mastery Lab',
-      description: 'Our official YouTube channel - tutorials, project walkthroughs, tech news.',
-      subscribers: 'New Channel',
-      link: 'https://youtube.com/@techmastery',
-      topics: ['Tutorials', 'Projects', 'Tech News'],
-      language: 'English + Hindi',
-      active: true
-    },
-    {
       name: 'CodeWithHarry',
-      description: 'Programming tutorials in Hindi, web development, Python.',
-      subscribers: '5M+',
+      description: 'Best Hindi programming tutorials. Web dev, Python, DSA.',
+      members: '5,000,000+',
       link: 'https://youtube.com/@CodeWithHarry',
-      topics: ['Programming', 'Web Dev', 'Python'],
+      topics: ['Web Dev', 'Python', 'DSA', 'Hindi Tutorials'],
       language: 'Hindi',
       active: true
     },
     {
       name: 'Apna College',
-      description: 'DSA, placement preparation, coding tutorials.',
-      subscribers: '4M+',
+      description: 'Complete courses in Hindi. Placement preparation.',
+      members: '4,500,000+',
       link: 'https://youtube.com/@ApnaCollegeOfficial',
-      topics: ['DSA', 'Placements', 'Coding'],
+      topics: ['DSA', 'Placements', 'Web Dev', 'Hindi'],
       language: 'Hindi',
       active: true
     },
     {
-      name: 'Tanay Pratap',
-      description: 'Web development, career guidance, tech industry insights.',
-      subscribers: '500K+',
-      link: 'https://youtube.com/@tanaypratap',
-      topics: ['Web Dev', 'Career', 'Industry Insights'],
+      name: 'freeCodeCamp',
+      description: 'Free full-length courses. Best for beginners.',
+      members: '9,000,000+',
+      link: 'https://youtube.com/@freecodecamp',
+      topics: ['All Tech Topics', 'Full Courses', 'Tutorials'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Fireship',
+      description: 'Quick tech tutorials in 100 seconds. Modern web dev.',
+      members: '3,000,000+',
+      link: 'https://youtube.com/@Fireship',
+      topics: ['Web Dev', 'Quick Tutorials', 'Tech News'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Tech With Tim',
+      description: 'Python, ML, game dev tutorials.',
+      members: '1,500,000+',
+      link: 'https://youtube.com/@TechWithTim',
+      topics: ['Python', 'Machine Learning', 'Game Dev'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Traversy Media',
+      description: 'Web development crash courses and projects.',
+      members: '2,200,000+',
+      link: 'https://youtube.com/@TraversyMedia',
+      topics: ['Web Dev', 'JavaScript', 'Full Stack'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'The Net Ninja',
+      description: 'Modern web dev tutorials. React, Vue, Node.',
+      members: '1,200,000+',
+      link: 'https://youtube.com/@NetNinja',
+      topics: ['Web Dev', 'React', 'Vue', 'Node.js'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Kunal Kushwaha',
+      description: 'DSA, DevOps, open source in Hindi/English.',
+      members: '500,000+',
+      link: 'https://youtube.com/@KunalKushwaha',
+      topics: ['DSA', 'DevOps', 'Open Source', 'Hindi'],
+      language: 'Hindi + English',
+      active: true
+    },
+    {
+      name: 'ISRO Official',
+      description: 'Official ISRO channel. Launch live streams, missions.',
+      members: '3,000,000+',
+      link: 'https://youtube.com/@ISROofficial',
+      topics: ['ISRO', 'Space Missions', 'Launches'],
       language: 'English + Hindi',
       active: true
-    }
-  ],
-
-  // GITHUB ORGANIZATIONS
-  github: [
-    {
-      name: 'Tech Mastery Lab',
-      description: 'Our official GitHub org - open source projects, learning resources.',
-      members: 'New Org',
-      link: 'https://github.com/tech-mastery-lab',
-      topics: ['Open Source', 'Learning Resources', 'Projects'],
-      language: 'All Languages',
-      active: true
     },
     {
-      name: 'Indian Open Source',
-      description: 'Indian open source projects and contributors.',
-      members: '10,000+',
-      link: 'https://github.com/indian-opensource',
-      topics: ['Open Source', 'Indian Projects', 'Contributions'],
-      language: 'All Languages',
+      name: 'Two Minute Papers',
+      description: 'Latest AI/ML research explained simply.',
+      members: '1,500,000+',
+      link: 'https://youtube.com/@TwoMinutePapers',
+      topics: ['AI Research', 'ML Papers', 'Tech Breakthroughs'],
+      language: 'English',
       active: true
     }
   ],
 
-  // FORUMS & WEBSITES
-  forums: [
+  // LINKEDIN GROUPS (PERMANENT!)
+  linkedin: [
     {
-      name: 'GeeksforGeeks Discuss',
-      description: 'Coding problems, interview prep, tech discussions.',
-      members: '1M+',
-      link: 'https://www.geeksforgeeks.org/discuss',
-      topics: ['Coding', 'Interview Prep', 'DSA'],
+      name: 'Indian Developers Community',
+      description: 'Professional network for Indian developers.',
+      members: '500,000+',
+      link: 'https://www.linkedin.com/groups/4750757/',
+      topics: ['Networking', 'Jobs', 'Career Growth'],
       language: 'English',
       active: true
     },
     {
-      name: 'HackerRank Discussions',
-      description: 'Competitive programming, coding challenges.',
-      members: '500K+',
-      link: 'https://www.hackerrank.com/discussions',
-      topics: ['Competitive Programming', 'Challenges'],
+      name: 'Artificial Intelligence & Deep Learning',
+      description: 'AI/ML professionals and researchers.',
+      members: '1,000,000+',
+      link: 'https://www.linkedin.com/groups/8324826/',
+      topics: ['AI', 'Machine Learning', 'Deep Learning'],
       language: 'English',
       active: true
     },
     {
-      name: 'Stack Overflow',
-      description: 'Programming Q&A, debugging help.',
-      members: '20M+',
-      link: 'https://stackoverflow.com',
-      topics: ['Programming', 'Debugging', 'Q&A'],
+      name: 'Web Developers',
+      description: 'Web development professionals worldwide.',
+      members: '800,000+',
+      link: 'https://www.linkedin.com/groups/1081177/',
+      topics: ['Web Development', 'Frontend', 'Backend'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Cybersecurity Professionals',
+      description: 'Security experts, ethical hackers, researchers.',
+      members: '600,000+',
+      link: 'https://www.linkedin.com/groups/2913734/',
+      topics: ['Cybersecurity', 'Ethical Hacking', 'Security'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Blockchain & Cryptocurrency',
+      description: 'Blockchain developers and crypto enthusiasts.',
+      members: '400,000+',
+      link: 'https://www.linkedin.com/groups/8308396/',
+      topics: ['Blockchain', 'Cryptocurrency', 'Web3'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Data Science Central',
+      description: 'Data scientists, analysts, ML engineers.',
+      members: '700,000+',
+      link: 'https://www.linkedin.com/groups/35222/',
+      topics: ['Data Science', 'Analytics', 'Machine Learning'],
+      language: 'English',
+      active: true
+    }
+  ],
+
+  // DISCORD SERVERS (PUBLIC PERMANENT LINKS)
+  discord: [
+    {
+      name: 'The Programmer\'s Hangout',
+      description: 'Largest programming Discord. All languages, all levels.',
+      members: '200,000+',
+      link: 'https://discord.gg/programming',
+      topics: ['All Programming Languages', 'Help', 'Projects'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Reactiflux',
+      description: 'Official React community. React, Next.js, Redux.',
+      members: '150,000+',
+      link: 'https://discord.gg/reactiflux',
+      topics: ['React', 'Next.js', 'Redux', 'JavaScript'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Python Discord',
+      description: 'Official Python community. Beginner to advanced.',
+      members: '400,000+',
+      link: 'https://discord.gg/python',
+      topics: ['Python', 'Django', 'Flask', 'Data Science'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Devcord',
+      description: 'Web development community. Daily challenges.',
+      members: '100,000+',
+      link: 'https://discord.gg/devcord',
+      topics: ['Web Dev', 'JavaScript', 'CSS', 'HTML'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Cybersecurity',
+      description: 'Ethical hacking, CTF challenges, security.',
+      members: '80,000+',
+      link: 'https://discord.gg/cybersecurity',
+      topics: ['Ethical Hacking', 'CTF', 'Security'],
+      language: 'English',
+      active: true
+    }
+  ],
+
+  // TELEGRAM GROUPS (PUBLIC PERMANENT)
+  telegram: [
+    {
+      name: 'Programming Discussions',
+      description: 'General programming chat and help.',
+      members: '50,000+',
+      link: 'https://t.me/programming_discussions',
+      topics: ['Programming', 'Help', 'Resources'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Web Developers',
+      description: 'Web dev news, tutorials, job postings.',
+      members: '100,000+',
+      link: 'https://t.me/webdevelopers',
+      topics: ['Web Development', 'Jobs', 'Tutorials'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'Python Developers',
+      description: 'Python programming, libraries, projects.',
+      members: '80,000+',
+      link: 'https://t.me/pythondev',
+      topics: ['Python', 'Django', 'Data Science'],
+      language: 'English',
+      active: true
+    },
+    {
+      name: 'AI & Machine Learning',
+      description: 'ML research, papers, projects.',
+      members: '60,000+',
+      link: 'https://t.me/ai_machinelearning',
+      topics: ['AI', 'Machine Learning', 'Research'],
+      language: 'English',
+      active: true
+    }
+  ],
+
+  // WHATSAPP COMMUNITIES (Note: WhatsApp links expire, using alternatives)
+  whatsapp: [
+    {
+      name: 'Join via Reddit',
+      description: 'Find active WhatsApp groups on r/developersIndia',
+      members: 'Various',
+      link: 'https://reddit.com/r/developersIndia',
+      topics: ['Check Reddit for active groups'],
+      language: 'English + Hindi',
+      active: true
+    },
+    {
+      name: 'Join via LinkedIn',
+      description: 'Connect with professionals for WhatsApp study groups',
+      members: 'Various',
+      link: 'https://www.linkedin.com/groups/4750757/',
+      topics: ['Professional networking'],
       language: 'English',
       active: true
     }
@@ -405,10 +360,6 @@ const communities = {
 };
 
 // Export for use in app
-if (typeof window !== 'undefined') {
-  window.communities = communities;
-}
-
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = communities;
 }
