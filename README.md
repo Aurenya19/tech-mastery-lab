@@ -1,232 +1,317 @@
-# 🚀 TECH MASTERY LAB - Complete Intelligence System
+# 🇮🇳 TECH MASTERY LAB - India's Ultimate Tech Intelligence Hub
 
-## THE ULTIMATE TECH INTELLIGENCE COMMAND CENTER
+[![Live Site](https://img.shields.io/badge/Live-Site-brightgreen)](https://aurenya19.github.io/tech-mastery-lab/)
+[![Auto-Update](https://img.shields.io/badge/Auto--Update-Enabled-blue)](https://github.com/Aurenya19/tech-mastery-lab/actions)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A comprehensive, real-time technology intelligence platform that aggregates data from multiple sources worldwide.
+> **Real-time tech intelligence platform with automatic content updates, live APIs, and permanent community links!**
 
-![Status](https://img.shields.io/badge/status-active-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
+## 🚀 LIVE DEMO
 
----
-
-## 🎯 COMPLETE FEATURE SET
-
-### 📰 REAL-TIME NEWS AGGREGATION
-- **Multiple Sources**: TechCrunch, Wired, MIT Tech Review, Hacker News
-- **Live Updates**: Real-time streaming
-- **AI Analysis**: Automatic sentiment & trend detection
-- **Search & Filter**: Advanced filtering by category, source, date
-
-### 🛰️ SATELLITE INTELLIGENCE
-- **NASA GIBS/Worldview**: 900+ imagery layers
-- **Sentinel Hub**: Copernicus Sentinel data
-- **USGS Landsat**: Historical satellite data
-- **Interactive Maps**: Zoom, pan, layer switching
-
-### 🔬 EMERGING TECH TRACKER
-- **GitHub Trending**: Real-time trending repos
-- **Research Papers**: ArXiv auto-categorization (AI, Quantum, Space)
-- **Patent Monitoring**: USPTO, EPO patent filings
-- **Startup Tracking**: Funding announcements
-
-### 🇮🇳 INDIA TECH HUB
-- **ISRO Live Tracker**: Mission updates, launch schedules
-- **Government Initiatives**: Policy tracking
-- **Startup Ecosystem**: Indian tech startups
-- **Defense Projects**: DRDO public announcements
-
-### ⚠️ RISK ANALYSIS ENGINE
-- **AI Safety Monitoring**: AGI developments
-- **Cybersecurity Threats**: Zero-days, vulnerabilities
-- **Biotech Risks**: CRISPR, synthetic biology
-- **Quantum Threats**: Encryption breaking timeline
-
-### 🕵️ OSINT TOOLS
-- **Social Media Monitoring**: Reddit trend analysis
-- **Company Intelligence**: Funding, acquisitions
-- **Public Data Aggregation**: Ethical OSINT only
+**🔗 https://aurenya19.github.io/tech-mastery-lab/**
 
 ---
 
-## 🚀 QUICK START
+## ✨ KEY FEATURES
 
-### 1. Clone Repository
+### 🤖 **AUTO-UPDATING CONTENT (No Manual Work!)**
+
+✅ **Research Papers** - Auto-updates every 6 hours from arXiv  
+✅ **Tech Breakthroughs** - Auto-updates every 12 hours  
+✅ **Hacker News** - Live API, 100+ stories  
+✅ **GitHub Trending** - Live scraping, 50+ repos  
+✅ **Reddit Posts** - Live API, 50+ posts from 10 subreddits  
+✅ **Communities** - Permanent links (Reddit, YouTube, LinkedIn) - **NEVER EXPIRE!**
+
+### 📊 **REAL-TIME DATA SOURCES**
+
+- **📰 Hacker News API** - Top 100 stories, live updates
+- **💻 GitHub Trending** - 50+ trending repositories
+- **🕵️ Reddit API** - 10 tech subreddits, 50+ posts
+- **🔬 arXiv API** - Latest AI/ML/CS research papers
+- **🛰️ Satellite Maps** - Esri World Imagery (better zoom!)
+- **🇮🇳 Indian Labs** - 50+ ISRO, IIT, DRDO, startups
+
+### 🎯 **INTERACTIVE FEATURES**
+
+- **💬 Live Chat** - 8 chat rooms (General, AI/ML, Space, Coding, Career, India, Quiz, Research)
+- **🧠 Tech Quiz** - 100 questions across 8 categories
+- **🗺️ Interactive Maps** - Global labs + Indian tech centers
+- **🌐 Communities** - 40+ permanent community links
+
+---
+
+## 🤖 AUTO-UPDATE SYSTEM
+
+### **GitHub Actions Workflows:**
+
+#### 1️⃣ **Research Papers** (Every 6 hours)
+```yaml
+Schedule: 0 */6 * * * (00:00, 06:00, 12:00, 18:00 UTC)
+Source: arXiv API (cs.AI, cs.LG, cs.CL)
+Updates: research-papers.js
+```
+
+#### 2️⃣ **Tech Breakthroughs** (Every 12 hours)
+```yaml
+Schedule: 0 */12 * * * (00:00, 12:00 UTC)
+Source: Curated + Live APIs
+Updates: intelligence-data.js
+```
+
+### **Manual Trigger:**
+You can manually trigger updates from GitHub Actions tab!
+
+---
+
+## 🌐 PERMANENT COMMUNITY LINKS
+
+**NO MORE EXPIRED INVITES!** All community links are permanent:
+
+### **Reddit Communities** (Never Expire!)
+- r/programming (6M+ members)
+- r/learnprogramming (4.5M+ members)
+- r/developersIndia (300K+ members)
+- r/MachineLearning (2.8M+ members)
+- r/ISRO (100K+ members)
+- ...and 5 more!
+
+### **YouTube Channels** (Permanent!)
+- CodeWithHarry (5M+ subscribers)
+- Apna College (4.5M+ subscribers)
+- freeCodeCamp (9M+ subscribers)
+- Fireship (3M+ subscribers)
+- ISRO Official (3M+ subscribers)
+- ...and 5 more!
+
+### **LinkedIn Groups** (Permanent!)
+- Indian Developers Community (500K+ members)
+- AI & Deep Learning (1M+ members)
+- Web Developers (800K+ members)
+- ...and 3 more!
+
+### **Discord Servers** (Public Permanent Links)
+- The Programmer's Hangout (200K+ members)
+- Reactiflux (150K+ members)
+- Python Discord (400K+ members)
+- ...and 2 more!
+
+---
+
+## 🛠️ TECH STACK
+
+- **Frontend:** Vanilla JavaScript (No frameworks!)
+- **Styling:** Custom CSS with Matrix theme
+- **Maps:** Leaflet.js + Esri World Imagery
+- **APIs:** 
+  - Hacker News Firebase API
+  - GitHub Trending (scraping)
+  - Reddit JSON API
+  - arXiv API
+- **Automation:** GitHub Actions
+- **Hosting:** GitHub Pages
+
+---
+
+## 📈 STATS
+
+- **📰 100+ News Stories** (Auto-updating)
+- **🔬 30+ Research Papers** (Auto-updating every 6 hours)
+- **💻 50+ GitHub Repos** (Live trending)
+- **🕵️ 50+ Reddit Posts** (Live from 10 subreddits)
+- **🇮🇳 50+ Indian Labs** (ISRO, IIT, DRDO, startups)
+- **🧠 100 Quiz Questions** (8 categories)
+- **🌐 40+ Communities** (Permanent links!)
+- **💬 8 Chat Rooms** (Live discussions)
+
+---
+
+## 🚀 HOW IT WORKS
+
+### **Auto-Update Flow:**
+
+```
+GitHub Actions (Cron Job)
+    ↓
+Fetch Latest Data (arXiv API, etc.)
+    ↓
+Parse & Format Data
+    ↓
+Update JavaScript Files
+    ↓
+Commit & Push to GitHub
+    ↓
+GitHub Pages Auto-Deploy
+    ↓
+Live Site Updated! ✅
+```
+
+### **User Experience:**
+
+1. **Visit Site** → Fresh data loads automatically
+2. **Click Sections** → Expand/collapse panels
+3. **Search** → Filter news, labs, etc.
+4. **Click Items** → View detailed modals
+5. **Join Communities** → Permanent links, never expire!
+
+---
+
+## 🎨 FEATURES BREAKDOWN
+
+### **📰 Hacker News Section**
+- Top 100 stories from Hacker News
+- Live API integration
+- Search functionality
+- Click for full details
+
+### **🔬 Research Papers Section**
+- Latest 30 papers from arXiv
+- Categories: AI, ML, NLP, Computer Vision
+- Auto-updates every 6 hours
+- Click for full abstract
+
+### **💻 GitHub Trending Section**
+- 50+ trending repositories
+- Live scraping
+- Stars, forks, language info
+- Direct GitHub links
+
+### **🕵️ Reddit Section**
+- 10 tech subreddits
+- 50+ latest posts
+- Upvotes, comments, awards
+- Direct Reddit links
+
+### **🛰️ Satellite Maps**
+- Global tech labs (Area 51, Google X, SpaceX, etc.)
+- Indian labs (ISRO, IIT, DRDO, startups)
+- Esri World Imagery (better zoom!)
+- Interactive markers with details
+
+### **🧠 Tech Quiz**
+- 100 questions across 8 categories
+- 3 modes: Quick (10Q), Timed (20Q), Practice (50Q)
+- Score tracking
+- Timer for timed mode
+
+### **💬 Live Chat**
+- 8 chat rooms
+- Nickname system
+- Real-time messaging (simulated)
+- Room switching
+
+### **🌐 Communities**
+- 40+ permanent community links
+- Filter by platform (Reddit, YouTube, LinkedIn, Discord, Telegram)
+- Member counts, topics, language info
+- Direct join links
+
+---
+
+## 🔧 SETUP & DEPLOYMENT
+
+### **Local Development:**
+
 ```bash
+# Clone repository
 git clone https://github.com/Aurenya19/tech-mastery-lab.git
+
+# Open in browser
 cd tech-mastery-lab
+open index.html
 ```
 
-### 2. Install Dependencies
-```bash
-npm install
+### **GitHub Pages Deployment:**
+
+1. Fork this repository
+2. Go to Settings → Pages
+3. Source: Deploy from branch `main`
+4. Save
+5. Wait 1-2 minutes
+6. Visit: `https://YOUR-USERNAME.github.io/tech-mastery-lab/`
+
+### **Enable Auto-Updates:**
+
+GitHub Actions are already configured! They will:
+- Run automatically on schedule
+- Update research papers every 6 hours
+- Update breakthroughs every 12 hours
+- Commit changes automatically
+
+---
+
+## 📝 FILE STRUCTURE
+
+```
+tech-mastery-lab/
+├── index.html              # Main HTML file
+├── style.css               # Main stylesheet
+├── modal-styles.css        # Modal styling
+├── communities.css         # Communities section styling
+├── app.js                  # Main JavaScript (APIs, maps, chat, quiz)
+├── communities-app.js      # Communities functionality
+├── research-papers.js      # Research papers data (auto-updated)
+├── intelligence-data.js    # Breakthroughs data (auto-updated)
+├── quiz-questions.js       # Quiz questions
+├── indian-labs.js          # Indian labs data
+├── communities.js          # Communities data (permanent links!)
+├── research-fix.js         # Research CORS workaround
+├── .github/
+│   └── workflows/
+│       ├── update-research.yml        # Auto-update research
+│       └── update-breakthroughs.yml   # Auto-update breakthroughs
+└── README.md               # This file
 ```
 
-### 3. Run Server
-```bash
-npm start
-```
-
-### 4. Access Application
-Open browser to: `http://localhost:3000`
-
 ---
 
-## 📡 API ENDPOINTS
+## 🎯 ROADMAP
 
-### News
-- `GET /api/news/latest` - Latest tech news (all sources)
-
-### Research
-- `GET /api/research/arxiv` - Latest ArXiv papers
-
-### GitHub
-- `GET /api/github/trending` - Trending repos
-
-### India
-- `GET /api/india/isro` - ISRO updates
-
-### OSINT
-- `GET /api/osint/reddit-tech` - Social media trends
-
-### Risks
-- `GET /api/risks/current` - Risk analysis
-
----
-
-## 🎨 INTERFACE FEATURES
-
-### Command Center Dashboard
-- **Multi-panel Layout**: 8 simultaneous data streams
-- **Dark Cyberpunk Theme**: Matrix-style aesthetics
-- **Live Indicators**: Pulsing status lights
-- **Real-time Updates**: Auto-refresh every 5 minutes
-
-### Search & Filter
-- **Global Search**: Search across ALL sources
-- **Advanced Filters**: Date, source, category
-- **Live Filtering**: Instant results
-
----
-
-## 🔧 TECHNOLOGY STACK
-
-### Backend
-- Node.js + Express
-- Axios (HTTP client)
-- Cheerio (Web scraping)
-- RSS Parser (Feed aggregation)
-
-### Frontend
-- Vanilla JavaScript
-- Leaflet.js (Interactive maps)
-- CSS3 (Cyberpunk styling)
-
-### Data Sources (FREE)
-- TechCrunch RSS
-- Hacker News API
-- MIT Tech Review RSS
-- Wired RSS
-- ArXiv API
-- GitHub Trending (scraping)
-- ISRO RSS
-- Reddit API
-
----
-
-## 🌟 KEY FEATURES
-
-✅ **Real-time News** from 4+ major tech sources
-✅ **Research Papers** from ArXiv (AI, Quantum, Space)
-✅ **GitHub Trending** repositories
-✅ **ISRO Updates** for India space program
-✅ **Risk Analysis** for emerging tech threats
-✅ **OSINT Tools** for social media monitoring
-✅ **Satellite Maps** with interactive layers
-✅ **Auto-refresh** every 5 minutes
-✅ **Search & Filter** across all data
-✅ **Cyberpunk UI** with Matrix background
-
----
-
-## 📊 DATA SOURCES
-
-| Source | Type | Update Frequency |
-|--------|------|------------------|
-| TechCrunch | News | Real-time |
-| Hacker News | Discussion | Real-time |
-| MIT Tech Review | Analysis | Daily |
-| Wired | Culture | Daily |
-| ArXiv | Research | Daily |
-| GitHub | Code | Hourly |
-| ISRO | Space | As published |
-| Reddit | Social | Real-time |
-
----
-
-## 🔐 SECURITY & ETHICS
-
-### Ethical Guidelines
-✅ Public data aggregation only
-✅ Open source intelligence (OSINT)
-✅ Respects robots.txt
-✅ No unauthorized access
-✅ No privacy violations
-
----
-
-## 🎯 USE CASES
-
-1. **Tech Researcher**: Track emerging technologies
-2. **Investor**: Monitor startups, funding, trends
-3. **Journalist**: Investigate tech stories
-4. **Security Analyst**: Threat intelligence
-5. **Student**: Academic research
-6. **Entrepreneur**: Market opportunity detection
-
----
-
-## 🚧 ROADMAP
-
-### Current (v2.0)
-- ✅ Multi-source news aggregation
-- ✅ Satellite imagery integration
-- ✅ GitHub trending tracker
-- ✅ ArXiv paper monitoring
-- ✅ OSINT tools
-- ✅ Risk analysis
-
-### Future
-- 🔄 Machine learning predictions
-- 🔄 Natural language processing
-- 🔄 Mobile app
-- 🔄 Browser extension
-- 🔄 Custom alerts
-
----
-
-## 📝 LICENSE
-
-MIT License - See LICENSE file
+- [x] Real-time APIs integration
+- [x] Auto-updating research papers
+- [x] Auto-updating breakthroughs
+- [x] Permanent community links
+- [x] Better satellite imagery
+- [ ] User authentication
+- [ ] Save preferences
+- [ ] Real backend for chat
+- [ ] Mobile app
 
 ---
 
 ## 🤝 CONTRIBUTING
 
-Contributions welcome! Please:
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Open pull request
+Contributions welcome! Feel free to:
+- Report bugs
+- Suggest features
+- Submit pull requests
+- Add more communities
+- Improve auto-update scripts
 
 ---
 
-## 📧 CONTACT
+## 📜 LICENSE
 
-For questions or suggestions, open an issue on GitHub.
+MIT License - Feel free to use, modify, and distribute!
 
 ---
 
-**"The future belongs to those who can see it coming."**
+## 🙏 CREDITS
 
-🚀 **TECH MASTERY LAB** - Your Window to Tomorrow's Technology
+- **APIs:** Hacker News, GitHub, Reddit, arXiv
+- **Maps:** Leaflet.js, Esri, OpenStreetMap
+- **Automation:** GitHub Actions
+- **Hosting:** GitHub Pages
+
+---
+
+## 📞 CONTACT
+
+- **GitHub:** [@Aurenya19](https://github.com/Aurenya19)
+- **Live Site:** [Tech Mastery Lab](https://aurenya19.github.io/tech-mastery-lab/)
+
+---
+
+**Made with ❤️ for the Indian Tech Community 🇮🇳**
+
+**Last Updated:** Auto-updated by GitHub Actions ✨
