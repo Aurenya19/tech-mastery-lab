@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, Indian labs, and interactive learning">
-  <meta name="keywords" content="tech news, research, GitHub, Indian labs, ISRO, IIT, tech quiz, programming">
+  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, Indian labs, and AI-powered chat">
+  <meta name="keywords" content="tech news, research, GitHub, Indian labs, ISRO, IIT, tech quiz, programming, AI chat">
   <meta name="author" content="Tech Mastery Lab">
   
   <title>🇮🇳 TECH MASTERY LAB - India's Ultimate Tech Hub</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" href="favicon.svg">
   
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -28,8 +32,11 @@
   <!-- Main Container -->
   <div class="container">
     
-    <!-- Header -->
+    <!-- Header with Logo -->
     <header class="header">
+      <div class="header__logo">
+        <img src="logo.svg" alt="Tech Mastery Lab Logo" width="80" height="80">
+      </div>
       <h1 class="header__title">🇮🇳 TECH MASTERY LAB</h1>
       <p class="header__tagline">India's Ultimate Tech Intelligence Hub</p>
       <p class="header__subtitle" id="last-update">Loading real-time data...</p>
@@ -54,279 +61,216 @@
         <span class="stat-card__label">🕵️ REDDIT POSTS</span>
       </div>
       <div class="stat-card">
-        <span class="stat-card__number">50+</span>
+        <span class="stat-card__number" id="labs-count">50+</span>
         <span class="stat-card__label">🇮🇳 INDIAN LABS</span>
       </div>
       <div class="stat-card">
-        <span class="stat-card__number">100</span>
-        <span class="stat-card__label">🧠 QUIZ QUESTIONS</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-card__number">40+</span>
+        <span class="stat-card__number" id="communities-count">40+</span>
         <span class="stat-card__label">🌐 COMMUNITIES</span>
       </div>
     </div>
     
-    <!-- Live Chat Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">💬 LIVE TECH CHAT</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('chat')">HIDE CHAT</button>
-      </div>
-      <div id="chat-panel">
-        <div class="chat-container">
-          <aside class="chat-sidebar">
-            <h3 class="text-primary mb-md">CHAT ROOMS</h3>
-            <div class="chat-rooms">
-              <button class="chat-room-btn chat-room-btn--active" data-room="general">💬 General Tech</button>
-              <button class="chat-room-btn" data-room="ai">🤖 AI/ML Discussion</button>
-              <button class="chat-room-btn" data-room="space">🚀 Space & ISRO</button>
-              <button class="chat-room-btn" data-room="coding">💻 Coding Help</button>
-              <button class="chat-room-btn" data-room="career">🎓 Career Guidance</button>
-              <button class="chat-room-btn" data-room="india">🇮🇳 Indian Tech Scene</button>
-              <button class="chat-room-btn" data-room="quiz">🎮 Quiz Arena</button>
-              <button class="chat-room-btn" data-room="research">🔬 Research Papers</button>
-            </div>
-          </aside>
-          
-          <div class="chat-main">
-            <div class="chat-header">
-              <span class="text-primary" id="current-room">General Tech Talk</span>
-              <span class="text-secondary" id="online-count">● Online</span>
-            </div>
-            
-            <div class="chat-messages" id="chat-messages">
-              <div class="text-center" style="padding: 50px;">
-                <p class="text-primary mb-md">💬 Welcome to Tech Mastery Chat!</p>
-                <p class="text-secondary">Set your nickname below to start chatting</p>
-              </div>
-            </div>
-            
-            <div class="chat-input-container" id="nickname-container">
-              <input 
-                type="text" 
-                class="chat-input" 
-                id="chat-nickname" 
-                placeholder="Enter your nickname..." 
-                maxlength="20"
-                aria-label="Enter nickname"
-              >
-              <button class="btn" onclick="setNickname()">SET NAME</button>
-            </div>
-            
-            <div class="chat-input-container hidden" id="message-container">
-              <input 
-                type="text" 
-                class="chat-input" 
-                id="chat-input" 
-                placeholder="Type your message..." 
-                maxlength="500"
-                aria-label="Type message"
-              >
-              <button class="btn" onclick="sendMessage()">SEND</button>
-            </div>
+    <!-- Main Content Grid -->
+    <div class="grid">
+      
+      <!-- HACKER NEWS SECTION -->
+      <section class="panel" id="hacker-news-panel">
+        <div class="panel__header" onclick="togglePanel('hacker-news')">
+          <h2 class="panel__title">📰 HACKER NEWS (Live API)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="hacker-news-content">
+          <input type="text" class="search-input" id="news-search" placeholder="🔍 Search news..." onkeyup="searchNews()">
+          <div id="news-list" class="list">
+            <div class="loading">Loading Hacker News...</div>
           </div>
         </div>
-      </div>
-    </section>
-    
-    <!-- Tech Quiz Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🧠 TECH QUIZ CHALLENGE</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('quiz')">HIDE QUIZ</button>
-      </div>
-      <div id="quiz-panel">
-        <div class="quiz-container">
-          <div class="quiz-header">
-            <div class="quiz-score">Score: <span id="quiz-score">0</span></div>
-            <div class="quiz-timer">Time: <span id="quiz-timer">--</span></div>
+      </section>
+      
+      <!-- RESEARCH PAPERS SECTION -->
+      <section class="panel" id="research-panel">
+        <div class="panel__header" onclick="togglePanel('research')">
+          <h2 class="panel__title">🔬 RESEARCH PAPERS (Auto-Updated)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="research-content">
+          <input type="text" class="search-input" id="research-search" placeholder="🔍 Search papers..." onkeyup="searchResearch()">
+          <div id="research-list" class="list">
+            <div class="loading">Loading research papers...</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- GITHUB TRENDING SECTION -->
+      <section class="panel" id="github-panel">
+        <div class="panel__header" onclick="togglePanel('github')">
+          <h2 class="panel__title">💻 GITHUB TRENDING (Live)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="github-content">
+          <input type="text" class="search-input" id="github-search" placeholder="🔍 Search repos..." onkeyup="searchGitHub()">
+          <div id="github-list" class="list">
+            <div class="loading">Loading GitHub trending...</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- REDDIT SECTION -->
+      <section class="panel" id="reddit-panel">
+        <div class="panel__header" onclick="togglePanel('reddit')">
+          <h2 class="panel__title">🕵️ REDDIT TECH (Live API)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="reddit-content">
+          <input type="text" class="search-input" id="reddit-search" placeholder="🔍 Search posts..." onkeyup="searchReddit()">
+          <div id="reddit-list" class="list">
+            <div class="loading">Loading Reddit posts...</div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- SATELLITE MAP SECTION -->
+      <section class="panel panel--full" id="satellite-panel">
+        <div class="panel__header" onclick="togglePanel('satellite')">
+          <h2 class="panel__title">🛰️ GLOBAL TECH LABS (Satellite View)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="satellite-content">
+          <div id="map" style="height: 500px; border-radius: 8px;"></div>
+        </div>
+      </section>
+      
+      <!-- INDIAN LABS MAP SECTION -->
+      <section class="panel panel--full" id="indian-labs-panel">
+        <div class="panel__header" onclick="togglePanel('indian-labs')">
+          <h2 class="panel__title">🇮🇳 INDIAN TECH LABS (50+ Locations)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="indian-labs-content">
+          <div id="indian-labs-map" style="height: 500px; border-radius: 8px;"></div>
+        </div>
+      </section>
+      
+      <!-- COMMUNITIES SECTION -->
+      <section class="panel panel--full" id="communities-panel">
+        <div class="panel__header" onclick="togglePanel('communities')">
+          <h2 class="panel__title">🌐 TECH COMMUNITIES (40+ Permanent Links)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="communities-content">
+          <!-- Communities content loaded by communities-app.js -->
+        </div>
+      </section>
+      
+      <!-- LIVE CHAT SECTION (AI-POWERED) -->
+      <section class="panel panel--full" id="chat-panel">
+        <div class="panel__header" onclick="togglePanel('chat')">
+          <h2 class="panel__title">💬 AI CHAT (Bhindi + OpenRouter)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="chat-content">
+          <div class="chat-info">
+            <span id="online-count">● 0 Online</span>
+            <span id="current-room-name">General</span>
           </div>
           
-          <div class="quiz-controls mb-lg">
-            <button class="btn btn--small" data-category="all">All</button>
-            <button class="btn btn--small" data-category="AI/ML">AI/ML</button>
-            <button class="btn btn--small" data-category="Space Tech">Space</button>
-            <button class="btn btn--small" data-category="Quantum Computing">Quantum</button>
-            <button class="btn btn--small" data-category="Cybersecurity">Security</button>
-            <button class="btn btn--small" data-category="Indian Tech">Indian Tech</button>
-            <button class="btn btn--small" data-category="Coding">Coding</button>
-            <button class="btn btn--small" data-category="Hardware">Hardware</button>
-            <button class="btn btn--small" data-category="Blockchain">Blockchain</button>
+          <div class="chat-rooms">
+            <button class="chat-room active" onclick="switchRoom('general')">General</button>
+            <button class="chat-room" onclick="switchRoom('ai-ml')">AI/ML</button>
+            <button class="chat-room" onclick="switchRoom('space')">Space Tech</button>
+            <button class="chat-room" onclick="switchRoom('coding')">Coding Help</button>
+            <button class="chat-room" onclick="switchRoom('career')">Career</button>
+            <button class="chat-room" onclick="switchRoom('india')">India Tech</button>
+            <button class="chat-room" onclick="switchRoom('quiz')">Quiz</button>
+            <button class="chat-room" onclick="switchRoom('research')">Research</button>
+          </div>
+          
+          <div id="chat-messages" class="chat-messages"></div>
+          
+          <div class="chat-input-container">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Ask anything... (AI-powered)" onkeypress="handleChatKeyPress(event)">
+            <button class="btn btn--primary" onclick="sendChatMessage()">Send 🚀</button>
+          </div>
+          
+          <div class="chat-ai-status">
+            <span id="ai-status">🤖 AI Ready (Bhindi + OpenRouter fallback)</span>
+          </div>
+        </div>
+      </section>
+      
+      <!-- TECH QUIZ SECTION -->
+      <section class="panel panel--full" id="quiz-panel">
+        <div class="panel__header" onclick="togglePanel('quiz')">
+          <h2 class="panel__title">🧠 TECH QUIZ (100 Questions)</h2>
+          <span class="panel__toggle">▼</span>
+        </div>
+        <div class="panel__content" id="quiz-content-panel">
+          <div class="quiz-controls">
+            <div class="quiz-categories">
+              <button class="btn btn--small btn--active" data-category="all" onclick="selectQuizCategory('all', this)">All</button>
+              <button class="btn btn--small" data-category="Web Dev" onclick="selectQuizCategory('Web Dev', this)">Web Dev</button>
+              <button class="btn btn--small" data-category="AI/ML" onclick="selectQuizCategory('AI/ML', this)">AI/ML</button>
+              <button class="btn btn--small" data-category="Mobile" onclick="selectQuizCategory('Mobile', this)">Mobile</button>
+              <button class="btn btn--small" data-category="Cloud" onclick="selectQuizCategory('Cloud', this)">Cloud</button>
+              <button class="btn btn--small" data-category="Security" onclick="selectQuizCategory('Security', this)">Security</button>
+              <button class="btn btn--small" data-category="Blockchain" onclick="selectQuizCategory('Blockchain', this)">Blockchain</button>
+              <button class="btn btn--small" data-category="General" onclick="selectQuizCategory('General', this)">General</button>
+            </div>
+            
+            <div class="quiz-modes">
+              <button class="btn btn--primary" onclick="startQuiz('quick')">⚡ Quick (10Q)</button>
+              <button class="btn btn--primary" onclick="startQuiz('timed')">⏱️ Timed (20Q)</button>
+              <button class="btn btn--primary" onclick="startQuiz('practice')">📚 Practice (50Q)</button>
+            </div>
+          </div>
+          
+          <div class="quiz-stats">
+            <div class="stat">Score: <span id="quiz-score">0</span></div>
+            <div class="stat" id="quiz-timer-display" style="display: none;">Time: <span id="quiz-timer">0:00</span></div>
           </div>
           
           <div id="quiz-content">
-            <div class="text-center" style="padding: 50px;">
-              <h3 class="text-primary mb-md">Ready to test your tech knowledge?</h3>
-              <p class="text-secondary mb-lg">100 questions across 8 categories!</p>
-              <div class="quiz-controls">
-                <button class="btn" onclick="startQuiz('quick')">QUICK QUIZ (10Q)</button>
-                <button class="btn" onclick="startQuiz('timed')">TIMED CHALLENGE (20Q)</button>
-                <button class="btn" onclick="startQuiz('practice')">PRACTICE MODE (50Q)</button>
-              </div>
-            </div>
+            <p class="text-center">Select a category and mode to start the quiz!</p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+      
+    </div>
     
-    <!-- Indian Labs Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🇮🇳 INDIAN TECH LABS & RESEARCH CENTERS</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('indian-labs')">HIDE LABS</button>
-      </div>
-      <div id="indian-labs-panel">
-        <input 
-          type="text" 
-          class="input" 
-          id="indian-lab-search" 
-          placeholder="🔍 Search Indian labs (ISRO, IIT, DRDO, startups...)"
-          aria-label="Search Indian labs"
-        >
-        
-        <div class="quiz-controls mb-md">
-          <button class="btn btn--small" onclick="filterIndianLabs('all')">All (50+)</button>
-          <button class="btn btn--small" onclick="filterIndianLabs('government')">🏛️ Government</button>
-          <button class="btn btn--small" onclick="filterIndianLabs('academic')">🎓 Academic</button>
-          <button class="btn btn--small" onclick="filterIndianLabs('private')">🏢 Private</button>
-          <button class="btn btn--small" onclick="filterIndianLabs('startup')">🚀 Startups</button>
-        </div>
-        
-        <div id="indian-labs-map"></div>
-        <div class="zoom-info" id="indian-zoom-info">Zoom: 5 | Max: 22</div>
-        
-        <div id="indian-labs-list" class="mt-lg"></div>
-      </div>
-    </section>
-    
-    <!-- Breakthroughs Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🚨 TECH BREAKTHROUGHS & INTELLIGENCE</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('breakthroughs')">HIDE BREAKTHROUGHS</button>
-      </div>
-      <div id="breakthroughs-panel">
-        <div id="breakthroughs-container"></div>
-      </div>
-    </section>
-    
-    <!-- Hacker News Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">📰 HACKER NEWS (100+ Stories)</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('news')">HIDE NEWS</button>
-      </div>
-      <div id="news-panel">
-        <input 
-          type="text" 
-          class="input" 
-          id="news-search" 
-          placeholder="🔍 Search news..." 
-          onkeyup="filterNews(this.value)"
-          aria-label="Search news"
-        >
-        <div id="news-container"></div>
-      </div>
-    </section>
-    
-    <!-- Reddit Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🕵️ REDDIT TECH (50+ Posts from 10 Subreddits)</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('reddit')">HIDE REDDIT</button>
-      </div>
-      <div id="reddit-panel">
-        <div id="reddit-container"></div>
-      </div>
-    </section>
-    
-    <!-- GitHub Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">💻 GITHUB TRENDING (50+ Repos)</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('github')">HIDE GITHUB</button>
-      </div>
-      <div id="github-panel">
-        <div id="github-container"></div>
-      </div>
-    </section>
-    
-    <!-- Research Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🔬 ARXIV RESEARCH (30+ Papers)</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('research')">HIDE RESEARCH</button>
-      </div>
-      <div id="research-panel">
-        <div id="research-container"></div>
-      </div>
-    </section>
-    
-    <!-- 🌐 TECH COMMUNITIES SECTION -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🌐 TECH COMMUNITIES - CONNECT & LEARN</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('communities')">HIDE COMMUNITIES</button>
-      </div>
-      <div id="communities-panel">
-        
-        <!-- Community Type Filters -->
-        <div class="quiz-controls mb-lg">
-          <button class="btn btn--small" onclick="filterCommunities('all')">All Communities</button>
-          <button class="btn btn--small" onclick="filterCommunities('discord')">💬 Discord</button>
-          <button class="btn btn--small" onclick="filterCommunities('telegram')">✈️ Telegram</button>
-          <button class="btn btn--small" onclick="filterCommunities('whatsapp')">📱 WhatsApp</button>
-          <button class="btn btn--small" onclick="filterCommunities('linkedin')">💼 LinkedIn</button>
-          <button class="btn btn--small" onclick="filterCommunities('reddit')">🔴 Reddit</button>
-          <button class="btn btn--small" onclick="filterCommunities('youtube')">📺 YouTube</button>
-        </div>
-        
-        <!-- Communities Container -->
-        <div id="communities-container"></div>
-        
-      </div>
-    </section>
-    
-    <!-- Global Satellite Map Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section__title">🛰️ GLOBAL SECRET LABS (Satellite View)</h2>
-        <button class="btn toggle-btn" onclick="togglePanel('satellite')">HIDE SATELLITE</button>
-      </div>
-      <div id="satellite-panel">
-        <input 
-          type="text" 
-          class="input" 
-          id="lab-search" 
-          placeholder="🔍 Search labs (Area 51, Google X, SpaceX...)"
-          aria-label="Search global labs"
-        >
-        <div id="map"></div>
-        <div class="zoom-info" id="zoom-info">Zoom: 2 | Max: 22 (ULTRA HD)</div>
-      </div>
-    </section>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Made with ❤️ for the Indian Tech Community 🇮🇳</p>
+      <p>Auto-updated by GitHub Actions | <a href="https://github.com/Aurenya19/tech-mastery-lab" target="_blank">View on GitHub</a></p>
+    </footer>
     
   </div>
   
-  <!-- Detail Modal -->
-  <div id="detail-modal" class="modal" onclick="if(event.target === this) closeModal()" role="dialog" aria-modal="true">
+  <!-- Modal for Details -->
+  <div id="detail-modal" class="modal">
     <div class="modal__content">
-      <button class="modal__close" onclick="closeModal()" aria-label="Close modal">✕ CLOSE</button>
-      <div id="modal-content"></div>
+      <span class="modal__close" onclick="closeModal()">&times;</span>
+      <div id="modal-body"></div>
     </div>
   </div>
   
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  
+  <!-- Data Scripts -->
   <script src="quiz-questions.js"></script>
-  <script src="intelligence-data.js"></script>
   <script src="indian-labs.js"></script>
   <script src="communities.js"></script>
   <script src="research-papers.js"></script>
-  <script src="app.js"></script>
   <script src="research-fix.js"></script>
+  
+  <!-- AI Chat Script -->
+  <script src="chat-ai.js"></script>
+  
+  <!-- Main App Script -->
+  <script src="app.js"></script>
+  
+  <!-- Communities App Script -->
   <script src="communities-app.js"></script>
 </body>
 </html>
