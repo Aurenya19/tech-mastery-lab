@@ -1,0 +1,81 @@
+name: Auto-Update Research Papers
+
+on:
+  schedule:
+    # Runs every 6 hours (at 00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-research:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Fetch latest arXiv papers
+        run: |
+          node << 'EOF'
+          const https = require('https');
+          const fs = require('fs');
+          
+          // Fetch from arXiv API
+          const url = 'https://export.arxiv.org/api/query?search_query=cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL&sortBy=submittedDate&sortOrder=descending&max_results=30';
+          
+          https.get(url, (res) => {
+            let data = '';
+            res.on('data', chunk => data += chunk);
+            res.on('end', () => {
+              // Parse XML (simple regex parsing)
+              const entries = data.match(/<entry>[\s\S]*?<\/entry>/g) || [];
+              
+              const papers = entries.map(entry => {
+                const getTag = (tag) => {
+                  const match = entry.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\/${tag}>`));
+                  return match ? match[1].trim() : '';
+                };
+                
+                const getAuthors = () => {
+                  const authorMatches = entry.match(/<author>[\s\S]*?<name>(.*?)<\/name>[\s\S]*?<\/author>/g) || [];
+                  return authorMatches.map(a => a.match(/<name>(.*?)<\/name>/)[1]);
+                };
+                
+                return {
+                  title: getTag('title').replace(/\n/g, ' '),
+                  summary: getTag('summary').replace(/\n/g, ' '),
+                  authors: getAuthors(),
+                  published: getTag('published'),
+                  link: getTag('id'),
+                  category: entry.match(/<category term="([^"]+)"/)?.[1] || 'cs.AI'
+                };
+              });
+              
+              // Generate JavaScript file
+              const jsContent = `// 🔬 RESEARCH PAPERS DATA - AUTO-UPDATED BY GITHUB ACTIONS
+// Last Updated: ${new Date().toISOString()}
+// Source: arXiv API (cs.AI, cs.LG, cs.CL)
+
+window.RESEARCH_PAPERS = ${JSON.stringify(papers, null, 2)};
+`;
+              
+              fs.writeFileSync('research-papers.js', jsContent);
+              console.log(`✅ Updated ${papers.length} research papers!`);
+            });
+          }).on('error', (err) => {
+            console.error('❌ Error fetching papers:', err);
+            process.exit(1);
+          });
+          EOF
+          
+      - name: Commit and push if changed
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add research-papers.js
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🤖 AUTO-UPDATE: Latest research papers from arXiv [$(date +'%Y-%m-%d %H:%M UTC')]" && git push)
