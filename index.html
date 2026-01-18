@@ -18,9 +18,10 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   
-  <!-- Stylesheets -->
+  <!-- Stylesheets (Order matters!) -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="logo-styles.css">
+  <link rel="stylesheet" href="chat-fix.css">
   <link rel="stylesheet" href="communities.css">
   <link rel="stylesheet" href="modal-styles.css">
 </head>
@@ -89,7 +90,7 @@
       <!-- RESEARCH PAPERS SECTION -->
       <section class="panel" id="research-panel">
         <div class="panel__header" onclick="togglePanel('research')">
-          <h2 class="panel__title">🔬 RESEARCH PAPERS (Auto-Updated)</h2>
+          <h2 class="panel__title">🔬 RESEARCH PAPERS (Auto-Updated Every 6hrs)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="research-content">
@@ -164,7 +165,7 @@
       <!-- LIVE CHAT SECTION (AI-POWERED) -->
       <section class="panel panel--full" id="chat-panel">
         <div class="panel__header" onclick="togglePanel('chat')">
-          <h2 class="panel__title">💬 AI CHAT (Bhindi + OpenRouter)</h2>
+          <h2 class="panel__title">💬 AI CHAT (Bhindi + OpenRouter + Gemini)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="chat-content">
@@ -192,7 +193,7 @@
           </div>
           
           <div class="chat-ai-status">
-            <span id="ai-status">🤖 AI Ready (Bhindi + OpenRouter fallback)</span>
+            <span id="ai-status">🤖 AI Ready (Bhindi + OpenRouter + Gemini fallback)</span>
           </div>
         </div>
       </section>
