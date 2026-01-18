@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="communities-enhanced.css">
   <link rel="stylesheet" href="communities.css">
   <link rel="stylesheet" href="modal-styles.css">
+  <link rel="stylesheet" href="tabs-navigation.css">
 </head>
 <body>
   <!-- Matrix Background Canvas -->
@@ -75,94 +76,97 @@
       </div>
     </div>
     
-    <!-- Main Content Grid -->
-    <div class="grid">
+    <!-- TABBED NAVIGATION -->
+    <div class="tabs-container">
+      <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('news')">📰 News</button>
+        <button class="tab-btn" onclick="switchTab('research')">🔬 Research</button>
+        <button class="tab-btn" onclick="switchTab('github')">💻 GitHub</button>
+        <button class="tab-btn" onclick="switchTab('reddit')">🕵️ Reddit</button>
+        <button class="tab-btn" onclick="switchTab('map')">🛰️ Map</button>
+        <button class="tab-btn" onclick="switchTab('communities')">🌐 Communities</button>
+        <button class="tab-btn" onclick="switchTab('chat')">💬 Chat</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">🧠 Quiz</button>
+      </div>
       
-      <!-- HACKER NEWS SECTION -->
-      <section class="panel" id="hacker-news-panel">
-        <div class="panel__header" onclick="togglePanel('hacker-news')">
-          <h2 class="panel__title">📰 HACKER NEWS (Live API - Auto-refresh 5min)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="hacker-news-content">
+      <!-- TAB CONTENT PANELS -->
+      <div class="tabs-content">
+        
+        <!-- NEWS TAB -->
+        <div id="tab-news" class="tab-panel active">
+          <div class="tab-panel__header">
+            <h2>📰 HACKER NEWS</h2>
+            <p class="tab-panel__subtitle">Live API - Auto-refresh every 5 minutes</p>
+          </div>
           <input type="text" class="search-input" id="news-search" placeholder="🔍 Search news..." onkeyup="searchNews()">
           <div id="news-list" class="list">
             <div class="loading">Loading Hacker News...</div>
           </div>
         </div>
-      </section>
-      
-      <!-- RESEARCH PAPERS SECTION -->
-      <section class="panel" id="research-panel">
-        <div class="panel__header" onclick="togglePanel('research')">
-          <h2 class="panel__title">🔬 RESEARCH PAPERS (30 Famous Papers)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="research-content">
+        
+        <!-- RESEARCH TAB -->
+        <div id="tab-research" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>🔬 RESEARCH PAPERS</h2>
+            <p class="tab-panel__subtitle">30 Famous Computer Science Papers</p>
+          </div>
           <input type="text" class="search-input" id="research-search" placeholder="🔍 Search papers..." onkeyup="searchResearch()">
           <div id="research-list" class="list">
             <div class="loading">Loading research papers...</div>
           </div>
         </div>
-      </section>
-      
-      <!-- GITHUB TRENDING SECTION -->
-      <section class="panel" id="github-panel">
-        <div class="panel__header" onclick="togglePanel('github')">
-          <h2 class="panel__title">💻 GITHUB TRENDING (Live API - Auto-refresh 15min)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="github-content">
+        
+        <!-- GITHUB TAB -->
+        <div id="tab-github" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>💻 GITHUB TRENDING</h2>
+            <p class="tab-panel__subtitle">Live API - Auto-refresh every 15 minutes</p>
+          </div>
           <input type="text" class="search-input" id="github-search" placeholder="🔍 Search repos..." onkeyup="searchGitHub()">
           <div id="github-list" class="list">
             <div class="loading">Loading GitHub trending...</div>
           </div>
         </div>
-      </section>
-      
-      <!-- REDDIT SECTION -->
-      <section class="panel" id="reddit-panel">
-        <div class="panel__header" onclick="togglePanel('reddit')">
-          <h2 class="panel__title">🕵️ REDDIT TECH (Live API - Auto-refresh 10min)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="reddit-content">
+        
+        <!-- REDDIT TAB -->
+        <div id="tab-reddit" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>🕵️ REDDIT TECH</h2>
+            <p class="tab-panel__subtitle">Live API - Auto-refresh every 10 minutes</p>
+          </div>
           <input type="text" class="search-input" id="reddit-search" placeholder="🔍 Search posts..." onkeyup="searchReddit()">
           <div id="reddit-list" class="list">
             <div class="loading">Loading Reddit posts...</div>
           </div>
         </div>
-      </section>
-      
-      <!-- SATELLITE MAP SECTION -->
-      <section class="panel panel--full" id="satellite-panel">
-        <div class="panel__header" onclick="togglePanel('satellite')">
-          <h2 class="panel__title">🛰️ GLOBAL TECH LABS (Satellite View)</h2>
-          <span class="panel__toggle">▼</span>
+        
+        <!-- MAP TAB -->
+        <div id="tab-map" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>🛰️ GLOBAL TECH LABS</h2>
+            <p class="tab-panel__subtitle">Satellite View of Major Tech Research Centers</p>
+          </div>
+          <div id="map" style="height: 600px; border-radius: 8px;"></div>
         </div>
-        <div class="panel__content" id="satellite-content">
-          <div id="map" style="height: 500px; border-radius: 8px;"></div>
+        
+        <!-- COMMUNITIES TAB -->
+        <div id="tab-communities" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>🌐 TECH COMMUNITIES</h2>
+            <p class="tab-panel__subtitle">40+ Active Communities with Live Stats</p>
+          </div>
+          <div id="communities-content">
+            <div class="communities-loading">Loading communities...</div>
+          </div>
         </div>
-      </section>
-      
-      <!-- COMMUNITIES SECTION (ENHANCED) -->
-      <section class="panel panel--full" id="communities-panel">
-        <div class="panel__header" onclick="togglePanel('communities')">
-          <h2 class="panel__title">🌐 TECH COMMUNITIES (40+ Live Stats)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="communities-content">
-          <div class="communities-loading">Loading communities...</div>
-        </div>
-      </section>
-      
-      <!-- LIVE CHAT SECTION (AI-POWERED) -->
-      <section class="panel panel--full" id="chat-panel">
-        <div class="panel__header" onclick="togglePanel('chat')">
-          <h2 class="panel__title">💬 AI CHAT (Smart Responses + 8 Rooms)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="chat-content">
+        
+        <!-- CHAT TAB -->
+        <div id="tab-chat" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>💬 AI CHAT</h2>
+            <p class="tab-panel__subtitle">Smart Responses + 8 Specialized Rooms</p>
+          </div>
+          
           <div class="chat-info">
             <span id="online-count">● Online</span>
             <span id="current-room-name">General</span>
@@ -190,15 +194,14 @@
             <span id="ai-status">🤖 AI Ready - Ask me anything!</span>
           </div>
         </div>
-      </section>
-      
-      <!-- TECH QUIZ SECTION -->
-      <section class="panel panel--full" id="quiz-panel">
-        <div class="panel__header" onclick="togglePanel('quiz')">
-          <h2 class="panel__title">🧠 TECH QUIZ (100 Questions + XP Rewards)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="quiz-content-panel">
+        
+        <!-- QUIZ TAB -->
+        <div id="tab-quiz" class="tab-panel">
+          <div class="tab-panel__header">
+            <h2>🧠 TECH QUIZ</h2>
+            <p class="tab-panel__subtitle">100 Questions + XP Rewards</p>
+          </div>
+          
           <div class="quiz-controls">
             <div class="quiz-categories">
               <button class="btn btn--small btn--active" data-category="all" onclick="selectQuizCategory('all', this)">All</button>
@@ -227,8 +230,8 @@
             <p class="text-center">Select a category and mode to start the quiz!</p>
           </div>
         </div>
-      </section>
-      
+        
+      </div>
     </div>
     
     <!-- Footer -->
@@ -266,6 +269,7 @@
   <script src="search-functions.js"></script>
   <script src="final-fix.js"></script>
   <script src="complete-fix.js"></script>
+  <script src="tabs-navigation.js"></script>
   
   <!-- Mission System (Needs AppState to be defined) -->
   <script src="mission-system.js"></script>
