@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, Indian labs, and AI-powered chat">
-  <meta name="keywords" content="tech news, research, GitHub, Indian labs, ISRO, IIT, tech quiz, programming, AI chat">
+  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, Indian labs, and AI-powered chat with gamification">
+  <meta name="keywords" content="tech news, research, GitHub, Indian labs, ISRO, IIT, tech quiz, programming, AI chat, gamification, achievements">
   <meta name="author" content="Tech Mastery Lab">
   
-  <title>🇮🇳 TECH MASTERY LAB - India's Ultimate Tech Hub</title>
+  <title>🎯 TECH MASTERY LAB - Mission Control</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="logo-styles.css">
   <link rel="stylesheet" href="chat-fix.css">
+  <link rel="stylesheet" href="mission-styles.css">
+  <link rel="stylesheet" href="communities-enhanced.css">
   <link rel="stylesheet" href="communities.css">
   <link rel="stylesheet" href="modal-styles.css">
 </head>
@@ -37,10 +39,13 @@
       <div class="header__logo">
         <img src="logo.svg" alt="Tech Mastery Lab Logo" width="80" height="80">
       </div>
-      <h1 class="header__title">🇮🇳 TECH MASTERY LAB</h1>
-      <p class="header__tagline">India's Ultimate Tech Intelligence Hub</p>
+      <h1 class="header__title">🎯 TECH MASTERY LAB</h1>
+      <p class="header__tagline">Mission Control - Your Tech Intelligence Hub</p>
       <p class="header__subtitle" id="last-update">Loading real-time data...</p>
     </header>
+    
+    <!-- Mission Dashboard -->
+    <div id="mission-dashboard"></div>
     
     <!-- Stats Grid -->
     <div class="stats">
@@ -151,14 +156,14 @@
         </div>
       </section>
       
-      <!-- COMMUNITIES SECTION -->
+      <!-- COMMUNITIES SECTION (ENHANCED) -->
       <section class="panel panel--full" id="communities-panel">
         <div class="panel__header" onclick="togglePanel('communities')">
-          <h2 class="panel__title">🌐 TECH COMMUNITIES (40+ Permanent Links)</h2>
+          <h2 class="panel__title">🌐 TECH COMMUNITIES (40+ Live Stats)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="communities-content">
-          <!-- Communities content loaded by communities-app.js -->
+          <div class="communities-loading">Loading communities...</div>
         </div>
       </section>
       
@@ -201,7 +206,7 @@
       <!-- TECH QUIZ SECTION -->
       <section class="panel panel--full" id="quiz-panel">
         <div class="panel__header" onclick="togglePanel('quiz')">
-          <h2 class="panel__title">🧠 TECH QUIZ (100 Questions)</h2>
+          <h2 class="panel__title">🧠 TECH QUIZ (100 Questions + XP Rewards)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="quiz-content-panel">
@@ -240,6 +245,7 @@
     <!-- Footer -->
     <footer class="footer">
       <p>Made with ❤️ for the Indian Tech Community 🇮🇳</p>
+      <p>🎯 Mission-Based Learning | 🏆 Achievements | 🔥 Daily Streaks | 💯 100% Free Forever</p>
       <p>Auto-updated by GitHub Actions | <a href="https://github.com/Aurenya19/tech-mastery-lab" target="_blank">View on GitHub</a></p>
     </footer>
     
@@ -263,6 +269,12 @@
   <script src="communities.js"></script>
   <script src="research-papers.js"></script>
   <script src="research-fix.js"></script>
+  
+  <!-- Mission System (Load first for tracking) -->
+  <script src="mission-system.js"></script>
+  
+  <!-- Enhanced Communities -->
+  <script src="communities-enhanced.js"></script>
   
   <!-- AI Chat Scripts (Load in order) -->
   <script src="chat-ai.js"></script>
