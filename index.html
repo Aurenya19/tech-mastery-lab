@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, Indian labs, and AI-powered chat with gamification">
-  <meta name="keywords" content="tech news, research, GitHub, Indian labs, ISRO, IIT, tech quiz, programming, AI chat, gamification, achievements">
+  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, and AI-powered chat with gamification">
+  <meta name="keywords" content="tech news, research, GitHub, tech quiz, programming, AI chat, gamification, achievements">
   <meta name="author" content="Tech Mastery Lab">
   
   <title>🎯 TECH MASTERY LAB - Mission Control</title>
@@ -66,12 +66,12 @@
         <span class="stat-card__label">🕵️ REDDIT POSTS</span>
       </div>
       <div class="stat-card">
-        <span class="stat-card__number" id="labs-count">50+</span>
-        <span class="stat-card__label">🇮🇳 INDIAN LABS</span>
-      </div>
-      <div class="stat-card">
         <span class="stat-card__number" id="communities-count">40+</span>
         <span class="stat-card__label">🌐 COMMUNITIES</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__number" id="quiz-count">100</span>
+        <span class="stat-card__label">🧠 QUIZ QUESTIONS</span>
       </div>
     </div>
     
@@ -142,17 +142,6 @@
         </div>
         <div class="panel__content" id="satellite-content">
           <div id="map" style="height: 500px; border-radius: 8px;"></div>
-        </div>
-      </section>
-      
-      <!-- INDIAN LABS MAP SECTION -->
-      <section class="panel panel--full" id="indian-labs-panel">
-        <div class="panel__header" onclick="togglePanel('indian-labs')">
-          <h2 class="panel__title">🇮🇳 INDIAN TECH LABS (50+ Locations)</h2>
-          <span class="panel__toggle">▼</span>
-        </div>
-        <div class="panel__content" id="indian-labs-content">
-          <div id="indian-labs-map" style="height: 500px; border-radius: 8px;"></div>
         </div>
       </section>
       
@@ -276,6 +265,7 @@
   <script src="research-fix.js"></script>
   <script src="search-functions.js"></script>
   <script src="final-fix.js"></script>
+  <script src="complete-fix.js"></script>
   
   <!-- Mission System (Needs AppState to be defined) -->
   <script src="mission-system.js"></script>
