@@ -15,20 +15,40 @@ window.openModal = function(type, data) {
   
   // Set modal content based on type
   if (type === 'news') {
+    // For Hacker News, most stories don't have text content
+    // The main action is to read the article or view discussion
+    const hasUrl = data.url && data.url.trim() !== '';
+    const hasText = data.text && data.text.trim() !== '';
+    
     modalBody.innerHTML = `
       <div class="modal-detail">
-        <h2>${data.title}</h2>
+        <h2>${sanitizeHTML(data.title)}</h2>
         <div class="modal-detail__meta">
-          <span class="tag">👤 ${data.by || 'Unknown'}</span>
+          <span class="tag">👤 ${sanitizeHTML(data.by || 'Unknown')}</span>
           <span class="tag">⭐ ${data.score || 0} points</span>
           <span class="tag">💬 ${data.descendants || 0} comments</span>
         </div>
-        <div class="modal-detail__text">
-          ${data.text || 'No additional content available.'}
-        </div>
+        
+        ${hasText ? `
+          <div class="modal-detail__text">
+            ${sanitizeHTML(data.text)}
+          </div>
+        ` : `
+          <div class="modal-detail__info">
+            <p>📰 This is a link post. Click "Read Full Article" below to view the complete content on the original website.</p>
+            ${hasUrl ? `<p class="modal-detail__url">🔗 <strong>Source:</strong> ${sanitizeHTML(new URL(data.url).hostname)}</p>` : ''}
+          </div>
+        `}
+        
         <div class="modal-detail__actions">
-          ${data.url ? `<a href="${data.url}" target="_blank" class="btn btn--primary">📖 Read Article</a>` : ''}
-          <a href="https://news.ycombinator.com/item?id=${data.id}" target="_blank" class="btn">💬 View Discussion</a>
+          ${hasUrl ? `
+            <a href="${data.url}" target="_blank" class="btn btn--primary btn--large">
+              📖 Read Full Article
+            </a>
+          ` : ''}
+          <a href="https://news.ycombinator.com/item?id=${data.id}" target="_blank" class="btn ${hasUrl ? '' : 'btn--primary'}">
+            💬 View Discussion (${data.descendants || 0} comments)
+          </a>
         </div>
       </div>
     `;
@@ -37,14 +57,14 @@ window.openModal = function(type, data) {
   } else if (type === 'github') {
     modalBody.innerHTML = `
       <div class="modal-detail">
-        <h2>${data.name}</h2>
+        <h2>${sanitizeHTML(data.name)}</h2>
         <div class="modal-detail__meta">
           <span class="tag">⭐ ${formatNumber(data.stars)} stars</span>
           <span class="tag">🔱 ${formatNumber(data.forks)} forks</span>
-          ${data.language ? `<span class="tag">💻 ${data.language}</span>` : ''}
+          ${data.language ? `<span class="tag">💻 ${sanitizeHTML(data.language)}</span>` : ''}
         </div>
         <div class="modal-detail__text">
-          ${data.description || 'No description available.'}
+          ${sanitizeHTML(data.description || 'No description available.')}
         </div>
         <div class="modal-detail__actions">
           <a href="${data.url}" target="_blank" class="btn btn--primary">🔗 View on GitHub</a>
@@ -92,7 +112,7 @@ window.displayNews = function() {
         <span class="tag">💬 ${story.descendants || 0}</span>
       </div>
       <div class="timestamp">${formatTime(story.time * 1000)}</div>
-      <div class="click-hint">Click for details 📖</div>
+      <div class="click-hint">Click to read article 📖</div>
     </div>
   `).join('');
 };
@@ -158,7 +178,7 @@ window.openResearchDetail = function(idx) {
         
         ${paper.arxiv ? `
           <div class="modal-detail__actions">
-            <a href="${paper.arxiv}" target="_blank" class="btn btn--primary">📄 Read on arXiv</a>
+            <a href="${paper.arxiv}" target="_blank" class="btn btn--primary">📄 Read Full Paper on arXiv</a>
           </div>
         ` : ''}
       </div>
