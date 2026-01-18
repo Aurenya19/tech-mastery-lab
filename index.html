@@ -81,7 +81,7 @@
       <!-- HACKER NEWS SECTION -->
       <section class="panel" id="hacker-news-panel">
         <div class="panel__header" onclick="togglePanel('hacker-news')">
-          <h2 class="panel__title">📰 HACKER NEWS (Live API)</h2>
+          <h2 class="panel__title">📰 HACKER NEWS (Live API - Auto-refresh 5min)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="hacker-news-content">
@@ -95,7 +95,7 @@
       <!-- RESEARCH PAPERS SECTION -->
       <section class="panel" id="research-panel">
         <div class="panel__header" onclick="togglePanel('research')">
-          <h2 class="panel__title">🔬 RESEARCH PAPERS (Auto-Updated Every 6hrs)</h2>
+          <h2 class="panel__title">🔬 RESEARCH PAPERS (30 Famous Papers)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="research-content">
@@ -109,7 +109,7 @@
       <!-- GITHUB TRENDING SECTION -->
       <section class="panel" id="github-panel">
         <div class="panel__header" onclick="togglePanel('github')">
-          <h2 class="panel__title">💻 GITHUB TRENDING (Live)</h2>
+          <h2 class="panel__title">💻 GITHUB TRENDING (Live API - Auto-refresh 15min)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="github-content">
@@ -123,7 +123,7 @@
       <!-- REDDIT SECTION -->
       <section class="panel" id="reddit-panel">
         <div class="panel__header" onclick="togglePanel('reddit')">
-          <h2 class="panel__title">🕵️ REDDIT TECH (Live API)</h2>
+          <h2 class="panel__title">🕵️ REDDIT TECH (Live API - Auto-refresh 10min)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="reddit-content">
@@ -170,12 +170,12 @@
       <!-- LIVE CHAT SECTION (AI-POWERED) -->
       <section class="panel panel--full" id="chat-panel">
         <div class="panel__header" onclick="togglePanel('chat')">
-          <h2 class="panel__title">💬 AI CHAT (Bhindi + OpenRouter + Gemini)</h2>
+          <h2 class="panel__title">💬 AI CHAT (Smart Responses + 8 Rooms)</h2>
           <span class="panel__toggle">▼</span>
         </div>
         <div class="panel__content" id="chat-content">
           <div class="chat-info">
-            <span id="online-count">● 0 Online</span>
+            <span id="online-count">● Online</span>
             <span id="current-room-name">General</span>
           </div>
           
@@ -198,7 +198,7 @@
           </div>
           
           <div class="chat-ai-status">
-            <span id="ai-status">🤖 AI Ready (Bhindi + OpenRouter + Gemini fallback)</span>
+            <span id="ai-status">🤖 AI Ready - Ask me anything!</span>
           </div>
         </div>
       </section>
@@ -246,7 +246,7 @@
     <footer class="footer">
       <p>Made with ❤️ for the Indian Tech Community 🇮🇳</p>
       <p>🎯 Mission-Based Learning | 🏆 Achievements | 🔥 Daily Streaks | 💯 100% Free Forever</p>
-      <p>Auto-updated by GitHub Actions | <a href="https://github.com/Aurenya19/tech-mastery-lab" target="_blank">View on GitHub</a></p>
+      <p>Auto-updated every 5-15 minutes | <a href="https://github.com/Aurenya19/tech-mastery-lab" target="_blank">View on GitHub</a></p>
     </footer>
     
   </div>
@@ -275,6 +275,7 @@
   <!-- Fix Scripts (Override functions after app.js loads) -->
   <script src="research-fix.js"></script>
   <script src="search-functions.js"></script>
+  <script src="final-fix.js"></script>
   
   <!-- Mission System (Needs AppState to be defined) -->
   <script src="mission-system.js"></script>
