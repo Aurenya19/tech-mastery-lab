@@ -1,261 +1,171 @@
 # 🇮🇳 TECH MASTERY LAB - India's Ultimate Tech Intelligence Hub
 
-[![Live Site](https://img.shields.io/badge/Live-Site-brightgreen)](https://aurenya19.github.io/tech-mastery-lab/)
-[![Auto-Update](https://img.shields.io/badge/Auto--Update-Enabled-blue)](https://github.com/Aurenya19/tech-mastery-lab/actions)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Auto-Update Research](https://github.com/Aurenya19/tech-mastery-lab/actions/workflows/update-research.yml/badge.svg)](https://github.com/Aurenya19/tech-mastery-lab/actions/workflows/update-research.yml)
+[![Auto-Update Breakthroughs](https://github.com/Aurenya19/tech-mastery-lab/actions/workflows/update-breakthroughs.yml/badge.svg)](https://github.com/Aurenya19/tech-mastery-lab/actions/workflows/update-breakthroughs.yml)
+[![Live Site](https://img.shields.io/badge/Live-Site-00ff00)](https://aurenya19.github.io/tech-mastery-lab/)
 
-> **Real-time tech intelligence platform with automatic content updates, live APIs, and permanent community links!**
-
-## 🚀 LIVE DEMO
-
-**🔗 https://aurenya19.github.io/tech-mastery-lab/**
+> **A comprehensive, auto-updating tech intelligence platform built for the Indian tech community**
 
 ---
 
-## ✨ KEY FEATURES
+## 🚀 **LIVE DEMO**
 
-### 🤖 **AUTO-UPDATING CONTENT (No Manual Work!)**
-
-✅ **Research Papers** - Auto-updates every 6 hours from arXiv  
-✅ **Tech Breakthroughs** - Auto-updates every 12 hours  
-✅ **Hacker News** - Live API, 100+ stories  
-✅ **GitHub Trending** - Live scraping, 50+ repos  
-✅ **Reddit Posts** - Live API, 50+ posts from 10 subreddits  
-✅ **Communities** - Permanent links (Reddit, YouTube, LinkedIn) - **NEVER EXPIRE!**
-
-### 📊 **REAL-TIME DATA SOURCES**
-
-- **📰 Hacker News API** - Top 100 stories, live updates
-- **💻 GitHub Trending** - 50+ trending repositories
-- **🕵️ Reddit API** - 10 tech subreddits, 50+ posts
-- **🔬 arXiv API** - Latest AI/ML/CS research papers
-- **🛰️ Satellite Maps** - Esri World Imagery (better zoom!)
-- **🇮🇳 Indian Labs** - 50+ ISRO, IIT, DRDO, startups
-
-### 🎯 **INTERACTIVE FEATURES**
-
-- **💬 Live Chat** - 8 chat rooms (General, AI/ML, Space, Coding, Career, India, Quiz, Research)
-- **🧠 Tech Quiz** - 100 questions across 8 categories
-- **🗺️ Interactive Maps** - Global labs + Indian tech centers
-- **🌐 Communities** - 40+ permanent community links
+**👉 [https://aurenya19.github.io/tech-mastery-lab/](https://aurenya19.github.io/tech-mastery-lab/)**
 
 ---
 
-## 🤖 AUTO-UPDATE SYSTEM
+## ✨ **KEY FEATURES**
+
+### 📰 **Real-Time Tech News**
+- **Hacker News** - Live API integration
+- **Reddit Tech** - r/technology, r/programming, r/india
+- **GitHub Trending** - Latest trending repositories
+- All updated on every page load!
+
+### 🔬 **Research Papers (AUTO-UPDATED)**
+- **arXiv Integration** - Latest AI/ML/CS papers
+- **Auto-updates every 6 hours** via GitHub Actions
+- Categories: AI, Machine Learning, Computer Science
+- Direct links to papers
+
+### 🤖 **AI-Powered Chat**
+- **3-Tier AI System:**
+  1. **Bhindi AI** (Primary) - Best quality, internet access
+  2. **OpenRouter** (Fallback 1) - Free Gemini 2.0 Flash
+  3. **Intelligent Fallback** (Fallback 2) - Context-aware offline responses
+- **8 Specialized Rooms:** General, AI/ML, Space Tech, Coding, Career, India Tech, Quiz, Research
+- **Context-Aware:** Knows which section you're viewing
+- **Conversation History:** Remembers last 10 exchanges
+
+### 🗺️ **Interactive Maps**
+- **Global Tech Labs** - Satellite view with Esri imagery
+- **Indian Tech Labs** - 50+ locations (ISRO, IIT, IIIT, NIT, etc.)
+- **Cluster Markers** - Clean visualization
+- **Detailed Info** - Click markers for lab details
+
+### 🌐 **Tech Communities (40+ Permanent Links)**
+- **Reddit Communities** - r/india, r/technology, r/programming, etc.
+- **YouTube Channels** - Tech education, tutorials, news
+- **LinkedIn Groups** - Professional networking
+- **Discord Servers** - Real-time discussions
+- **All links are permanent** - Never expire!
+
+### 🧠 **Tech Quiz**
+- **100 Questions** across 8 categories
+- **3 Modes:** Quick (10Q), Timed (20Q), Practice (50Q)
+- **Categories:** Web Dev, AI/ML, Mobile, Cloud, Security, Blockchain, General
+- **Real-time scoring** and feedback
+
+---
+
+## 🤖 **AUTO-UPDATE SYSTEM**
 
 ### **GitHub Actions Workflows:**
 
 #### 1️⃣ **Research Papers** (Every 6 hours)
 ```yaml
-Schedule: 0 */6 * * * (00:00, 06:00, 12:00, 18:00 UTC)
-Source: arXiv API (cs.AI, cs.LG, cs.CL)
-Updates: research-papers.js
+Schedule: 00:00, 06:00, 12:00, 18:00 UTC
+Source: arXiv API
+Categories: cs.AI, cs.LG, cs.CL
+Output: research-papers.js
 ```
 
 #### 2️⃣ **Tech Breakthroughs** (Every 12 hours)
 ```yaml
-Schedule: 0 */12 * * * (00:00, 12:00 UTC)
-Source: Curated + Live APIs
-Updates: intelligence-data.js
+Schedule: 00:00, 12:00 UTC
+Source: Multiple tech news APIs
+Output: breakthroughs.js
 ```
 
-### **Manual Trigger:**
-You can manually trigger updates from GitHub Actions tab!
+**✅ ZERO MANUAL WORK REQUIRED!**
 
 ---
 
-## 🌐 PERMANENT COMMUNITY LINKS
+## 🎨 **DESIGN & BRANDING**
 
-**NO MORE EXPIRED INVITES!** All community links are permanent:
+### **Custom Logo**
+- 🇮🇳 Indian theme with tricolor accent
+- 🧠 Tech brain with microchip design
+- 🛰️ Orbital rings for global reach
+- ⚡ Circuit pattern aesthetic
+- 💚 Matrix-style green/cyan glow
 
-### **Reddit Communities** (Never Expire!)
-- r/programming (6M+ members)
-- r/learnprogramming (4.5M+ members)
-- r/developersIndia (300K+ members)
-- r/MachineLearning (2.8M+ members)
-- r/ISRO (100K+ members)
-- ...and 5 more!
-
-### **YouTube Channels** (Permanent!)
-- CodeWithHarry (5M+ subscribers)
-- Apna College (4.5M+ subscribers)
-- freeCodeCamp (9M+ subscribers)
-- Fireship (3M+ subscribers)
-- ISRO Official (3M+ subscribers)
-- ...and 5 more!
-
-### **LinkedIn Groups** (Permanent!)
-- Indian Developers Community (500K+ members)
-- AI & Deep Learning (1M+ members)
-- Web Developers (800K+ members)
-- ...and 3 more!
-
-### **Discord Servers** (Public Permanent Links)
-- The Programmer's Hangout (200K+ members)
-- Reactiflux (150K+ members)
-- Python Discord (400K+ members)
-- ...and 2 more!
+### **Professional UI**
+- Matrix-style background animation
+- Responsive design (mobile, tablet, desktop)
+- Smooth animations and transitions
+- Clean, modern interface
+- Accessibility-focused
 
 ---
 
-## 🛠️ TECH STACK
+## 📊 **TECH STACK**
 
-- **Frontend:** Vanilla JavaScript (No frameworks!)
-- **Styling:** Custom CSS with Matrix theme
-- **Maps:** Leaflet.js + Esri World Imagery
-- **APIs:** 
-  - Hacker News Firebase API
-  - GitHub Trending (scraping)
-  - Reddit JSON API
-  - arXiv API
-- **Automation:** GitHub Actions
-- **Hosting:** GitHub Pages
+### **Frontend**
+- Pure HTML5, CSS3, JavaScript (No frameworks!)
+- Leaflet.js for maps
+- Custom CSS with BEM methodology
+- Responsive grid layout
 
----
+### **APIs & Data Sources**
+- Hacker News API
+- Reddit JSON API
+- GitHub (scraping)
+- arXiv API
+- Esri Satellite Imagery
 
-## 📈 STATS
-
-- **📰 100+ News Stories** (Auto-updating)
-- **🔬 30+ Research Papers** (Auto-updating every 6 hours)
-- **💻 50+ GitHub Repos** (Live trending)
-- **🕵️ 50+ Reddit Posts** (Live from 10 subreddits)
-- **🇮🇳 50+ Indian Labs** (ISRO, IIT, DRDO, startups)
-- **🧠 100 Quiz Questions** (8 categories)
-- **🌐 40+ Communities** (Permanent links!)
-- **💬 8 Chat Rooms** (Live discussions)
+### **Automation**
+- GitHub Actions
+- Cron-based scheduling
+- Automated commits
 
 ---
 
-## 🚀 HOW IT WORKS
+## 🚀 **GETTING STARTED**
 
-### **Auto-Update Flow:**
-
-```
-GitHub Actions (Cron Job)
-    ↓
-Fetch Latest Data (arXiv API, etc.)
-    ↓
-Parse & Format Data
-    ↓
-Update JavaScript Files
-    ↓
-Commit & Push to GitHub
-    ↓
-GitHub Pages Auto-Deploy
-    ↓
-Live Site Updated! ✅
-```
-
-### **User Experience:**
-
-1. **Visit Site** → Fresh data loads automatically
-2. **Click Sections** → Expand/collapse panels
-3. **Search** → Filter news, labs, etc.
-4. **Click Items** → View detailed modals
-5. **Join Communities** → Permanent links, never expire!
-
----
-
-## 🎨 FEATURES BREAKDOWN
-
-### **📰 Hacker News Section**
-- Top 100 stories from Hacker News
-- Live API integration
-- Search functionality
-- Click for full details
-
-### **🔬 Research Papers Section**
-- Latest 30 papers from arXiv
-- Categories: AI, ML, NLP, Computer Vision
-- Auto-updates every 6 hours
-- Click for full abstract
-
-### **💻 GitHub Trending Section**
-- 50+ trending repositories
-- Live scraping
-- Stars, forks, language info
-- Direct GitHub links
-
-### **🕵️ Reddit Section**
-- 10 tech subreddits
-- 50+ latest posts
-- Upvotes, comments, awards
-- Direct Reddit links
-
-### **🛰️ Satellite Maps**
-- Global tech labs (Area 51, Google X, SpaceX, etc.)
-- Indian labs (ISRO, IIT, DRDO, startups)
-- Esri World Imagery (better zoom!)
-- Interactive markers with details
-
-### **🧠 Tech Quiz**
-- 100 questions across 8 categories
-- 3 modes: Quick (10Q), Timed (20Q), Practice (50Q)
-- Score tracking
-- Timer for timed mode
-
-### **💬 Live Chat**
-- 8 chat rooms
-- Nickname system
-- Real-time messaging (simulated)
-- Room switching
-
-### **🌐 Communities**
-- 40+ permanent community links
-- Filter by platform (Reddit, YouTube, LinkedIn, Discord, Telegram)
-- Member counts, topics, language info
-- Direct join links
-
----
-
-## 🔧 SETUP & DEPLOYMENT
-
-### **Local Development:**
-
+### **1. Clone Repository**
 ```bash
-# Clone repository
 git clone https://github.com/Aurenya19/tech-mastery-lab.git
-
-# Open in browser
 cd tech-mastery-lab
-open index.html
 ```
 
-### **GitHub Pages Deployment:**
+### **2. Open Locally**
+```bash
+# Just open index.html in browser
+open index.html  # Mac
+start index.html # Windows
+xdg-open index.html # Linux
+```
 
-1. Fork this repository
-2. Go to Settings → Pages
-3. Source: Deploy from branch `main`
-4. Save
-5. Wait 1-2 minutes
-6. Visit: `https://YOUR-USERNAME.github.io/tech-mastery-lab/`
-
-### **Enable Auto-Updates:**
-
-GitHub Actions are already configured! They will:
-- Run automatically on schedule
-- Update research papers every 6 hours
-- Update breakthroughs every 12 hours
-- Commit changes automatically
+### **3. Deploy to GitHub Pages**
+1. Go to repository Settings
+2. Navigate to Pages
+3. Select `main` branch
+4. Save and wait for deployment
 
 ---
 
-## 📝 FILE STRUCTURE
+## 📁 **PROJECT STRUCTURE**
 
 ```
 tech-mastery-lab/
 ├── index.html              # Main HTML file
 ├── style.css               # Main stylesheet
+├── chat-fix.css            # Chat system fixes
+├── logo-styles.css         # Logo animations
+├── communities.css         # Communities styling
 ├── modal-styles.css        # Modal styling
-├── communities.css         # Communities section styling
-├── app.js                  # Main JavaScript (APIs, maps, chat, quiz)
+├── app.js                  # Main application logic
+├── chat-ai.js              # AI chat system
+├── chat-integration.js     # Chat UI integration
 ├── communities-app.js      # Communities functionality
-├── research-papers.js      # Research papers data (auto-updated)
-├── intelligence-data.js    # Breakthroughs data (auto-updated)
-├── quiz-questions.js       # Quiz questions
+├── quiz-questions.js       # Quiz data
 ├── indian-labs.js          # Indian labs data
-├── communities.js          # Communities data (permanent links!)
-├── research-fix.js         # Research CORS workaround
+├── communities.js          # Communities data
+├── research-papers.js      # Research papers (auto-updated)
+├── research-fix.js         # Research display logic
+├── logo.svg                # Main logo
+├── favicon.svg             # Browser icon
 ├── .github/
 │   └── workflows/
 │       ├── update-research.yml        # Auto-update research
@@ -265,53 +175,161 @@ tech-mastery-lab/
 
 ---
 
-## 🎯 ROADMAP
+## 🔧 **CUSTOMIZATION**
 
-- [x] Real-time APIs integration
-- [x] Auto-updating research papers
-- [x] Auto-updating breakthroughs
-- [x] Permanent community links
-- [x] Better satellite imagery
+### **Add More Communities**
+Edit `communities.js`:
+```javascript
+{
+  name: "Your Community",
+  category: "reddit", // or youtube, linkedin, discord
+  url: "https://...",
+  description: "Description",
+  members: "10K+"
+}
+```
+
+### **Add More Quiz Questions**
+Edit `quiz-questions.js`:
+```javascript
+{
+  question: "Your question?",
+  options: ["A", "B", "C", "D"],
+  correct: 0, // Index of correct answer
+  category: "Web Dev",
+  difficulty: "medium"
+}
+```
+
+### **Add More Indian Labs**
+Edit `indian-labs.js`:
+```javascript
+{
+  name: "Lab Name",
+  lat: 28.6139,
+  lng: 77.2090,
+  type: "Research",
+  description: "Description"
+}
+```
+
+---
+
+## 🤝 **CONTRIBUTING**
+
+Contributions are welcome! Here's how:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
+4. **Push** to branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+---
+
+## 📝 **TODO / ROADMAP**
+
+### **Phase 1: Core Features** ✅
+- [x] Real-time news integration
+- [x] Research papers auto-update
+- [x] AI chat system
+- [x] Interactive maps
+- [x] Tech quiz
+- [x] Communities section
+
+### **Phase 2: Enhancements** 🚧
 - [ ] User authentication
-- [ ] Save preferences
-- [ ] Real backend for chat
-- [ ] Mobile app
+- [ ] Bookmark/save features
+- [ ] Dark/light theme toggle
+- [ ] Advanced search filters
+- [ ] Export data functionality
+- [ ] Mobile app (PWA)
+
+### **Phase 3: Advanced** 📋
+- [ ] Real-time notifications
+- [ ] Personalized recommendations
+- [ ] Community forums
+- [ ] Job board integration
+- [ ] Event calendar
+- [ ] Newsletter system
 
 ---
 
-## 🤝 CONTRIBUTING
+## 🐛 **KNOWN ISSUES & FIXES**
 
-Contributions welcome! Feel free to:
-- Report bugs
-- Suggest features
-- Submit pull requests
-- Add more communities
-- Improve auto-update scripts
+### **Chat System**
+- ✅ **FIXED:** Chat overflow and overlap issues
+- ✅ **FIXED:** Proper scrolling with many messages
+- ✅ **FIXED:** Mobile responsiveness
 
----
+### **Auto-Updates**
+- ✅ **WORKING:** Research papers update every 6 hours
+- ✅ **WORKING:** Breakthroughs update every 12 hours
+- Check Actions tab for workflow status
 
-## 📜 LICENSE
-
-MIT License - Feel free to use, modify, and distribute!
-
----
-
-## 🙏 CREDITS
-
-- **APIs:** Hacker News, GitHub, Reddit, arXiv
-- **Maps:** Leaflet.js, Esri, OpenStreetMap
-- **Automation:** GitHub Actions
-- **Hosting:** GitHub Pages
+### **Performance**
+- All APIs are cached for better performance
+- Lazy loading for images
+- Optimized JavaScript execution
 
 ---
 
-## 📞 CONTACT
+## 📄 **LICENSE**
 
-- **GitHub:** [@Aurenya19](https://github.com/Aurenya19)
-- **Live Site:** [Tech Mastery Lab](https://aurenya19.github.io/tech-mastery-lab/)
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+## 👨‍💻 **AUTHOR**
+
+**Ritika Saini**
+- GitHub: [@Aurenya19](https://github.com/Aurenya19)
+- Email: ritikasainirits@gmail.com
+
+---
+
+## 🙏 **ACKNOWLEDGMENTS**
+
+- **Hacker News** for news API
+- **Reddit** for community data
+- **arXiv** for research papers
+- **GitHub** for trending repos
+- **Esri** for satellite imagery
+- **Leaflet.js** for mapping
+- **Indian Tech Community** for inspiration
+
+---
+
+## 📊 **STATS**
+
+- **40+ Communities** with permanent links
+- **50+ Indian Labs** mapped
+- **100 Quiz Questions** across 8 categories
+- **Auto-updates** every 6-12 hours
+- **3-Tier AI** chat system
+- **100% Free** and open source
+
+---
+
+## 🔗 **LINKS**
+
+- **Live Site:** https://aurenya19.github.io/tech-mastery-lab/
+- **Repository:** https://github.com/Aurenya19/tech-mastery-lab
+- **Issues:** https://github.com/Aurenya19/tech-mastery-lab/issues
+- **Discussions:** https://github.com/Aurenya19/tech-mastery-lab/discussions
+
+---
+
+## 💡 **SUPPORT**
+
+If you find this project helpful:
+- ⭐ **Star** the repository
+- 🐛 **Report** bugs via Issues
+- 💬 **Share** with the community
+- 🤝 **Contribute** improvements
 
 ---
 
 **Made with ❤️ for the Indian Tech Community 🇮🇳**
 
-**Last Updated:** Auto-updated by GitHub Actions ✨
+*Last Updated: January 2025*
