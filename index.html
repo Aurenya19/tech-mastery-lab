@@ -29,8 +29,8 @@
         <img src="logo.svg" alt="Logo" width="80" height="80">
       </div>
       <h1 class="header__title">🎯 TECH MASTERY LAB</h1>
-      <p class="header__tagline">Mission Control</p>
-      <p class="header__subtitle" id="last-update">Loading...</p>
+      <p class="header__tagline">Mission Control - Your Tech Intelligence Hub</p>
+      <p class="header__subtitle" id="last-update">Loading real-time data...</p>
     </header>
     
     <!-- Mission Dashboard -->
@@ -51,7 +51,7 @@
         🕵️ Reddit <span class="tab-count" id="reddit-count">0</span>
       </button>
       <button class="tab-btn" onclick="switchTab('map')" data-tab="map">
-        🛰️ Map
+        🛰️ Satellite
       </button>
       <button class="tab-btn" onclick="switchTab('communities')" data-tab="communities">
         🌐 Communities <span class="tab-count">500</span>
@@ -68,47 +68,68 @@
     <div class="tabs-content">
       <!-- News -->
       <div id="tab-news" class="tab-panel active">
-        <h2>📰 HACKER NEWS</h2>
-        <input type="text" class="search-input" id="news-search" placeholder="🔍 Search..." onkeyup="searchNews()">
-        <div id="news-list" class="list"><div class="loading">Loading...</div></div>
+        <div class="tab-panel__header">
+          <h2>📰 HACKER NEWS</h2>
+          <p class="tab-panel__subtitle">Live API - Auto-refresh every 5 minutes</p>
+        </div>
+        <input type="text" class="search-input" id="news-search" placeholder="🔍 Search news..." onkeyup="searchNews()">
+        <div id="news-list" class="list"><div class="loading">Loading Hacker News...</div></div>
       </div>
       
       <!-- Research -->
       <div id="tab-research" class="tab-panel">
-        <h2>🔬 RESEARCH PAPERS</h2>
-        <input type="text" class="search-input" id="research-search" placeholder="🔍 Search..." onkeyup="searchResearch()">
-        <div id="research-list" class="list"><div class="loading">Loading...</div></div>
+        <div class="tab-panel__header">
+          <h2>🔬 RESEARCH PAPERS</h2>
+          <p class="tab-panel__subtitle">30 Famous Computer Science Papers</p>
+        </div>
+        <input type="text" class="search-input" id="research-search" placeholder="🔍 Search papers..." onkeyup="searchResearch()">
+        <div id="research-list" class="list"><div class="loading">Loading research papers...</div></div>
       </div>
       
       <!-- GitHub -->
       <div id="tab-github" class="tab-panel">
-        <h2>💻 GITHUB TRENDING</h2>
-        <input type="text" class="search-input" id="github-search" placeholder="🔍 Search..." onkeyup="searchGitHub()">
-        <div id="github-list" class="list"><div class="loading">Loading...</div></div>
+        <div class="tab-panel__header">
+          <h2>💻 GITHUB TRENDING</h2>
+          <p class="tab-panel__subtitle">Live API - Auto-refresh every 15 minutes</p>
+        </div>
+        <input type="text" class="search-input" id="github-search" placeholder="🔍 Search repos..." onkeyup="searchGitHub()">
+        <div id="github-list" class="list"><div class="loading">Loading GitHub trending...</div></div>
       </div>
       
       <!-- Reddit -->
       <div id="tab-reddit" class="tab-panel">
-        <h2>🕵️ REDDIT TECH</h2>
-        <input type="text" class="search-input" id="reddit-search" placeholder="🔍 Search..." onkeyup="searchReddit()">
-        <div id="reddit-list" class="list"><div class="loading">Loading...</div></div>
+        <div class="tab-panel__header">
+          <h2>🕵️ REDDIT TECH</h2>
+          <p class="tab-panel__subtitle">Live API - Auto-refresh every 10 minutes</p>
+        </div>
+        <input type="text" class="search-input" id="reddit-search" placeholder="🔍 Search posts..." onkeyup="searchReddit()">
+        <div id="reddit-list" class="list"><div class="loading">Loading Reddit posts...</div></div>
       </div>
       
       <!-- Map -->
       <div id="tab-map" class="tab-panel">
-        <h2>🛰️ SATELLITE VIEW</h2>
+        <div class="tab-panel__header">
+          <h2>🛰️ GLOBAL TECH LABS - SATELLITE VIEW</h2>
+          <p class="tab-panel__subtitle">Major Tech Research Centers Worldwide</p>
+        </div>
         <div id="map" style="height: 600px; border-radius: 8px; margin-top: 20px;"></div>
       </div>
       
       <!-- Communities -->
       <div id="tab-communities" class="tab-panel">
-        <h2>🌐 TECH COMMUNITIES</h2>
+        <div class="tab-panel__header">
+          <h2>🌐 TECH COMMUNITIES</h2>
+          <p class="tab-panel__subtitle">500 Active Communities Worldwide</p>
+        </div>
         <div id="communities-content"><div class="loading">Loading 500 communities...</div></div>
       </div>
       
       <!-- Chat -->
       <div id="tab-chat" class="tab-panel">
-        <h2>💬 AI CHAT</h2>
+        <div class="tab-panel__header">
+          <h2>💬 AI CHAT</h2>
+          <p class="tab-panel__subtitle">Smart Responses + 8 Specialized Rooms</p>
+        </div>
         <div class="chat-info">
           <span id="online-count">● Online</span>
           <span id="current-room-name">General</span>
@@ -116,31 +137,38 @@
         <div class="chat-rooms">
           <button class="chat-room active" onclick="switchRoom('general')">General</button>
           <button class="chat-room" onclick="switchRoom('ai-ml')">AI/ML</button>
-          <button class="chat-room" onclick="switchRoom('space')">Space</button>
-          <button class="chat-room" onclick="switchRoom('coding')">Coding</button>
+          <button class="chat-room" onclick="switchRoom('space')">Space Tech</button>
+          <button class="chat-room" onclick="switchRoom('coding')">Coding Help</button>
           <button class="chat-room" onclick="switchRoom('career')">Career</button>
-          <button class="chat-room" onclick="switchRoom('india')">India</button>
+          <button class="chat-room" onclick="switchRoom('india')">India Tech</button>
           <button class="chat-room" onclick="switchRoom('quiz')">Quiz</button>
           <button class="chat-room" onclick="switchRoom('research')">Research</button>
         </div>
         <div id="chat-messages" class="chat-messages"></div>
         <div class="chat-input-container">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Ask anything..." onkeypress="handleChatKeyPress(event)">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Ask anything... (AI-powered)" onkeypress="handleChatKeyPress(event)">
           <button class="btn btn--primary" onclick="sendChatMessage()">Send 🚀</button>
         </div>
         <div class="chat-ai-status">
-          <span id="ai-status">🤖 AI Ready</span>
+          <span id="ai-status">🤖 AI Ready - Ask me anything!</span>
         </div>
       </div>
       
       <!-- Quiz -->
       <div id="tab-quiz" class="tab-panel">
-        <h2>🧠 TECH QUIZ</h2>
-        <p>500 Questions - 8 Categories - 3 Modes</p>
+        <div class="tab-panel__header">
+          <h2>🧠 TECH QUIZ</h2>
+          <p class="tab-panel__subtitle">500 Questions - 8 Categories - 3 Modes</p>
+        </div>
         <div class="quiz-stats">
           <div class="stat-card">
             <div class="stat-value" id="quiz-score">0</div>
             <div class="stat-label">Score</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="quiz-timer-display" style="display: none;">
+              <span id="quiz-timer">10:00</span>
+            </div>
           </div>
         </div>
         <div class="quiz-categories">
@@ -155,9 +183,9 @@
           <button class="btn" onclick="selectQuizCategory('DSA', this)">DSA</button>
         </div>
         <div class="quiz-modes">
-          <button class="btn btn--primary" onclick="startQuiz('quick')">⚡ Quick (10Q)</button>
-          <button class="btn btn--primary" onclick="startQuiz('timed')">⏱️ Timed (20Q)</button>
-          <button class="btn btn--primary" onclick="startQuiz('practice')">📚 Practice (50Q)</button>
+          <button class="btn btn--primary" onclick="startQuiz('quick')">⚡ Quick Mode (10 Questions)</button>
+          <button class="btn btn--primary" onclick="startQuiz('timed')">⏱️ Timed Mode (20Q - 10min)</button>
+          <button class="btn btn--primary" onclick="startQuiz('practice')">📚 Practice Mode (50 Questions)</button>
         </div>
         <div id="quiz-content"></div>
       </div>
@@ -176,31 +204,42 @@
   <!-- 1. External Libraries -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
-  <!-- 2. Data Files FIRST -->
+  <!-- 2. Data Files FIRST (Must load before everything else) -->
   <script src="data-communities.js"></script>
   <script src="data-quiz.js"></script>
   <script src="research-papers.js"></script>
   <script src="quiz-questions.js"></script>
+  <script src="indian-labs.js"></script>
+  <script src="communities.js"></script>
   
-  <!-- 3. Core App -->
+  <!-- 3. Core App (Defines AppState and core functions) -->
   <script src="app.js"></script>
   
-  <!-- 4. Feature Scripts -->
+  <!-- 4. Feature Scripts (Depend on app.js) -->
   <script src="tabs-navigation.js"></script>
   <script src="mission-system.js"></script>
   <script src="communities-enhanced.js"></script>
   <script src="chat-ai.js"></script>
   <script src="chat-integration.js"></script>
+  <script src="communities-app.js"></script>
   
-  <!-- 5. Fix Scripts -->
+  <!-- 5. Fix Scripts (Override/enhance existing functions) -->
+  <script src="research-fix.js"></script>
+  <script src="search-functions.js"></script>
   <script src="final-fix.js"></script>
   <script src="complete-fix.js"></script>
   
-  <!-- 6. Initialization -->
+  <!-- 6. Initialization Scripts -->
   <script src="init-all.js"></script>
   
+  <!-- 7. MASTER FIX (Ensures 100% functionality) -->
+  <script src="master-fix.js"></script>
+  
   <script>
-    console.log('✅ All scripts loaded!');
+    console.log('✅ Tech Mastery Lab Fully Loaded!');
+    console.log('📊 Data: 500 Communities, 500 Quiz Questions, 30 Research Papers');
+    console.log('🛰️ Features: News, Research, GitHub, Reddit, Satellite View, Communities, Chat, Quiz');
+    console.log('💡 TIP: Open Console (F12) and run window.runDiagnostics() to check system status!');
   </script>
 </body>
 </html>
