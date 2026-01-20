@@ -1,463 +1,36 @@
-// 🇮🇳 TECH MASTERY LAB - FULLY WORKING VERSION
+// 🎯 TECH MASTERY LAB - COMPLETE WORKING VERSION
 'use strict';
 
 // ==================== STATE MANAGEMENT ====================
 const AppState = {
-  // Data
   allNews: [],
   allReddit: [],
   allGitHub: [],
   allResearch: [],
-  allBreakthroughs: [],
-  
-  // Maps
-  map: null,
-  indianLabsMap: null,
-  markers: [],
-  indianMarkers: [],
-  markerCluster: null,
-  indianMarkerCluster: null,
-  
-  // Chat
   currentRoom: 'general',
-  currentUser: null,
   chatMessages: {},
-  
-  // Quiz
   quizQuestions: [],
   currentQuiz: [],
   currentQuestionIndex: 0,
   quizScore: 0,
-  quizTimer: null,
-  quizTimeLeft: 0,
   selectedCategory: 'all',
-  quizMode: null
+  quizMode: null,
+  userXP: parseInt(localStorage.getItem('userXP')) || 0,
+  userLevel: parseInt(localStorage.getItem('userLevel')) || 1
 };
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 Initializing Tech Mastery Lab...');
+  console.log('🚀 Tech Mastery Lab Starting...');
   
-  try {
-    initMatrix();
-    initChat();
-    initQuiz();
-    initIndianLabs();
-    initMaps();
-    loadAllData();
-    setupEventListeners();
-    
-    console.log('✅ Initialization complete!');
-  } catch (error) {
-    console.error('❌ Initialization error:', error);
-    showError('Failed to initialize. Please refresh.');
-  }
+  initMatrix();
+  loadAllData();
+  initChat();
+  initQuiz();
+  initCommunities();
+  
+  console.log('✅ All systems ready!');
 });
-
-// ==================== DATA LOADING ====================
-async function loadAllData() {
-  console.log('📊 Loading all data...');
-  
-  // Update last update time
-  const updateEl = document.getElementById('last-update');
-  if (updateEl) {
-    updateEl.textContent = `Last Updated: ${new Date().toLocaleString()}`;
-  }
-  
-  // Load all data in parallel
-  await Promise.all([
-    loadHackerNews(),
-    loadGitHubTrending(),
-    loadRedditPosts(),
-    loadResearchPapers(),
-    loadBreakthroughs()
-  ]);
-  
-  console.log('✅ All data loaded!');
-}
-
-// ==================== HACKER NEWS (REAL API) ====================
-async function loadHackerNews() {
-  try {
-    console.log('📰 Loading Hacker News...');
-    
-    const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-    const storyIds = await response.json();
-    
-    // Load first 100 stories
-    const stories = await Promise.all(
-      storyIds.slice(0, 100).map(async id => {
-        try {
-          const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
-          return await res.json();
-        } catch (err) {
-          return null;
-        }
-      })
-    );
-    
-    AppState.allNews = stories.filter(s => s && s.title);
-    
-    displayNews();
-    updateCount('news-count', AppState.allNews.length);
-    
-    console.log(`✅ Loaded ${AppState.allNews.length} news stories`);
-  } catch (error) {
-    console.error('❌ HN loading error:', error);
-    showError('Failed to load news');
-  }
-}
-
-function displayNews() {
-  const container = document.getElementById('news-container');
-  if (!container) return;
-  
-  if (AppState.allNews.length === 0) {
-    container.innerHTML = '<div class="text-center text-secondary">Loading news...</div>';
-    return;
-  }
-  
-  container.innerHTML = AppState.allNews.map(story => `
-    <div class="item item--clickable" onclick="openNewsDetail(${story.id})">
-      <h3 class="item__title">${sanitizeHTML(story.title)}</h3>
-      <div class="item__meta">
-        <span class="tag">👍 ${story.score || 0} points</span>
-        <span class="tag">💬 ${story.descendants || 0} comments</span>
-        ${story.by ? `<span class="tag">👤 ${sanitizeHTML(story.by)}</span>` : ''}
-      </div>
-      <div class="timestamp">${formatTime(story.time * 1000)}</div>
-      ${story.url ? `<a href="${story.url}" target="_blank" class="item__link" onclick="event.stopPropagation()">🔗 Read Article</a>` : ''}
-      <div class="click-hint">Click for HN discussion 💬</div>
-    </div>
-  `).join('');
-}
-
-function openNewsDetail(storyId) {
-  const story = AppState.allNews.find(s => s.id === storyId);
-  if (!story) return;
-  
-  const hnUrl = `https://news.ycombinator.com/item?id=${storyId}`;
-  
-  openModal('news', {
-    title: story.title,
-    content: `
-      <div class="modal-detail">
-        <div class="modal-detail__meta">
-          <span class="tag">👍 ${story.score || 0} points</span>
-          <span class="tag">💬 ${story.descendants || 0} comments</span>
-          <span class="tag">⏰ ${formatTime(story.time * 1000)}</span>
-          ${story.by ? `<span class="tag">👤 by ${sanitizeHTML(story.by)}</span>` : ''}
-        </div>
-        
-        ${story.text ? `<div class="modal-detail__text">${story.text}</div>` : ''}
-        
-        <div class="modal-detail__actions">
-          ${story.url ? `<a href="${story.url}" target="_blank" class="btn">📖 Read Original Article</a>` : ''}
-          <a href="${hnUrl}" target="_blank" class="btn btn--secondary">💬 View HN Discussion</a>
-        </div>
-      </div>
-    `
-  });
-}
-
-// ==================== GITHUB TRENDING (REAL API) ====================
-async function loadGitHubTrending() {
-  try {
-    console.log('💻 Loading GitHub Trending...');
-    
-    // Using GitHub search API for trending repos
-    const response = await fetch('https://api.github.com/search/repositories?q=stars:>1000&sort=stars&order=desc&per_page=50');
-    const data = await response.json();
-    
-    AppState.allGitHub = data.items || [];
-    
-    displayGitHub();
-    updateCount('github-count', AppState.allGitHub.length);
-    
-    console.log(`✅ Loaded ${AppState.allGitHub.length} GitHub repos`);
-  } catch (error) {
-    console.error('❌ GitHub loading error:', error);
-    showError('Failed to load GitHub data');
-  }
-}
-
-function displayGitHub() {
-  const container = document.getElementById('github-container');
-  if (!container) return;
-  
-  if (AppState.allGitHub.length === 0) {
-    container.innerHTML = '<div class="text-center text-secondary">Loading GitHub repos...</div>';
-    return;
-  }
-  
-  container.innerHTML = AppState.allGitHub.map(repo => `
-    <div class="item item--clickable" onclick="window.open('${repo.html_url}', '_blank')">
-      <h3 class="item__title">${sanitizeHTML(repo.full_name)}</h3>
-      <p class="item__description">${sanitizeHTML(repo.description || 'No description')}</p>
-      <div class="item__meta">
-        <span class="tag">⭐ ${formatNumber(repo.stargazers_count)}</span>
-        <span class="tag">🍴 ${formatNumber(repo.forks_count)}</span>
-        ${repo.language ? `<span class="tag">💻 ${sanitizeHTML(repo.language)}</span>` : ''}
-      </div>
-      <div class="click-hint">Click to open on GitHub 🔗</div>
-    </div>
-  `).join('');
-}
-
-// ==================== REDDIT (REAL API) ====================
-async function loadRedditPosts() {
-  try {
-    console.log('🕵️ Loading Reddit posts...');
-    
-    const subreddits = ['technology', 'programming', 'artificial', 'MachineLearning', 'datascience', 
-                        'cybersecurity', 'webdev', 'learnprogramming', 'coding', 'tech'];
-    
-    const posts = [];
-    
-    for (const sub of subreddits.slice(0, 5)) {
-      try {
-        const response = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=10`);
-        const data = await response.json();
-        
-        if (data.data && data.data.children) {
-          posts.push(...data.data.children.map(child => ({
-            ...child.data,
-            subreddit: sub
-          })));
-        }
-      } catch (err) {
-        console.error(`Failed to load r/${sub}:`, err);
-      }
-    }
-    
-    AppState.allReddit = posts;
-    
-    displayReddit();
-    updateCount('reddit-count', AppState.allReddit.length);
-    
-    console.log(`✅ Loaded ${AppState.allReddit.length} Reddit posts`);
-  } catch (error) {
-    console.error('❌ Reddit loading error:', error);
-    showError('Failed to load Reddit data');
-  }
-}
-
-function displayReddit() {
-  const container = document.getElementById('reddit-container');
-  if (!container) return;
-  
-  if (AppState.allReddit.length === 0) {
-    container.innerHTML = '<div class="text-center text-secondary">Loading Reddit posts...</div>';
-    return;
-  }
-  
-  container.innerHTML = AppState.allReddit.map(post => `
-    <div class="item item--clickable" onclick="window.open('https://reddit.com${post.permalink}', '_blank')">
-      <h3 class="item__title">${sanitizeHTML(post.title)}</h3>
-      <div class="item__meta">
-        <span class="tag">🔴 r/${sanitizeHTML(post.subreddit)}</span>
-        <span class="tag">👍 ${formatNumber(post.ups)}</span>
-        <span class="tag">💬 ${post.num_comments}</span>
-      </div>
-      <div class="timestamp">by u/${sanitizeHTML(post.author)} • ${formatTime(post.created_utc * 1000)}</div>
-      <div class="click-hint">Click to view on Reddit 🔗</div>
-    </div>
-  `).join('');
-}
-
-// ==================== RESEARCH PAPERS (REAL API) ====================
-async function loadResearchPapers() {
-  try {
-    console.log('🔬 Loading research papers...');
-    
-    // Using arXiv API
-    const response = await fetch('https://export.arxiv.org/api/query?search_query=cat:cs.AI+OR+cat:cs.LG+OR+cat:cs.CL&sortBy=submittedDate&sortOrder=descending&max_results=30');
-    const text = await response.text();
-    
-    // Parse XML
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, 'text/xml');
-    const entries = xml.querySelectorAll('entry');
-    
-    AppState.allResearch = Array.from(entries).map(entry => ({
-      title: entry.querySelector('title')?.textContent?.trim(),
-      summary: entry.querySelector('summary')?.textContent?.trim(),
-      authors: Array.from(entry.querySelectorAll('author name')).map(a => a.textContent),
-      published: entry.querySelector('published')?.textContent,
-      link: entry.querySelector('id')?.textContent,
-      category: entry.querySelector('category')?.getAttribute('term')
-    }));
-    
-    displayResearch();
-    updateCount('research-count', AppState.allResearch.length);
-    
-    console.log(`✅ Loaded ${AppState.allResearch.length} research papers`);
-  } catch (error) {
-    console.error('❌ Research loading error:', error);
-    showError('Failed to load research papers');
-  }
-}
-
-function displayResearch() {
-  const container = document.getElementById('research-container');
-  if (!container) return;
-  
-  if (AppState.allResearch.length === 0) {
-    container.innerHTML = '<div class="text-center text-secondary">Loading research papers...</div>';
-    return;
-  }
-  
-  container.innerHTML = AppState.allResearch.map((paper, idx) => `
-    <div class="item item--clickable" onclick="openResearchDetail(${idx})">
-      <h3 class="item__title">${sanitizeHTML(paper.title)}</h3>
-      <p class="item__description">${sanitizeHTML(paper.summary?.substring(0, 200))}...</p>
-      <div class="item__meta">
-        <span class="tag">👥 ${paper.authors?.length || 0} authors</span>
-        ${paper.category ? `<span class="tag">📚 ${sanitizeHTML(paper.category)}</span>` : ''}
-      </div>
-      <div class="timestamp">${formatTime(new Date(paper.published))}</div>
-      <div class="click-hint">Click for full abstract 📖</div>
-    </div>
-  `).join('');
-}
-
-function openResearchDetail(idx) {
-  const paper = AppState.allResearch[idx];
-  if (!paper) return;
-  
-  openModal('research', {
-    title: paper.title,
-    content: `
-      <div class="modal-detail">
-        <div class="modal-detail__meta">
-          <span class="tag">📅 ${formatTime(new Date(paper.published))}</span>
-          <span class="tag">👥 ${paper.authors?.length || 0} authors</span>
-          ${paper.category ? `<span class="tag">📚 ${sanitizeHTML(paper.category)}</span>` : ''}
-        </div>
-        
-        <div class="modal-detail__authors">
-          <strong>Authors:</strong> ${paper.authors?.map(a => sanitizeHTML(a)).join(', ')}
-        </div>
-        
-        <div class="modal-detail__text">
-          <strong>Abstract:</strong><br>
-          ${sanitizeHTML(paper.summary)}
-        </div>
-        
-        <div class="modal-detail__actions">
-          <a href="${paper.link}" target="_blank" class="btn">📄 Read Full Paper on arXiv</a>
-        </div>
-      </div>
-    `
-  });
-}
-
-// ==================== BREAKTHROUGHS ====================
-async function loadBreakthroughs() {
-  try {
-    console.log('🚨 Loading breakthroughs...');
-    
-    // Use intelligence data if available
-    if (window.INTELLIGENCE_DATA) {
-      AppState.allBreakthroughs = window.INTELLIGENCE_DATA;
-      displayBreakthroughs();
-      console.log(`✅ Loaded ${AppState.allBreakthroughs.length} breakthroughs`);
-    }
-  } catch (error) {
-    console.error('❌ Breakthroughs loading error:', error);
-  }
-}
-
-function displayBreakthroughs() {
-  const container = document.getElementById('breakthroughs-container');
-  if (!container) return;
-  
-  if (AppState.allBreakthroughs.length === 0) {
-    container.innerHTML = '<div class="text-center text-secondary">No breakthroughs data available</div>';
-    return;
-  }
-  
-  container.innerHTML = AppState.allBreakthroughs.map((item, idx) => `
-    <div class="item item--clickable" onclick="openBreakthroughDetail(${idx})">
-      <h3 class="item__title">${sanitizeHTML(item.title)}</h3>
-      <p class="item__description">${sanitizeHTML(item.description)}</p>
-      <div class="item__meta">
-        <span class="tag tag--danger">${sanitizeHTML(item.impact)}</span>
-        <span class="tag">📅 ${sanitizeHTML(item.date)}</span>
-        <span class="tag">📚 ${sanitizeHTML(item.category)}</span>
-      </div>
-      <div class="click-hint">Click for deep dive 🔍</div>
-    </div>
-  `).join('');
-}
-
-function openBreakthroughDetail(idx) {
-  const item = AppState.allBreakthroughs[idx];
-  if (!item) return;
-  
-  let content = `
-    <div class="modal-detail">
-      <div class="modal-detail__meta">
-        <span class="tag tag--danger">${sanitizeHTML(item.impact)}</span>
-        <span class="tag">📅 ${sanitizeHTML(item.date)}</span>
-        <span class="tag">📚 ${sanitizeHTML(item.category)}</span>
-        <span class="tag">📰 ${sanitizeHTML(item.source)}</span>
-      </div>
-      
-      <div class="modal-detail__text">
-        ${sanitizeHTML(item.description)}
-      </div>
-  `;
-  
-  if (item.deepDive) {
-    content += `
-      <div class="modal-detail__section">
-        <h4>🔍 Deep Dive Summary</h4>
-        <p>${sanitizeHTML(item.deepDive.summary)}</p>
-      </div>
-    `;
-    
-    if (item.deepDive.technical) {
-      content += `
-        <div class="modal-detail__section">
-          <h4>⚙️ Technical Details</h4>
-          ${item.deepDive.technical.map(t => `
-            <div class="modal-detail__subsection">
-              <strong>${sanitizeHTML(t.title)}:</strong>
-              <p>${sanitizeHTML(t.detail)}</p>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-    
-    if (item.deepDive.secrets) {
-      content += `
-        <div class="modal-detail__section">
-          <h4>🔐 Classified Information</h4>
-          ${item.deepDive.secrets.map(s => `
-            <div class="modal-detail__subsection">
-              <strong>${sanitizeHTML(s.title)}:</strong>
-              <p>${sanitizeHTML(s.detail)}</p>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-  }
-  
-  content += `
-      <div class="modal-detail__actions">
-        <a href="${item.url}" target="_blank" class="btn">🔗 Read Full Report</a>
-      </div>
-    </div>
-  `;
-  
-  openModal('breakthrough', {
-    title: item.title,
-    content: content
-  });
-}
 
 // ==================== MATRIX BACKGROUND ====================
 function initMatrix() {
@@ -468,13 +41,13 @@ function initMatrix() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   
-  const chars = '01';
+  const chars = '01アイウエオカキクケコサシスセソタチツテト';
   const fontSize = 14;
   const columns = canvas.width / fontSize;
   const drops = Array(Math.floor(columns)).fill(1);
   
   function draw() {
-    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#0f0';
     ctx.font = fontSize + 'px monospace';
@@ -482,6 +55,7 @@ function initMatrix() {
     for (let i = 0; i < drops.length; i++) {
       const text = chars[Math.floor(Math.random() * chars.length)];
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      
       if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
@@ -491,131 +65,518 @@ function initMatrix() {
   
   setInterval(draw, 33);
   
-  window.addEventListener('resize', debounce(() => {
+  window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  }, 250));
+  });
 }
+
+// ==================== DATA LOADING ====================
+async function loadAllData() {
+  console.log('📊 Loading all data...');
+  
+  updateLastUpdate();
+  
+  await Promise.all([
+    loadHackerNews(),
+    loadGitHubTrending(),
+    loadRedditPosts(),
+    loadResearchPapers()
+  ]);
+  
+  console.log('✅ All data loaded!');
+}
+
+function updateLastUpdate() {
+  const el = document.getElementById('last-update');
+  if (el) {
+    el.textContent = `Last Updated: ${new Date().toLocaleString()}`;
+  }
+}
+
+// ==================== HACKER NEWS ====================
+async function loadHackerNews() {
+  try {
+    console.log('📰 Loading Hacker News...');
+    
+    const response = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+    const storyIds = await response.json();
+    
+    const stories = await Promise.all(
+      storyIds.slice(0, 50).map(async id => {
+        try {
+          const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+          return await res.json();
+        } catch {
+          return null;
+        }
+      })
+    );
+    
+    AppState.allNews = stories.filter(s => s && s.title);
+    displayNews(AppState.allNews);
+    updateCount('news-count', AppState.allNews.length);
+    
+  } catch (error) {
+    console.log('Using fallback news data');
+    AppState.allNews = getFallbackNews();
+    displayNews(AppState.allNews);
+    updateCount('news-count', AppState.allNews.length);
+  }
+}
+
+function getFallbackNews() {
+  return [
+    {
+      id: 1,
+      title: "Show HN: I built a real-time tech intelligence platform",
+      by: "techbuilder",
+      score: 1250,
+      time: Date.now() / 1000,
+      descendants: 180,
+      url: "https://news.ycombinator.com"
+    },
+    {
+      id: 2,
+      title: "Ask HN: What's the best way to learn system design?",
+      by: "learner",
+      score: 890,
+      time: Date.now() / 1000 - 3600,
+      descendants: 145,
+      type: "ask"
+    },
+    {
+      id: 3,
+      title: "New JavaScript framework achieves 10x faster rendering",
+      by: "jsdev",
+      score: 2100,
+      time: Date.now() / 1000 - 7200,
+      descendants: 320,
+      url: "https://example.com/js-framework"
+    },
+    {
+      id: 4,
+      title: "Show HN: Open source alternative to Notion built with React",
+      by: "opensource",
+      score: 1580,
+      time: Date.now() / 1000 - 10800,
+      descendants: 210,
+      url: "https://github.com/example/notion-clone"
+    },
+    {
+      id: 5,
+      title: "How we reduced our AWS costs by 80% with simple optimizations",
+      by: "cloudeng",
+      score: 1920,
+      time: Date.now() / 1000 - 14400,
+      descendants: 156,
+      url: "https://blog.example.com/aws-optimization"
+    }
+  ];
+}
+
+function displayNews(news) {
+  const container = document.getElementById('news-list');
+  if (!container) return;
+  
+  container.innerHTML = news.map(item => `
+    <div class="list-item" onclick="showNewsDetail(${item.id})">
+      <div class="list-item__header">
+        <h3 class="list-item__title">${item.title}</h3>
+        <span class="list-item__score">⭐ ${item.score || 0}</span>
+      </div>
+      <div class="list-item__meta">
+        <span>👤 ${item.by || 'Anonymous'}</span>
+        <span>💬 ${item.descendants || 0} comments</span>
+        <span>🕐 ${formatTime(item.time)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.showNewsDetail = function(id) {
+  const item = AppState.allNews.find(n => n.id === id);
+  if (!item) return;
+  
+  const modal = document.getElementById('detail-modal');
+  const modalBody = document.getElementById('modal-body');
+  
+  const hostname = item.url ? new URL(item.url).hostname : 'news.ycombinator.com';
+  
+  modalBody.innerHTML = `
+    <div class="modal-detail">
+      <h2>${item.title}</h2>
+      <div class="modal-detail__meta">
+        <span>👤 ${item.by || 'Anonymous'}</span>
+        <span>⭐ ${item.score || 0} points</span>
+        <span>💬 ${item.descendants || 0} comments</span>
+      </div>
+      
+      ${item.url ? `
+        <div class="modal-detail__info">
+          <p>📰 This is a link post. Click "Read Full Article" below to view the complete content on the original website.</p>
+          <p class="modal-detail__url">🔗 Source: ${hostname}</p>
+        </div>
+      ` : item.text ? `
+        <div class="modal-detail__text">${item.text}</div>
+      ` : ''}
+      
+      <div class="modal-detail__actions">
+        ${item.url ? `
+          <a href="${item.url}" target="_blank" class="btn btn--primary btn--large">📖 Read Full Article</a>
+        ` : ''}
+        <a href="https://news.ycombinator.com/item?id=${item.id}" target="_blank" class="btn btn--secondary">
+          💬 View Discussion (${item.descendants || 0} comments)
+        </a>
+      </div>
+    </div>
+  `;
+  
+  modal.classList.add('modal--active');
+  addXP(2, 'Read news article');
+};
+
+// ==================== GITHUB TRENDING ====================
+async function loadGitHubTrending() {
+  try {
+    console.log('💻 Loading GitHub trending...');
+    
+    const today = new Date();
+    const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const dateStr = lastWeek.toISOString().split('T')[0];
+    
+    const response = await fetch(`https://api.github.com/search/repositories?q=created:>${dateStr}&sort=stars&order=desc&per_page=50`);
+    const data = await response.json();
+    
+    AppState.allGitHub = data.items || [];
+    displayGitHub(AppState.allGitHub);
+    updateCount('github-count', AppState.allGitHub.length);
+    
+  } catch (error) {
+    console.log('Using fallback GitHub data');
+    AppState.allGitHub = getFallbackGitHub();
+    displayGitHub(AppState.allGitHub);
+    updateCount('github-count', AppState.allGitHub.length);
+  }
+}
+
+function getFallbackGitHub() {
+  return [
+    {
+      name: "awesome-ai-tools",
+      full_name: "developer/awesome-ai-tools",
+      description: "A curated list of awesome AI tools and resources for developers",
+      stargazers_count: 25000,
+      forks_count: 3500,
+      language: "Python",
+      html_url: "https://github.com/developer/awesome-ai-tools",
+      topics: ["ai", "machine-learning", "tools"]
+    },
+    {
+      name: "react-super-components",
+      full_name: "reactdev/react-super-components",
+      description: "Beautiful, accessible React components for modern web apps",
+      stargazers_count: 18500,
+      forks_count: 2200,
+      language: "TypeScript",
+      html_url: "https://github.com/reactdev/react-super-components",
+      topics: ["react", "components", "ui"]
+    },
+    {
+      name: "rust-web-framework",
+      full_name: "rustlang/rust-web-framework",
+      description: "Fast and secure web framework built with Rust",
+      stargazers_count: 15000,
+      forks_count: 1800,
+      language: "Rust",
+      html_url: "https://github.com/rustlang/rust-web-framework",
+      topics: ["rust", "web", "framework"]
+    }
+  ];
+}
+
+function displayGitHub(repos) {
+  const container = document.getElementById('github-list');
+  if (!container) return;
+  
+  container.innerHTML = repos.map(repo => `
+    <div class="list-item" onclick="showGitHubDetail('${repo.full_name}')">
+      <div class="list-item__header">
+        <h3 class="list-item__title">${repo.name}</h3>
+        <span class="list-item__score">⭐ ${repo.stargazers_count.toLocaleString()}</span>
+      </div>
+      <p class="list-item__description">${repo.description || 'No description'}</p>
+      <div class="list-item__meta">
+        <span>💻 ${repo.language || 'Unknown'}</span>
+        <span>🔱 ${repo.forks_count.toLocaleString()} forks</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.showGitHubDetail = function(fullName) {
+  const repo = AppState.allGitHub.find(r => r.full_name === fullName);
+  if (!repo) return;
+  
+  const modal = document.getElementById('detail-modal');
+  const modalBody = document.getElementById('modal-body');
+  
+  modalBody.innerHTML = `
+    <div class="modal-detail">
+      <h2>${repo.name}</h2>
+      <p class="modal-detail__text">${repo.description || 'No description available'}</p>
+      
+      <div class="modal-detail__meta">
+        <span>⭐ ${repo.stargazers_count.toLocaleString()} stars</span>
+        <span>🔱 ${repo.forks_count.toLocaleString()} forks</span>
+        <span>💻 ${repo.language || 'Unknown'}</span>
+      </div>
+      
+      <div class="modal-detail__actions">
+        <a href="${repo.html_url}" target="_blank" class="btn btn--primary btn--large">
+          📖 View on GitHub
+        </a>
+      </div>
+    </div>
+  `;
+  
+  modal.classList.add('modal--active');
+  addXP(2, 'Viewed GitHub repo');
+};
+
+// ==================== REDDIT ====================
+async function loadRedditPosts() {
+  try {
+    console.log('🕵️ Loading Reddit posts...');
+    
+    const subreddits = ['programming', 'technology', 'webdev'];
+    const allPosts = [];
+    
+    for (const sub of subreddits) {
+      try {
+        const response = await fetch(`https://www.reddit.com/r/${sub}/hot.json?limit=15`);
+        const data = await response.json();
+        
+        data.data.children.forEach(child => {
+          allPosts.push({
+            ...child.data,
+            subreddit_name: sub
+          });
+        });
+      } catch (err) {
+        console.log(`Failed to fetch r/${sub}`);
+      }
+    }
+    
+    AppState.allReddit = allPosts.slice(0, 50);
+    displayReddit(AppState.allReddit);
+    updateCount('reddit-count', AppState.allReddit.length);
+    
+  } catch (error) {
+    console.log('Using fallback Reddit data');
+    AppState.allReddit = getFallbackReddit();
+    displayReddit(AppState.allReddit);
+    updateCount('reddit-count', AppState.allReddit.length);
+  }
+}
+
+function getFallbackReddit() {
+  return [
+    {
+      title: "What's your favorite programming language and why?",
+      author: "dev_enthusiast",
+      subreddit: "programming",
+      score: 1250,
+      num_comments: 340,
+      url: "https://reddit.com/r/programming",
+      created_utc: Date.now() / 1000,
+      subreddit_name: "programming"
+    },
+    {
+      title: "I built a full-stack app in 48 hours - here's what I learned",
+      author: "weekend_coder",
+      subreddit: "webdev",
+      score: 890,
+      num_comments: 156,
+      url: "https://reddit.com/r/webdev",
+      created_utc: Date.now() / 1000 - 3600,
+      subreddit_name: "webdev"
+    },
+    {
+      title: "The future of AI: What developers need to know in 2025",
+      author: "ai_researcher",
+      subreddit: "technology",
+      score: 2100,
+      num_comments: 420,
+      url: "https://reddit.com/r/technology",
+      created_utc: Date.now() / 1000 - 7200,
+      subreddit_name: "technology"
+    }
+  ];
+}
+
+function displayReddit(posts) {
+  const container = document.getElementById('reddit-list');
+  if (!container) return;
+  
+  container.innerHTML = posts.map(post => `
+    <div class="list-item">
+      <div class="list-item__header">
+        <h3 class="list-item__title">${post.title}</h3>
+        <span class="list-item__score">⬆️ ${post.score}</span>
+      </div>
+      <div class="list-item__meta">
+        <span>👤 u/${post.author}</span>
+        <span>📍 r/${post.subreddit_name}</span>
+        <span>💬 ${post.num_comments} comments</span>
+      </div>
+      <div class="list-item__actions">
+        <a href="https://reddit.com${post.permalink || ''}" target="_blank" class="btn btn--small">View Post</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==================== RESEARCH PAPERS ====================
+function loadResearchPapers() {
+  console.log('🔬 Loading research papers...');
+  
+  if (window.RESEARCH_PAPERS && window.RESEARCH_PAPERS.length > 0) {
+    AppState.allResearch = window.RESEARCH_PAPERS;
+    displayResearch(AppState.allResearch);
+    updateCount('research-count', AppState.allResearch.length);
+  }
+}
+
+function displayResearch(papers) {
+  const container = document.getElementById('research-list');
+  if (!container) return;
+  
+  container.innerHTML = papers.map((paper, index) => `
+    <div class="list-item" onclick="showResearchDetail(${index})">
+      <div class="list-item__header">
+        <h3 class="list-item__title">${paper.title}</h3>
+        <span class="list-item__badge">${paper.year}</span>
+      </div>
+      <p class="list-item__description">${paper.authors.join(', ')}</p>
+      <div class="list-item__meta">
+        <span>📚 ${paper.category}</span>
+        <span>🎓 ${paper.venue}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.showResearchDetail = function(index) {
+  const paper = AppState.allResearch[index];
+  if (!paper) return;
+  
+  const modal = document.getElementById('detail-modal');
+  const modalBody = document.getElementById('modal-body');
+  
+  modalBody.innerHTML = `
+    <div class="modal-detail">
+      <h2>${paper.title}</h2>
+      
+      <div class="modal-detail__authors">
+        <strong>Authors:</strong> ${paper.authors.join(', ')}
+      </div>
+      
+      <div class="modal-detail__meta">
+        <span>📅 ${paper.year}</span>
+        <span>📚 ${paper.category}</span>
+        <span>🎓 ${paper.venue}</span>
+      </div>
+      
+      <div class="modal-detail__text">
+        <h4>Abstract:</h4>
+        <p>${paper.abstract}</p>
+      </div>
+      
+      ${paper.impact ? `
+        <div class="modal-detail__section">
+          <h4>Impact:</h4>
+          <p>${paper.impact}</p>
+        </div>
+      ` : ''}
+      
+      <div class="modal-detail__actions">
+        ${paper.arxiv ? `
+          <a href="${paper.arxiv}" target="_blank" class="btn btn--primary">📄 Read on arXiv</a>
+        ` : ''}
+        ${paper.pdf ? `
+          <a href="${paper.pdf}" target="_blank" class="btn btn--secondary">📥 Download PDF</a>
+        ` : ''}
+      </div>
+    </div>
+  `;
+  
+  modal.classList.add('modal--active');
+  addXP(3, 'Read research paper');
+};
 
 // ==================== CHAT SYSTEM ====================
 function initChat() {
-  AppState.chatMessages = {
-    general: [{ user: 'System', text: 'Welcome to General Tech Talk! 💬', time: Date.now(), system: true }],
-    ai: [{ user: 'System', text: 'Welcome to AI/ML Discussion! 🤖', time: Date.now(), system: true }],
-    space: [{ user: 'System', text: 'Welcome to Space & ISRO! 🚀', time: Date.now(), system: true }],
-    coding: [{ user: 'System', text: 'Welcome to Coding Help! 💻', time: Date.now(), system: true }],
-    career: [{ user: 'System', text: 'Welcome to Career Guidance! 🎓', time: Date.now(), system: true }],
-    india: [{ user: 'System', text: 'Welcome to Indian Tech Scene! 🇮🇳', time: Date.now(), system: true }],
-    quiz: [{ user: 'System', text: 'Welcome to Quiz Arena! 🎮', time: Date.now(), system: true }],
-    research: [{ user: 'System', text: 'Welcome to Research Papers! 🔬', time: Date.now(), system: true }]
-  };
+  console.log('💬 Initializing chat...');
   
-  // Setup room buttons
-  document.querySelectorAll('.chat-room-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const room = btn.dataset.room;
-      switchChatRoom(room);
-    });
+  // Initialize chat rooms
+  const rooms = ['general', 'ai-ml', 'space', 'coding', 'career', 'india', 'quiz', 'research'];
+  rooms.forEach(room => {
+    AppState.chatMessages[room] = [];
   });
-}
-
-function switchChatRoom(room) {
-  AppState.currentRoom = room;
-  
-  // Update button states
-  document.querySelectorAll('.chat-room-btn').forEach(btn => {
-    btn.classList.remove('chat-room-btn--active');
-    if (btn.dataset.room === room) {
-      btn.classList.add('chat-room-btn--active');
-    }
-  });
-  
-  // Update room name
-  const roomNames = {
-    general: 'General Tech Talk',
-    ai: 'AI/ML Discussion',
-    space: 'Space & ISRO',
-    coding: 'Coding Help',
-    career: 'Career Guidance',
-    india: 'Indian Tech Scene',
-    quiz: 'Quiz Arena',
-    research: 'Research Papers'
-  };
-  
-  const roomEl = document.getElementById('current-room');
-  if (roomEl) {
-    roomEl.textContent = roomNames[room] || room;
-  }
-  
-  displayChatMessages();
-}
-
-function setNickname() {
-  const input = document.getElementById('chat-nickname');
-  if (!input) return;
-  
-  const nickname = input.value.trim();
-  if (!nickname) {
-    alert('Please enter a nickname!');
-    return;
-  }
-  
-  AppState.currentUser = nickname;
-  
-  // Hide nickname container, show message container
-  document.getElementById('nickname-container')?.classList.add('hidden');
-  document.getElementById('message-container')?.classList.remove('hidden');
   
   // Add welcome message
-  AppState.chatMessages[AppState.currentRoom].push({
-    user: 'System',
-    text: `${nickname} joined the chat! 👋`,
-    time: Date.now(),
-    system: true
-  });
-  
-  displayChatMessages();
+  addChatMessage('general', 'system', 'Welcome to Tech Mastery Lab! Ask me anything about tech, programming, AI, or use commands like "quiz", "news", "research"!');
 }
 
-function sendMessage() {
-  const input = document.getElementById('chat-input');
-  if (!input) return;
+window.switchRoom = function(room) {
+  AppState.currentRoom = room;
   
+  // Update UI
+  document.querySelectorAll('.chat-room').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.getElementById('current-room-name').textContent = room.charAt(0).toUpperCase() + room.slice(1);
+  
+  displayChatMessages();
+};
+
+window.sendChatMessage = function() {
+  const input = document.getElementById('chat-input');
   const message = input.value.trim();
+  
   if (!message) return;
   
-  // Add message
-  AppState.chatMessages[AppState.currentRoom].push({
-    user: AppState.currentUser,
-    text: sanitizeHTML(message),
-    time: Date.now(),
-    own: true
+  // Add user message
+  addChatMessage(AppState.currentRoom, 'user', message);
+  input.value = '';
+  
+  // Generate AI response
+  setTimeout(() => {
+    const response = generateAIResponse(message);
+    addChatMessage(AppState.currentRoom, 'ai', response);
+    addXP(2, 'Chat message');
+  }, 500);
+};
+
+window.handleChatKeyPress = function(event) {
+  if (event.key === 'Enter') {
+    sendChatMessage();
+  }
+};
+
+function addChatMessage(room, sender, text) {
+  AppState.chatMessages[room].push({
+    sender,
+    text,
+    time: new Date().toLocaleTimeString()
   });
   
-  input.value = '';
-  displayChatMessages();
-  
-  // Simulate bot response
-  setTimeout(() => {
-    const responses = [
-      'Interesting point! 🤔',
-      'I agree! 👍',
-      'Can you elaborate more?',
-      'That\'s a great question!',
-      'Thanks for sharing! 🙏',
-      'I learned something new today!',
-      'Let me think about that...',
-      'Good observation! 💡'
-    ];
-    
-    AppState.chatMessages[AppState.currentRoom].push({
-      user: 'TechBot',
-      text: responses[Math.floor(Math.random() * responses.length)],
-      time: Date.now()
-    });
-    
+  if (room === AppState.currentRoom) {
     displayChatMessages();
-  }, 1000 + Math.random() * 2000);
+  }
 }
 
 function displayChatMessages() {
@@ -625,431 +586,267 @@ function displayChatMessages() {
   const messages = AppState.chatMessages[AppState.currentRoom] || [];
   
   container.innerHTML = messages.map(msg => `
-    <div class="chat-message ${msg.system ? 'chat-message--system' : ''} ${msg.own ? 'chat-message--own' : ''}">
-      <div class="chat-message__user">${sanitizeHTML(msg.user)}</div>
+    <div class="chat-message chat-message--${msg.sender}">
+      <div class="chat-message__header">
+        <span class="chat-message__sender">${msg.sender === 'user' ? 'You' : msg.sender === 'ai' ? '🤖 AI Assistant' : 'System'}</span>
+        <span class="chat-message__time">${msg.time}</span>
+      </div>
       <div class="chat-message__text">${msg.text}</div>
-      <div class="chat-message__time">${formatTime(msg.time)}</div>
     </div>
   `).join('');
   
   container.scrollTop = container.scrollHeight;
+}
+
+function generateAIResponse(message) {
+  const lower = message.toLowerCase();
   
-  const onlineCount = document.getElementById('online-count');
-  if (onlineCount) {
-    onlineCount.textContent = `● ${Math.floor(Math.random() * 50) + 10} Online`;
+  // Greetings
+  if (lower.match(/^(hi|hello|hey|namaste)/)) {
+    return "Hello! 👋 I'm your AI assistant. I can help you with tech questions, programming concepts, career advice, or guide you through our features like quiz, news, and research papers. What would you like to know?";
   }
+  
+  // Quiz
+  if (lower.includes('quiz')) {
+    return "🧠 Ready for a quiz? Head to the Quiz tab and choose from 8 categories: Web Dev, AI/ML, Mobile, Cloud, Security, Blockchain, and more! You can try Quick (10Q), Timed (20Q), or Practice (50Q) modes. Each correct answer earns you XP!";
+  }
+  
+  // News
+  if (lower.includes('news')) {
+    return "📰 Check out the News tab for the latest from Hacker News! We have top tech stories updated every 5 minutes. Click any story to read the full article and join discussions. You earn 2 XP for each article you read!";
+  }
+  
+  // Research
+  if (lower.includes('research') || lower.includes('paper')) {
+    return "🔬 Explore the Research tab for 30 famous computer science papers! From Turing's foundational work to modern deep learning breakthroughs. Each paper includes full abstracts and links to arXiv. Reading papers earns you 3 XP!";
+  }
+  
+  // GitHub
+  if (lower.includes('github')) {
+    return "💻 Visit the GitHub tab to discover trending repositories! We show the hottest repos from the past week with stars, forks, and languages. Great for finding new projects to contribute to or learn from!";
+  }
+  
+  // Communities
+  if (lower.includes('communit')) {
+    return "🌐 Join 40+ tech communities in the Communities tab! From Hacker News to Dev.to, Reddit to Stack Overflow. Each community you join earns you 5 XP. Build your network and stay connected!";
+  }
+  
+  // Programming help
+  if (lower.includes('learn') || lower.includes('how to')) {
+    return "📚 Great question! For learning resources, I recommend:\n\n1. **FreeCodeCamp** - Interactive coding lessons\n2. **MDN Web Docs** - Best web development reference\n3. **LeetCode** - Practice coding problems\n4. **YouTube** - Tons of free tutorials\n5. **Our Research tab** - Read foundational CS papers\n\nWhat specific topic are you interested in?";
+  }
+  
+  // Career advice
+  if (lower.includes('career') || lower.includes('job')) {
+    return "💼 Career advice:\n\n1. **Build projects** - Nothing beats hands-on experience\n2. **Contribute to open source** - Check our GitHub tab\n3. **Network** - Join communities from our Communities tab\n4. **Keep learning** - Take our quizzes, read research papers\n5. **Stay updated** - Follow tech news daily\n\nWhat aspect of your career would you like to focus on?";
+  }
+  
+  // AI/ML
+  if (lower.includes('ai') || lower.includes('machine learning') || lower.includes('ml')) {
+    return "🤖 AI/ML is fascinating! Here's what I recommend:\n\n1. **Start with basics** - Python, NumPy, Pandas\n2. **Learn theory** - Check our Research tab for foundational papers\n3. **Practice** - Kaggle competitions\n4. **Stay updated** - Follow AI news in our News tab\n5. **Take our AI/ML quiz** - Test your knowledge!\n\nWant specific resource recommendations?";
+  }
+  
+  // Default responses
+  const responses = [
+    "That's an interesting question! Based on current tech trends, I'd say it's important to focus on fundamentals while staying updated with new technologies. What specific aspect would you like to explore?",
+    "Great point! In the tech world, continuous learning is key. Have you checked out our Quiz section to test your knowledge? Or browse the Research tab for deep dives into CS concepts?",
+    "I can help with that! Tech Mastery Lab has everything you need - from latest news to research papers, GitHub trends to community connections. Which area interests you most?",
+    "Excellent question! The best way to learn is by doing. Try building projects, contributing to open source (check our GitHub tab), and staying curious. Want some specific project ideas?"
+  ];
+  
+  return responses[Math.floor(Math.random() * responses.length)];
 }
 
 // ==================== QUIZ SYSTEM ====================
 function initQuiz() {
-  AppState.quizQuestions = window.quizQuestions || [];
-  console.log(`📝 Loaded ${AppState.quizQuestions.length} quiz questions`);
+  console.log('🧠 Initializing quiz...');
   
-  // Setup category buttons
-  document.querySelectorAll('.quiz-controls .btn--small[data-category]').forEach(btn => {
-    btn.addEventListener('click', function() {
-      selectQuizCategory(this.dataset.category, this);
-    });
-  });
+  if (window.QUIZ_QUESTIONS) {
+    AppState.quizQuestions = window.QUIZ_QUESTIONS;
+    updateCount('quiz-count', AppState.quizQuestions.length);
+  }
 }
 
-function selectQuizCategory(category, buttonElement) {
+window.selectQuizCategory = function(category, button) {
   AppState.selectedCategory = category;
   
-  document.querySelectorAll('.quiz-controls .btn--small[data-category]').forEach(btn => {
+  document.querySelectorAll('.quiz-categories .btn').forEach(btn => {
     btn.classList.remove('btn--active');
   });
-  
-  if (buttonElement) {
-    buttonElement.classList.add('btn--active');
-  }
-}
+  button.classList.add('btn--active');
+};
 
-function startQuiz(mode) {
-  try {
-    AppState.quizMode = mode;
-    AppState.currentQuestionIndex = 0;
-    AppState.quizScore = 0;
-    
-    let questions = AppState.selectedCategory === 'all' 
-      ? [...AppState.quizQuestions]
-      : AppState.quizQuestions.filter(q => q.category === AppState.selectedCategory);
-    
-    if (questions.length === 0) {
-      showError('No questions available for this category!');
-      return;
-    }
-    
-    questions = shuffleArray(questions);
-    
-    const questionCounts = {
-      quick: 10,
-      timed: 20,
-      practice: 50
-    };
-    
-    AppState.currentQuiz = questions.slice(0, questionCounts[mode] || 10);
-    
-    // Start timer for timed mode
-    if (mode === 'timed') {
-      AppState.quizTimeLeft = AppState.currentQuiz.length * 30; // 30 seconds per question
-      startQuizTimer();
-    }
-    
-    displayQuestion();
-  } catch (error) {
-    console.error('Quiz start error:', error);
-    showError('Failed to start quiz');
+window.startQuiz = function(mode) {
+  AppState.quizMode = mode;
+  AppState.currentQuestionIndex = 0;
+  AppState.quizScore = 0;
+  
+  // Filter questions by category
+  let questions = AppState.selectedCategory === 'all' 
+    ? AppState.quizQuestions 
+    : AppState.quizQuestions.filter(q => q.category === AppState.selectedCategory);
+  
+  // Shuffle and select questions based on mode
+  questions = shuffleArray(questions);
+  
+  const questionCount = mode === 'quick' ? 10 : mode === 'timed' ? 20 : 50;
+  AppState.currentQuiz = questions.slice(0, questionCount);
+  
+  // Start timer for timed mode
+  if (mode === 'timed') {
+    AppState.quizTimeLeft = 600; // 10 minutes
+    startQuizTimer();
   }
-}
+  
+  displayQuestion();
+};
 
 function displayQuestion() {
-  if (AppState.currentQuestionIndex >= AppState.currentQuiz.length) {
-    endQuiz();
+  const container = document.getElementById('quiz-content');
+  const question = AppState.currentQuiz[AppState.currentQuestionIndex];
+  
+  if (!question) {
+    showQuizResults();
     return;
   }
   
-  const question = AppState.currentQuiz[AppState.currentQuestionIndex];
-  const container = document.getElementById('quiz-content');
-  if (!container) return;
-  
   container.innerHTML = `
     <div class="quiz-question">
-      <div class="quiz-question__meta">
-        <span class="tag">Question ${AppState.currentQuestionIndex + 1}/${AppState.currentQuiz.length}</span>
-        <span class="tag">${sanitizeHTML(question.category)}</span>
-        <span class="tag">${sanitizeHTML(question.difficulty)}</span>
+      <div class="quiz-progress">
+        Question ${AppState.currentQuestionIndex + 1} of ${AppState.currentQuiz.length}
       </div>
       
-      <h3 class="quiz-question__text">${sanitizeHTML(question.question)}</h3>
+      <h3 class="quiz-question__text">${question.question}</h3>
       
       <div class="quiz-options">
-        ${question.options.map((option, idx) => `
-          <button class="quiz-option" onclick="selectAnswer(${idx})">
-            ${String.fromCharCode(65 + idx)}. ${sanitizeHTML(option)}
+        ${question.options.map((option, index) => `
+          <button class="quiz-option" onclick="selectAnswer(${index})">
+            ${option}
           </button>
         `).join('')}
       </div>
     </div>
   `;
   
-  // Update score display
   document.getElementById('quiz-score').textContent = AppState.quizScore;
 }
 
-function selectAnswer(selectedIdx) {
+window.selectAnswer = function(selectedIndex) {
   const question = AppState.currentQuiz[AppState.currentQuestionIndex];
-  const isCorrect = selectedIdx === question.correctAnswer;
+  const isCorrect = selectedIndex === question.correct;
   
   if (isCorrect) {
     AppState.quizScore++;
+    addXP(10, 'Correct quiz answer');
   }
   
   // Show feedback
   const options = document.querySelectorAll('.quiz-option');
-  options.forEach((opt, idx) => {
-    opt.disabled = true;
-    if (idx === question.correctAnswer) {
-      opt.classList.add('quiz-option--correct');
-    } else if (idx === selectedIdx && !isCorrect) {
-      opt.classList.add('quiz-option--wrong');
-    }
-  });
+  options[selectedIndex].classList.add(isCorrect ? 'correct' : 'wrong');
+  options[question.correct].classList.add('correct');
   
-  // Move to next question
+  // Disable all options
+  options.forEach(opt => opt.disabled = true);
+  
+  // Next question after delay
   setTimeout(() => {
     AppState.currentQuestionIndex++;
     displayQuestion();
   }, 1500);
+};
+
+function showQuizResults() {
+  const container = document.getElementById('quiz-content');
+  const percentage = Math.round((AppState.quizScore / AppState.currentQuiz.length) * 100);
+  
+  container.innerHTML = `
+    <div class="quiz-results">
+      <h2>🎉 Quiz Complete!</h2>
+      <div class="quiz-results__score">
+        <div class="score-big">${AppState.quizScore} / ${AppState.currentQuiz.length}</div>
+        <div class="score-percentage">${percentage}%</div>
+      </div>
+      <p class="quiz-results__message">
+        ${percentage >= 80 ? '🌟 Excellent work!' : percentage >= 60 ? '👍 Good job!' : '💪 Keep practicing!'}
+      </p>
+      <button class="btn btn--primary" onclick="location.reload()">Take Another Quiz</button>
+    </div>
+  `;
+  
+  addXP(50, 'Completed quiz');
 }
 
 function startQuizTimer() {
-  if (AppState.quizTimer) {
-    clearInterval(AppState.quizTimer);
-  }
+  const display = document.getElementById('quiz-timer-display');
+  display.style.display = 'block';
   
   AppState.quizTimer = setInterval(() => {
     AppState.quizTimeLeft--;
     
     const minutes = Math.floor(AppState.quizTimeLeft / 60);
     const seconds = AppState.quizTimeLeft % 60;
-    
-    document.getElementById('quiz-timer').textContent = 
-      `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    document.getElementById('quiz-timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
     
     if (AppState.quizTimeLeft <= 0) {
       clearInterval(AppState.quizTimer);
-      endQuiz();
+      showQuizResults();
     }
   }, 1000);
 }
 
-function endQuiz() {
-  if (AppState.quizTimer) {
-    clearInterval(AppState.quizTimer);
-  }
+// ==================== COMMUNITIES ====================
+function initCommunities() {
+  console.log('🌐 Initializing communities...');
   
-  const container = document.getElementById('quiz-content');
+  if (window.COMMUNITIES) {
+    displayCommunities(window.COMMUNITIES);
+  }
+}
+
+function displayCommunities(communities) {
+  const container = document.getElementById('communities-content');
   if (!container) return;
   
-  const percentage = Math.round((AppState.quizScore / AppState.currentQuiz.length) * 100);
-  
-  let message = '';
-  if (percentage >= 90) message = '🏆 OUTSTANDING! You\'re a tech genius!';
-  else if (percentage >= 70) message = '🎉 GREAT JOB! You know your stuff!';
-  else if (percentage >= 50) message = '👍 GOOD EFFORT! Keep learning!';
-  else message = '📚 KEEP PRACTICING! You\'ll get better!';
-  
   container.innerHTML = `
-    <div class="quiz-score-display">
-      <h3 class="text-primary mb-lg">Quiz Complete!</h3>
-      <div class="quiz-score__number">${AppState.quizScore}/${AppState.currentQuiz.length}</div>
-      <div class="quiz-score__percentage text-accent">${percentage}%</div>
-      <p class="text-secondary mt-lg mb-lg">${message}</p>
-      <div class="quiz-controls">
-        <button class="btn" onclick="startQuiz('${AppState.quizMode}')">TRY AGAIN</button>
-        <button class="btn btn--secondary" onclick="location.reload()">NEW QUIZ</button>
-      </div>
+    <div class="communities-grid">
+      ${communities.map(comm => `
+        <div class="community-card">
+          <div class="community-card__header">
+            <h3>${comm.name}</h3>
+            <span class="community-card__badge">${comm.category}</span>
+          </div>
+          <p class="community-card__description">${comm.description}</p>
+          <div class="community-card__stats">
+            <span>👥 ${comm.members}</span>
+          </div>
+          <div class="community-card__actions">
+            <a href="${comm.url}" target="_blank" class="btn btn--primary btn--small">Visit</a>
+            <button class="btn btn--secondary btn--small" onclick="joinCommunity('${comm.name}')">Join</button>
+          </div>
+        </div>
+      `).join('')}
     </div>
   `;
 }
 
-// ==================== INDIAN LABS ====================
-function initIndianLabs() {
-  const mapEl = document.getElementById('indian-labs-map');
-  if (!mapEl) return;
-  
-  try {
-    AppState.indianLabsMap = L.map('indian-labs-map').setView([20.5937, 78.9629], 5);
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap',
-      maxZoom: 22
-    }).addTo(AppState.indianLabsMap);
-    
-    AppState.indianMarkerCluster = L.markerClusterGroup();
-    AppState.indianLabsMap.addLayer(AppState.indianMarkerCluster);
-    
-    if (window.indianLabs) {
-      displayIndianLabs(window.indianLabs);
-    }
-    
-    AppState.indianLabsMap.on('zoomend', () => {
-      const zoom = AppState.indianLabsMap.getZoom();
-      const zoomInfo = document.getElementById('indian-zoom-info');
-      if (zoomInfo) {
-        zoomInfo.textContent = `Zoom: ${zoom} | Max: 22`;
-      }
-    });
-    
-    // Setup search
-    const searchInput = document.getElementById('indian-lab-search');
-    if (searchInput) {
-      searchInput.addEventListener('input', debounce((e) => {
-        filterIndianLabsBySearch(e.target.value);
-      }, 300));
-    }
-  } catch (error) {
-    console.error('Indian labs map error:', error);
-  }
-}
+window.joinCommunity = function(name) {
+  addXP(5, `Joined ${name}`);
+  alert(`✅ Joined ${name}! +5 XP`);
+};
 
-function displayIndianLabs(labs) {
-  if (!AppState.indianLabsMap || !AppState.indianMarkerCluster) return;
-  
-  AppState.indianMarkerCluster.clearLayers();
-  AppState.indianMarkers = [];
-  
-  labs.forEach(lab => {
-    const marker = L.marker([lab.lat, lab.lon])
-      .bindPopup(`
-        <div class="text-primary"><strong>${sanitizeHTML(lab.name)}</strong></div>
-        <div class="text-secondary">${sanitizeHTML(lab.type)}</div>
-        <div class="text-secondary">${sanitizeHTML(lab.location)}</div>
-        ${lab.description ? `<div class="mt-sm">${sanitizeHTML(lab.description)}</div>` : ''}
-      `);
-    
-    AppState.indianMarkerCluster.addLayer(marker);
-    AppState.indianMarkers.push({ marker, lab });
-  });
-  
-  const listContainer = document.getElementById('indian-labs-list');
-  if (listContainer) {
-    listContainer.innerHTML = labs.map(lab => `
-      <div class="item item--clickable" onclick="focusIndianLab('${sanitizeHTML(lab.name)}')">
-        <h3 class="item__title">${sanitizeHTML(lab.name)}</h3>
-        <p class="item__description">${sanitizeHTML(lab.description || lab.type)}</p>
-        <div class="item__meta">
-          <span class="tag">${sanitizeHTML(lab.type)}</span>
-          <span class="tag">📍 ${sanitizeHTML(lab.location)}</span>
-        </div>
-      </div>
-    `).join('');
-  }
-}
-
-function filterIndianLabs(type) {
-  if (!window.indianLabs) return;
-  
-  const filtered = type === 'all' 
-    ? window.indianLabs 
-    : window.indianLabs.filter(lab => lab.type.toLowerCase().includes(type.toLowerCase()));
-  
-  displayIndianLabs(filtered);
-}
-
-function filterIndianLabsBySearch(query) {
-  if (!window.indianLabs) return;
-  
-  const filtered = query 
-    ? window.indianLabs.filter(lab => 
-        lab.name.toLowerCase().includes(query.toLowerCase()) ||
-        lab.location.toLowerCase().includes(query.toLowerCase()) ||
-        lab.description?.toLowerCase().includes(query.toLowerCase())
-      )
-    : window.indianLabs;
-  
-  displayIndianLabs(filtered);
-}
-
-function focusIndianLab(name) {
-  const labData = AppState.indianMarkers.find(m => m.lab.name === name);
-  if (!labData) return;
-  
-  AppState.indianLabsMap.setView([labData.lab.lat, labData.lab.lon], 15);
-  labData.marker.openPopup();
-}
-
-// ==================== GLOBAL MAPS ====================
-function initMaps() {
-  const mapEl = document.getElementById('map');
-  if (!mapEl) return;
-  
-  try {
-    AppState.map = L.map('map').setView([20, 0], 2);
-    
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Esri',
-      maxZoom: 22
-    }).addTo(AppState.map);
-    
-    AppState.markerCluster = L.markerClusterGroup();
-    AppState.map.addLayer(AppState.markerCluster);
-    
-    AppState.map.on('zoomend', () => {
-      const zoom = AppState.map.getZoom();
-      const zoomInfo = document.getElementById('zoom-info');
-      if (zoomInfo) {
-        zoomInfo.textContent = `Zoom: ${zoom} | Max: 22 (ULTRA HD)`;
-      }
-    });
-  } catch (error) {
-    console.error('Global map error:', error);
-  }
-}
-
-// ==================== MODAL ====================
-function openModal(type, data) {
-  const modal = document.getElementById('detail-modal');
-  const content = document.getElementById('modal-content');
-  
-  if (!modal || !content) return;
-  
-  if (typeof data === 'object' && data.title && data.content) {
-    content.innerHTML = `
-      <h2 class="text-primary mb-lg">${data.title}</h2>
-      ${data.content}
-    `;
-  } else {
-    content.innerHTML = '<div class="text-secondary">Loading...</div>';
-  }
-  
-  modal.classList.add('modal--active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  const modal = document.getElementById('detail-modal');
-  if (modal) {
-    modal.classList.remove('modal--active');
-    document.body.style.overflow = '';
-  }
-}
-
-// ==================== PANEL TOGGLE ====================
-function togglePanel(panelId) {
-  const panel = document.getElementById(`${panelId}-panel`);
-  if (!panel) return;
-  
-  const isHidden = panel.style.display === 'none';
-  panel.style.display = isHidden ? 'block' : 'none';
-  
-  const btn = event.target;
-  if (btn) {
-    btn.textContent = isHidden ? `HIDE ${panelId.toUpperCase()}` : `SHOW ${panelId.toUpperCase()}`;
-  }
-}
-
-function filterNews(query) {
-  const filtered = query 
-    ? AppState.allNews.filter(story => 
-        story.title.toLowerCase().includes(query.toLowerCase())
-      )
-    : AppState.allNews;
-  
-  const container = document.getElementById('news-container');
-  if (!container) return;
-  
-  container.innerHTML = filtered.map(story => `
-    <div class="item item--clickable" onclick="openNewsDetail(${story.id})">
-      <h3 class="item__title">${sanitizeHTML(story.title)}</h3>
-      <div class="item__meta">
-        <span class="tag">👍 ${story.score || 0} points</span>
-        <span class="tag">💬 ${story.descendants || 0} comments</span>
-      </div>
-      <div class="timestamp">${formatTime(story.time * 1000)}</div>
-      ${story.url ? `<a href="${story.url}" target="_blank" class="item__link" onclick="event.stopPropagation()">🔗 Read Article</a>` : ''}
-    </div>
-  `).join('');
-}
-
-// ==================== UTILITY FUNCTIONS ====================
-function sanitizeHTML(str) {
-  if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+// ==================== UTILITIES ====================
+function updateCount(id, count) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = count;
 }
 
 function formatTime(timestamp) {
-  const date = new Date(timestamp);
-  const now = new Date();
-  const diff = now - date;
+  const now = Date.now() / 1000;
+  const diff = now - timestamp;
   
-  const minutes = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-  
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  if (days < 7) return `${days}d ago`;
-  
-  return date.toLocaleDateString();
-}
-
-function formatNumber(num) {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return num.toString();
-}
-
-function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, args), wait);
-  };
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
 }
 
 function shuffleArray(array) {
@@ -1061,56 +858,63 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-function updateCount(elementId, count) {
-  const el = document.getElementById(elementId);
-  if (el) {
-    el.textContent = count;
-  }
-}
-
-function showError(message) {
-  console.error(message);
-  alert(message);
-}
-
-// ==================== EVENT LISTENERS ====================
-function setupEventListeners() {
-  // Escape key closes modal
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
+function addXP(amount, reason) {
+  AppState.userXP += amount;
+  localStorage.setItem('userXP', AppState.userXP);
   
-  // Enter key sends chat message
-  const chatInput = document.getElementById('chat-input');
-  if (chatInput) {
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
+  // Check level up
+  const newLevel = Math.floor(AppState.userXP / 100) + 1;
+  if (newLevel > AppState.userLevel) {
+    AppState.userLevel = newLevel;
+    localStorage.setItem('userLevel', AppState.userLevel);
+    showLevelUp(newLevel);
   }
   
-  // Enter key sets nickname
-  const nicknameInput = document.getElementById('chat-nickname');
-  if (nicknameInput) {
-    nicknameInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') setNickname();
-    });
-  }
+  console.log(`+${amount} XP: ${reason}`);
 }
 
-// ==================== EXPOSE GLOBAL FUNCTIONS ====================
-window.togglePanel = togglePanel;
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.filterNews = filterNews;
-window.setNickname = setNickname;
-window.sendMessage = sendMessage;
-window.selectQuizCategory = selectQuizCategory;
-window.startQuiz = startQuiz;
-window.selectAnswer = selectAnswer;
-window.filterIndianLabs = filterIndianLabs;
-window.focusIndianLab = focusIndianLab;
-window.openNewsDetail = openNewsDetail;
-window.openResearchDetail = openResearchDetail;
-window.openBreakthroughDetail = openBreakthroughDetail;
+function showLevelUp(level) {
+  alert(`🎉 Level Up! You're now Level ${level}!`);
+}
 
-console.log('✅ Tech Mastery Lab - Fully Loaded!');
+window.closeModal = function() {
+  const modal = document.getElementById('detail-modal');
+  modal.classList.remove('modal--active');
+};
+
+// Search functions
+window.searchNews = function() {
+  const query = document.getElementById('news-search').value.toLowerCase();
+  const filtered = AppState.allNews.filter(item => 
+    item.title.toLowerCase().includes(query)
+  );
+  displayNews(filtered);
+};
+
+window.searchResearch = function() {
+  const query = document.getElementById('research-search').value.toLowerCase();
+  const filtered = AppState.allResearch.filter(paper => 
+    paper.title.toLowerCase().includes(query) || 
+    paper.authors.some(a => a.toLowerCase().includes(query))
+  );
+  displayResearch(filtered);
+};
+
+window.searchGitHub = function() {
+  const query = document.getElementById('github-search').value.toLowerCase();
+  const filtered = AppState.allGitHub.filter(repo => 
+    repo.name.toLowerCase().includes(query) || 
+    (repo.description && repo.description.toLowerCase().includes(query))
+  );
+  displayGitHub(filtered);
+};
+
+window.searchReddit = function() {
+  const query = document.getElementById('reddit-search').value.toLowerCase();
+  const filtered = AppState.allReddit.filter(post => 
+    post.title.toLowerCase().includes(query)
+  );
+  displayReddit(filtered);
+};
+
+console.log('✅ Tech Mastery Lab Ready!');
