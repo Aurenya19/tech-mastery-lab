@@ -237,15 +237,38 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   
-  <!-- NEW Data Scripts (500 items each) -->
+  <!-- NEW Data Scripts (500 items each) - Load FIRST -->
   <script src="data-communities.js"></script>
   <script src="data-quiz.js"></script>
   
   <!-- OLD Data Scripts (Keep for compatibility) -->
+  <script src="quiz-questions.js"></script>
+  <script src="indian-labs.js"></script>
+  <script src="communities.js"></script>
   <script src="research-papers.js"></script>
   
-  <!-- Main App Script -->
+  <!-- Main App Script (Defines AppState and core functions) -->
   <script src="app.js"></script>
+  
+  <!-- Fix Scripts (Override functions after app.js loads) -->
+  <script src="research-fix.js"></script>
+  <script src="search-functions.js"></script>
+  <script src="final-fix.js"></script>
+  <script src="complete-fix.js"></script>
+  <script src="tabs-navigation.js"></script>
+  
+  <!-- Mission System (Needs AppState to be defined) -->
+  <script src="mission-system.js"></script>
+  
+  <!-- Enhanced Communities (Needs window.COMMUNITIES) -->
+  <script src="communities-enhanced.js"></script>
+  
+  <!-- AI Chat Scripts (Load in order) -->
+  <script src="chat-ai.js"></script>
+  <script src="chat-integration.js"></script>
+  
+  <!-- Communities App Script (Last) -->
+  <script src="communities-app.js"></script>
   
   <!-- Satellite View Script -->
   <script>
@@ -338,12 +361,6 @@
       }
     };
   </script>
-  
-  <!-- Tab Navigation Script -->
-  <script src="tabs-navigation.js"></script>
-  
-  <!-- Mission System -->
-  <script src="mission-system.js"></script>
   
   <script>
     console.log('✅ Tech Mastery Lab Loaded!');
