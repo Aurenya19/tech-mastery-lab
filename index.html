@@ -3,22 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="India's Ultimate Tech Intelligence Hub - Real-time tech news, research papers, GitHub trends, and AI-powered chat with gamification">
-  <meta name="keywords" content="tech news, research, GitHub, tech quiz, programming, AI chat, gamification, achievements">
-  <meta name="author" content="Tech Mastery Lab">
-  
-  <title>🎯 TECH MASTERY LAB - Mission Control</title>
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="alternate icon" href="favicon.svg">
+  <title>🎯 TECH MASTERY LAB</title>
   
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   
-  <!-- Stylesheets (Order matters!) -->
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="logo-styles.css">
   <link rel="stylesheet" href="chat-fix.css">
@@ -29,26 +19,24 @@
   <link rel="stylesheet" href="tabs-navigation.css">
 </head>
 <body>
-  <!-- Matrix Background Canvas -->
-  <canvas id="matrix" aria-hidden="true"></canvas>
+  <!-- Matrix Background -->
+  <canvas id="matrix"></canvas>
   
-  <!-- Main Container -->
   <div class="container">
-    
-    <!-- Header with Logo -->
+    <!-- Header -->
     <header class="header">
       <div class="header__logo">
-        <img src="logo.svg" alt="Tech Mastery Lab Logo" width="80" height="80">
+        <img src="logo.svg" alt="Logo" width="80" height="80">
       </div>
       <h1 class="header__title">🎯 TECH MASTERY LAB</h1>
-      <p class="header__tagline">Mission Control - Your Tech Intelligence Hub</p>
-      <p class="header__subtitle" id="last-update">Loading real-time data...</p>
+      <p class="header__tagline">Mission Control</p>
+      <p class="header__subtitle" id="last-update">Loading...</p>
     </header>
     
     <!-- Mission Dashboard -->
     <div id="mission-dashboard"></div>
     
-    <!-- Tab Navigation -->
+    <!-- Tabs -->
     <div class="tabs-navigation">
       <button class="tab-btn active" onclick="switchTab('news')" data-tab="news">
         📰 News <span class="tab-count" id="news-count">0</span>
@@ -63,7 +51,7 @@
         🕵️ Reddit <span class="tab-count" id="reddit-count">0</span>
       </button>
       <button class="tab-btn" onclick="switchTab('map')" data-tab="map">
-        🛰️ Satellite
+        🛰️ Map
       </button>
       <button class="tab-btn" onclick="switchTab('communities')" data-tab="communities">
         🌐 Communities <span class="tab-count">500</span>
@@ -72,135 +60,89 @@
         💬 Chat
       </button>
       <button class="tab-btn" onclick="switchTab('quiz')" data-tab="quiz">
-        🧠 Quiz <span class="tab-count" id="quiz-count">500</span>
+        🧠 Quiz <span class="tab-count">500</span>
       </button>
     </div>
     
-    <!-- Tab Panels -->
+    <!-- Tab Content -->
     <div class="tabs-content">
-      
-      <!-- NEWS TAB -->
+      <!-- News -->
       <div id="tab-news" class="tab-panel active">
-        <div class="tab-panel__header">
-          <h2>📰 HACKER NEWS</h2>
-          <p class="tab-panel__subtitle">Live API - Auto-refresh every 5 minutes</p>
-        </div>
-        <input type="text" class="search-input" id="news-search" placeholder="🔍 Search news..." onkeyup="searchNews()">
-        <div id="news-list" class="list">
-          <div class="loading">Loading Hacker News...</div>
-        </div>
+        <h2>📰 HACKER NEWS</h2>
+        <input type="text" class="search-input" id="news-search" placeholder="🔍 Search..." onkeyup="searchNews()">
+        <div id="news-list" class="list"><div class="loading">Loading...</div></div>
       </div>
       
-      <!-- RESEARCH TAB -->
+      <!-- Research -->
       <div id="tab-research" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>🔬 RESEARCH PAPERS</h2>
-          <p class="tab-panel__subtitle">30 Famous Computer Science Papers</p>
-        </div>
-        <input type="text" class="search-input" id="research-search" placeholder="🔍 Search papers..." onkeyup="searchResearch()">
-        <div id="research-list" class="list">
-          <div class="loading">Loading research papers...</div>
-        </div>
+        <h2>🔬 RESEARCH PAPERS</h2>
+        <input type="text" class="search-input" id="research-search" placeholder="🔍 Search..." onkeyup="searchResearch()">
+        <div id="research-list" class="list"><div class="loading">Loading...</div></div>
       </div>
       
-      <!-- GITHUB TAB -->
+      <!-- GitHub -->
       <div id="tab-github" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>💻 GITHUB TRENDING</h2>
-          <p class="tab-panel__subtitle">Live API - Auto-refresh every 15 minutes</p>
-        </div>
-        <input type="text" class="search-input" id="github-search" placeholder="🔍 Search repos..." onkeyup="searchGitHub()">
-        <div id="github-list" class="list">
-          <div class="loading">Loading GitHub trending...</div>
-        </div>
+        <h2>💻 GITHUB TRENDING</h2>
+        <input type="text" class="search-input" id="github-search" placeholder="🔍 Search..." onkeyup="searchGitHub()">
+        <div id="github-list" class="list"><div class="loading">Loading...</div></div>
       </div>
       
-      <!-- REDDIT TAB -->
+      <!-- Reddit -->
       <div id="tab-reddit" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>🕵️ REDDIT TECH</h2>
-          <p class="tab-panel__subtitle">Live API - Auto-refresh every 10 minutes</p>
-        </div>
-        <input type="text" class="search-input" id="reddit-search" placeholder="🔍 Search posts..." onkeyup="searchReddit()">
-        <div id="reddit-list" class="list">
-          <div class="loading">Loading Reddit posts...</div>
-        </div>
+        <h2>🕵️ REDDIT TECH</h2>
+        <input type="text" class="search-input" id="reddit-search" placeholder="🔍 Search..." onkeyup="searchReddit()">
+        <div id="reddit-list" class="list"><div class="loading">Loading...</div></div>
       </div>
       
-      <!-- MAP TAB - SATELLITE VIEW -->
+      <!-- Map -->
       <div id="tab-map" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>🛰️ GLOBAL TECH LABS - SATELLITE VIEW</h2>
-          <p class="tab-panel__subtitle">Major Tech Research Centers Worldwide</p>
-        </div>
+        <h2>🛰️ SATELLITE VIEW</h2>
         <div id="map" style="height: 600px; border-radius: 8px; margin-top: 20px;"></div>
       </div>
       
-      <!-- COMMUNITIES TAB -->
+      <!-- Communities -->
       <div id="tab-communities" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>🌐 TECH COMMUNITIES</h2>
-          <p class="tab-panel__subtitle">500 Active Communities Worldwide</p>
-        </div>
-        <div id="communities-content">
-          <div class="communities-loading">Loading 500 communities...</div>
-        </div>
+        <h2>🌐 TECH COMMUNITIES</h2>
+        <div id="communities-content"><div class="loading">Loading 500 communities...</div></div>
       </div>
       
-      <!-- CHAT TAB -->
+      <!-- Chat -->
       <div id="tab-chat" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>💬 AI CHAT</h2>
-          <p class="tab-panel__subtitle">Smart Responses + 8 Specialized Rooms</p>
-        </div>
-        
+        <h2>💬 AI CHAT</h2>
         <div class="chat-info">
           <span id="online-count">● Online</span>
           <span id="current-room-name">General</span>
         </div>
-        
         <div class="chat-rooms">
           <button class="chat-room active" onclick="switchRoom('general')">General</button>
           <button class="chat-room" onclick="switchRoom('ai-ml')">AI/ML</button>
-          <button class="chat-room" onclick="switchRoom('space')">Space Tech</button>
-          <button class="chat-room" onclick="switchRoom('coding')">Coding Help</button>
+          <button class="chat-room" onclick="switchRoom('space')">Space</button>
+          <button class="chat-room" onclick="switchRoom('coding')">Coding</button>
           <button class="chat-room" onclick="switchRoom('career')">Career</button>
-          <button class="chat-room" onclick="switchRoom('india')">India Tech</button>
+          <button class="chat-room" onclick="switchRoom('india')">India</button>
           <button class="chat-room" onclick="switchRoom('quiz')">Quiz</button>
           <button class="chat-room" onclick="switchRoom('research')">Research</button>
         </div>
-        
         <div id="chat-messages" class="chat-messages"></div>
-        
         <div class="chat-input-container">
-          <input type="text" id="chat-input" class="chat-input" placeholder="Ask anything... (AI-powered)" onkeypress="handleChatKeyPress(event)">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Ask anything..." onkeypress="handleChatKeyPress(event)">
           <button class="btn btn--primary" onclick="sendChatMessage()">Send 🚀</button>
         </div>
-        
         <div class="chat-ai-status">
-          <span id="ai-status">🤖 AI Ready - Ask me anything!</span>
+          <span id="ai-status">🤖 AI Ready</span>
         </div>
       </div>
       
-      <!-- QUIZ TAB -->
+      <!-- Quiz -->
       <div id="tab-quiz" class="tab-panel">
-        <div class="tab-panel__header">
-          <h2>🧠 TECH QUIZ</h2>
-          <p class="tab-panel__subtitle">500 Questions - 8 Categories - 3 Modes</p>
-        </div>
-        
+        <h2>🧠 TECH QUIZ</h2>
+        <p>500 Questions - 8 Categories - 3 Modes</p>
         <div class="quiz-stats">
           <div class="stat-card">
             <div class="stat-value" id="quiz-score">0</div>
             <div class="stat-label">Score</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-value" id="quiz-timer-display" style="display: none;">
-              <span id="quiz-timer">10:00</span>
-            </div>
-          </div>
         </div>
-        
         <div class="quiz-categories">
           <button class="btn btn--active" onclick="selectQuizCategory('all', this)">All (500)</button>
           <button class="btn" onclick="selectQuizCategory('Web Dev', this)">Web Dev</button>
@@ -212,19 +154,16 @@
           <button class="btn" onclick="selectQuizCategory('Blockchain', this)">Blockchain</button>
           <button class="btn" onclick="selectQuizCategory('DSA', this)">DSA</button>
         </div>
-        
         <div class="quiz-modes">
-          <button class="btn btn--primary" onclick="startQuiz('quick')">⚡ Quick Mode (10 Questions)</button>
-          <button class="btn btn--primary" onclick="startQuiz('timed')">⏱️ Timed Mode (20Q - 10min)</button>
-          <button class="btn btn--primary" onclick="startQuiz('practice')">📚 Practice Mode (50 Questions)</button>
+          <button class="btn btn--primary" onclick="startQuiz('quick')">⚡ Quick (10Q)</button>
+          <button class="btn btn--primary" onclick="startQuiz('timed')">⏱️ Timed (20Q)</button>
+          <button class="btn btn--primary" onclick="startQuiz('practice')">📚 Practice (50Q)</button>
         </div>
-        
         <div id="quiz-content"></div>
       </div>
-      
     </div>
     
-    <!-- Modal for Details -->
+    <!-- Modal -->
     <div id="detail-modal" class="modal">
       <div class="modal__content">
         <button class="modal__close" onclick="closeModal()">✕</button>
@@ -233,139 +172,35 @@
     </div>
   </div>
   
-  <!-- Scripts (Order is CRITICAL!) -->
+  <!-- SCRIPTS - CRITICAL ORDER! -->
+  <!-- 1. External Libraries -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   
-  <!-- NEW Data Scripts (500 items each) - Load FIRST -->
+  <!-- 2. Data Files FIRST -->
   <script src="data-communities.js"></script>
   <script src="data-quiz.js"></script>
-  
-  <!-- OLD Data Scripts (Keep for compatibility) -->
-  <script src="quiz-questions.js"></script>
-  <script src="indian-labs.js"></script>
-  <script src="communities.js"></script>
   <script src="research-papers.js"></script>
+  <script src="quiz-questions.js"></script>
   
-  <!-- Main App Script (Defines AppState and core functions) -->
+  <!-- 3. Core App -->
   <script src="app.js"></script>
   
-  <!-- Fix Scripts (Override functions after app.js loads) -->
-  <script src="research-fix.js"></script>
-  <script src="search-functions.js"></script>
-  <script src="final-fix.js"></script>
-  <script src="complete-fix.js"></script>
+  <!-- 4. Feature Scripts -->
   <script src="tabs-navigation.js"></script>
-  
-  <!-- Mission System (Needs AppState to be defined) -->
   <script src="mission-system.js"></script>
-  
-  <!-- Enhanced Communities (Needs window.COMMUNITIES) -->
   <script src="communities-enhanced.js"></script>
-  
-  <!-- AI Chat Scripts (Load in order) -->
   <script src="chat-ai.js"></script>
   <script src="chat-integration.js"></script>
   
-  <!-- Communities App Script (Last) -->
-  <script src="communities-app.js"></script>
+  <!-- 5. Fix Scripts -->
+  <script src="final-fix.js"></script>
+  <script src="complete-fix.js"></script>
   
-  <!-- Satellite View Script -->
-  <script>
-    // Initialize satellite view map when tab is opened
-    let satelliteMap = null;
-    
-    function initSatelliteMap() {
-      if (satelliteMap) return; // Already initialized
-      
-      // Create map with satellite view
-      satelliteMap = L.map('map').setView([20, 0], 2);
-      
-      // Add satellite tile layer
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'Tiles &copy; Esri',
-        maxZoom: 18
-      }).addTo(satelliteMap);
-      
-      // Major tech research centers worldwide
-      const techLabs = [
-        // USA
-        { name: "MIT CSAIL", lat: 42.3601, lng: -71.0942, country: "USA" },
-        { name: "Stanford AI Lab", lat: 37.4275, lng: -122.1697, country: "USA" },
-        { name: "Google AI", lat: 37.4220, lng: -122.0841, country: "USA" },
-        { name: "Microsoft Research", lat: 47.6397, lng: -122.1266, country: "USA" },
-        { name: "OpenAI", lat: 37.7749, lng: -122.4194, country: "USA" },
-        { name: "Meta AI Research", lat: 37.4847, lng: -122.1477, country: "USA" },
-        { name: "NASA JPL", lat: 34.2011, lng: -118.1717, country: "USA" },
-        { name: "SpaceX HQ", lat: 33.9207, lng: -118.3280, country: "USA" },
-        
-        // UK
-        { name: "DeepMind", lat: 51.5074, lng: -0.1278, country: "UK" },
-        { name: "Cambridge AI", lat: 52.2053, lng: 0.1218, country: "UK" },
-        { name: "Oxford AI", lat: 51.7520, lng: -1.2577, country: "UK" },
-        
-        // Canada
-        { name: "Vector Institute", lat: 43.6532, lng: -79.3832, country: "Canada" },
-        { name: "Mila Quebec", lat: 45.5017, lng: -73.5673, country: "Canada" },
-        
-        // Europe
-        { name: "ETH Zurich", lat: 47.3769, lng: 8.5417, country: "Switzerland" },
-        { name: "CERN", lat: 46.2333, lng: 6.0557, country: "Switzerland" },
-        { name: "Max Planck Institute", lat: 48.1351, lng: 11.5820, country: "Germany" },
-        
-        // Asia
-        { name: "Tsinghua AI", lat: 40.0031, lng: 116.3262, country: "China" },
-        { name: "Baidu Research", lat: 39.9042, lng: 116.4074, country: "China" },
-        { name: "Alibaba DAMO", lat: 30.2741, lng: 120.1551, country: "China" },
-        { name: "Tokyo Tech", lat: 35.6050, lng: 139.6828, country: "Japan" },
-        { name: "KAIST", lat: 36.3714, lng: 127.3606, country: "South Korea" },
-        { name: "Samsung AI", lat: 37.5665, lng: 126.9780, country: "South Korea" },
-        
-        // India
-        { name: "IIT Bombay", lat: 19.1334, lng: 72.9133, country: "India" },
-        { name: "IIT Delhi", lat: 28.5450, lng: 77.1920, country: "India" },
-        { name: "IISc Bangalore", lat: 13.0210, lng: 77.5658, country: "India" },
-        { name: "ISRO HQ", lat: 12.9716, lng: 77.5946, country: "India" },
-        { name: "Google India", lat: 19.0760, lng: 72.8777, country: "India" },
-        { name: "Microsoft India", lat: 12.9716, lng: 77.5946, country: "India" },
-        
-        // Australia
-        { name: "CSIRO", lat: -35.2809, lng: 149.1300, country: "Australia" },
-        
-        // Israel
-        { name: "Technion", lat: 32.7767, lng: 35.0231, country: "Israel" },
-        { name: "Weizmann Institute", lat: 31.9054, lng: 34.8104, country: "Israel" }
-      ];
-      
-      // Add markers for each lab
-      techLabs.forEach(lab => {
-        const marker = L.marker([lab.lat, lab.lng]).addTo(satelliteMap);
-        marker.bindPopup(`
-          <div style="text-align: center;">
-            <strong>${lab.name}</strong><br>
-            <em>${lab.country}</em><br>
-            <small>Lat: ${lab.lat.toFixed(4)}, Lng: ${lab.lng.toFixed(4)}</small>
-          </div>
-        `);
-      });
-      
-      console.log('🛰️ Satellite map initialized with', techLabs.length, 'tech labs');
-    }
-    
-    // Initialize map when map tab is opened
-    const originalSwitchTab = window.switchTab;
-    window.switchTab = function(tabName) {
-      originalSwitchTab(tabName);
-      if (tabName === 'map') {
-        setTimeout(initSatelliteMap, 100);
-      }
-    };
-  </script>
+  <!-- 6. Initialization -->
+  <script src="init-all.js"></script>
   
   <script>
-    console.log('✅ Tech Mastery Lab Loaded!');
-    console.log('📊 Data: 500 Communities, 500 Quiz Questions, 30 Research Papers');
-    console.log('🛰️ Satellite View: Global Tech Labs');
+    console.log('✅ All scripts loaded!');
   </script>
 </body>
 </html>
